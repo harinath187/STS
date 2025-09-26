@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Employee List</title>
+  
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" 
+        href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" 
+        href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+  <!-- DataTables JS -->
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: rgb(202, 216, 212);
+    }
+    table {
+      width: 100%;
+    }
+
+    /* Hide the input field visually */
+  input[type="date"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+  }
+
+  /* Style the button that will trigger the date picker */
+  .date-picker-button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  </style>
+  
+</head>
+<body>
+  <form id="dateForm" method="POST" action="{{ url_for('get_by_task_date_route') }}">
+    <label for="hiddenDateInput" class="date-picker-button">Select Date</label>
+    <input type="date" id="hiddenDateInput" name="selectedDate" required>
+  
+
+    <label for="startDate" class="date-picker-button">Start Date:</label>
+    <input type="date" id="startDate" name="startDate">
+
+    <label for="endDate" class="date-picker-button">End Date:</label>
+    <input type="date" id="endDate" name="endDate">
+
+  </form>
+
+
+  <h2>Employee List</h2>
+
+  <table id="employeeTable" class="display nowrap">
+    <thead>
+      <tr>
+        <th>task_id</th>
+        <th>task_name</th>
+        <th>task_description</th>
+        <th>full_name</th>
+        <th>estimated_hrs</th>
+        <th>worked_hrs</th>
+        <th>Start_Date</th>
+        <th>Comments</th>
+        <th>status</th>
+    </tr>
+    </thead>
+    <tbody>
+      {% for task in today_task %}
+      
+      <tr>
+    
+        <td>{{task.task_id}}</td>
+        <td>{{task.task_name}}</td>
+        <td>{{task.task_description}}</td>
+        <td>{{task.full_name}}</td>
+        <td>{{task.estimated_hrs}}</td>
+        <td>{{task.worked_hrs}}</td>
+        <td>{{task.Start_Date}}</td>
+        <td>{{task.Comments}}</td>
+        <td>{{task.status}}</td>
+      </tr>
+      {% endfor %}
+      
+      <!-- Add more rows dynamically from Flask -->
+    </tbody>
+  </table>
+  
+
+  <script>
+    $(document).ready(function() {
+      $('#employeeTable').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+          'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        responsive: true,
+        pageLength: 5
+      });
+    });
+
+  document.querySelector('.date-picker-button').addEventListener('click', function() { document.getElementById('hiddenDateInput').showPicker(),
+  document.getElementById('startDate').showPicker(),document.getElementById('endDate').showPicker();  });
+
+
+  document.getElementById('hiddenDateInput').addEventListener('change', function() {
+    document.getElementById('dateForm').submit();  // auto submit form when date changes
+  });
+
+
+   
+  </script>
+
+</body>
+</html>
