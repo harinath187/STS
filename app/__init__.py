@@ -1,10 +1,12 @@
-from flask import Flask, render_template
+
+
+from flask import Flask
+from app.routes.login_routes import register_routes
 
 def create_app():
     app = Flask(__name__)
+    app.secret_key = "sts"  
 
-    @app.route('/')
-    def home():
-        return render_template('base.html')
+    register_routes(app)
 
     return app
