@@ -16,6 +16,7 @@ def get_db_connection():
             password=os.getenv("DB_PASSWORD"),
             database=os.getenv("DB_NAME")
         )
+        print("connection suxcesdjd",connection)
         
         if connection.is_connected():
             return connection

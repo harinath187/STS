@@ -4,7 +4,7 @@ from app.models.db import get_db_connection
 
 from app.models.login import get_user_by_credentials  
 
-
+from app.models.project_db import get_today_task
 
 
 
@@ -19,7 +19,7 @@ def register_routes(app):
     def login():
         username = request.form["username"]
         password = request.form["password"]
-
+        print("username ", username)
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
         cursor.execute("""
@@ -29,6 +29,7 @@ def register_routes(app):
             WHERE employee.username = %s AND employee.password = %s
         """, (username, password))
         user = cursor.fetchone()
+        print("username of th employee", user)
         cursor.close()
         conn.close()
 
@@ -80,3 +81,10 @@ def register_routes(app):
     @app.route("/logout")
     def logout():
         return render_template("auth/login.html")
+    
+    @app.route("/today_task")
+    def get_new():
+        today_task = get_today_task()
+        # print("task must show here.............",today_task)
+        return render_template("project_management/due_today.html",today_task = today_task)
+    
