@@ -1,4 +1,4 @@
-<!-- templates/base.html -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,20 +14,22 @@
   <div class="flex h-screen flex-col">
     
     <div class="flex flex-1 overflow-hidden">
-      {% include "common/sidebar.html" %}
-      <main class="flex-1 p-6 overflow-y-auto">
-        {% include "common/navbar.html" %}
-        {% block content %}
-        <!-- Dynamic content will go here -->
-        {% endblock %}
-      </main>
+     
+     <main class="flex-1 p-6 overflow-y-auto">
+  <div class="w-full flex justify-end mb-6">
+    {% include "common/navbar.html" %}
+  </div>
+
+  {% block content %}
+  {% endblock %}
+</main>
+
     </div>
     
     {% include "common/footer.html" %}
   </div>
 
   {% block scripts %}
-  <!-- Child pages can override this for chart JS -->
   {% endblock %}
 
 </body>
