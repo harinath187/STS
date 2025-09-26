@@ -21,6 +21,3 @@ Thumbs.db
 # Other common exclusions
 *.log
 *.sqlite3
-
-.env
-.flaskenv
