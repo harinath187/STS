@@ -1,0 +1,83 @@
+{% comment %} <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Tasks</title>
+</head>
+<body>
+    <h1>My Tasks</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Task Name</th>
+                <th>Description</th>
+                <th>Project</th>
+                <th>Assigned By</th>
+                <th>Status</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+            <tr>
+                <td>{{ task.task_name }}</td>
+                <td>{{ task.task_description }}</td>
+                <td>{{ task.project_name }}</td>
+                <td>{{ task.assigned_by_firstname }} {{ task.assigned_by_lastname }}</td>
+                <td>{{ task.status }}</td>
+                <td>{{ task.Start_Date }}</td>
+                <td>{{ task.End_Date }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
+ 
+ 
+  {% endcomment %}
+
+ <!-- /templates/employee/mytickets.html -->
+<!-- /templates/employee/mytickets.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Tasks</title>
+</head>
+<body>
+    <h1>My Tasks</h1>
+    
+    {% if tasks %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Task Name</th>
+                    <th>Assigned By</th>
+                    <th>Project</th>
+                    <th>Status</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks %}
+                    <tr>
+                        <td>{{ task.task_name }}</td>
+                        <td>{{ task.assigned_by_firstname }} {{ task.assigned_by_lastname }}</td>
+                        <td>{{ task.project_name }}</td>
+                        <td>{{ task.status }}</td>
+                        <td>{{ task.Start_Date }}</td>
+                        <td>{{ task.End_Date }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No tasks found for this employee.</p>
+    {% endif %}
+</body>
+</html>
