@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add New Project</title>
+    <style>
+        form { max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ccc; }
+        label { display: block; margin-top: 10px; font-weight: bold; }
+        input, textarea, select { width: 100%; padding: 8px; margin-top: 5px; }
+        button { margin-top: 20px; padding: 10px 20px; background-color: #3498db; color: white; border: none; cursor: pointer; }
+        button:hover { background-color: #2980b9; }
+    </style>
+</head>
+<body>
+    <h2 style="text-align:center;">Add New Project</h2>
+    <form method="POST" action="/projects/add" enctype="multipart/form-data">
+        <label>Project Name</label>
+        <input type="text" name="project_name" required>
+
+        <label>Client ID</label>
+        <input type="number" name="client_id" required>
+
+        <label>Project Manager ID</label>
+        <input type="number" name="project_manager">
+
+        <label>Estimated Duration (months)</label>
+        <input type="number" name="estimated_duration_months">
+
+        <label>Tech Stack</label>
+        <textarea name="tech_stack"></textarea>
+
+        <label>Actual Time Taken</label>
+        <input type="number" name="actual_time_taken">
+
+        <label>Cost (hours)</label>
+        <input type="number" step="0.01" name="cost_hours">
+
+        <label>Attachment</label>
+        <input type="file" name="attachment">
+
+
+        <label>Status (%)</label>
+        <input type="number" name="status_percentage" min="0" max="100">
+
+        <button type="submit">Add Project</button>
+    </form>
+</body>
+</html>
