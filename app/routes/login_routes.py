@@ -5,7 +5,7 @@ from app.models.db import get_db_connection
 =======
 from app.models.login import get_user_by_credentials  
 
-
+from app.models.project_db import get_today_task
 
 
 
@@ -99,6 +99,7 @@ def register_routes(app):
     @app.route("/logout")
     def logout():
         return render_template("auth/login.html")
+<<<<<<< HEAD
 =======
     #     # Get all projects for this manager
     #     cursor.execute("""
@@ -107,6 +108,9 @@ def register_routes(app):
     #         WHERE project_lead = %s
     #     """, (user['id'],))
     #     projects = cursor.fetchall()
+=======
+<<<<<<< HEAD
+>>>>>>> 10c6969 (solamaten)
 
     #     # If no projects, counts are zero
     #     in_progress_count = 0
@@ -178,6 +182,7 @@ def register_routes(app):
     #     """, (project_id,))
     #     tasks = cursor.fetchall()
 
+<<<<<<< HEAD
     #     cursor.close()
     #     conn.close()
 
@@ -195,3 +200,14 @@ def register_routes(app):
     #     session.clear()
     #     return redirect("/login")
 >>>>>>> 748b2b7 (project_manager)
+=======
+=======
+    
+    @app.route("/today_task")
+    def get_new():
+        today_task = get_today_task()
+        # print("task must show here.............",today_task)
+        return render_template("project_management/due_today.html",today_task = today_task)
+>>>>>>> 51ed321 (solamaten)
+    
+>>>>>>> 10c6969 (solamaten)
