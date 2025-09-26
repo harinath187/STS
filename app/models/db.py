@@ -16,7 +16,7 @@ def get_db_connection():
         )
         return connection
     except Error as e:
-        print("❌ Database Connection Error:", e)
+        print(" Database Connection Error:", e)
         return None
 
 if __name__ == "__main__":
