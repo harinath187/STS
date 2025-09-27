@@ -58,12 +58,13 @@ def register_routes(app):
             return redirect("/login")
         return render_template("dashboard/admin.html",user=user)
 
-    @app.route("/employee")
-    def employee_dashboard():
+    @app.route("/employee_home")
+    def employee_home():
         user = session.get("user")
         if not user:
             return redirect("/login")
         return render_template("dashboard/employee.html",user=user)
+    
 
 
     @app.route("/manager")
@@ -89,6 +90,11 @@ def register_routes(app):
     def logout():
         return render_template("auth/login.html")
 
+    @app.context_processor
+    def inject_user():
+        return dict(user=session.get("user"))
+
+
     @app.route("/supporthistory")
     def supporthistory():
         user = session.get("user")
@@ -100,3 +106,4 @@ def register_routes(app):
         
     
         
+
