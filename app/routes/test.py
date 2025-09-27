@@ -1,8 +1,14 @@
-from flask import render_template
-from app.utils.auth import login_required  # <- import once
+from flask import Blueprint, render_template, session, redirect
+from app.models.test import get_tasks_by_employee
 
-def test_routes(app):
-    @app.route("/tickets")
-    @login_required  # ✅ This replaces the if-check!
-    def test():
-        return render_template("employee/test.html")
+test_routes = Blueprint('test_routes', __name__)
+
+@test_routes.route("/test")
+def test_tasks():
+    user = session.get("user")
+    if not user:
+        return redirect("/login")  # redirect if not logged in
+
+    emp_id = user["id"]  # hardcoded from session
+    tasks = get_tasks_by_employee(emp_id)
+    return render_template("employee/test.html", user=user, tasks=tasks)
