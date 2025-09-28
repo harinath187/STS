@@ -5,7 +5,13 @@ from flask import Flask
 from app.routes.project_routes import project_bp
 
 from app.routes.login_routes import register_routes
+<<<<<<< HEAD
 
+=======
+from app.routes.test import test_routes  # ✅ Add this
+from app.routes.emp_dashboard_routes import register_employee_routes
+from app.routes.supporthistoryroute import supporthistory,suppassignlist,notsuppassignlist
+>>>>>>> 8783371 (updated code of support history)
 def create_app():
     app = Flask(__name__)
     app.secret_key = "sts"
@@ -14,7 +20,17 @@ def create_app():
     os.makedirs(upload_folder, exist_ok=True)   
     app.register_blueprint(project_bpp)
 
+<<<<<<< HEAD
     register_routes(app)
 
+=======
+    # Register all routes
+    register_routes(app)  # login, admin, etc.
+    register_employee_routes(app)  # employee dashboard routes
+    test_routes(app)
+    supporthistory(app)
+    suppassignlist(app)
+    notsuppassignlist(app)
+>>>>>>> 8783371 (updated code of support history)
     return app
 

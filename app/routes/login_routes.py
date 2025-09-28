@@ -1,6 +1,15 @@
 from flask import render_template, request, redirect, session
 from app.models.db import get_db_connection
 
+<<<<<<< HEAD
+=======
+from app.models.login import get_user_by_credentials  
+
+
+
+
+
+>>>>>>> 8783371 (updated code of support history)
 def register_routes(app):
 
     @app.route("/")
@@ -141,6 +150,12 @@ def register_routes(app):
     #     conn = get_db_connection()
     #     cursor = conn.cursor(dictionary=True)
 
+<<<<<<< HEAD
+=======
+  
+        
+    
+>>>>>>> 8783371 (updated code of support history)
         
     #     cursor.execute("""
     #         SELECT * FROM project 

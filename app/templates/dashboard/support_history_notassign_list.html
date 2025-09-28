@@ -50,15 +50,15 @@ table, th, td {
             </tr>
         </thead>
         <tbody>
-            {% for history in historylist %}
+            {% for notassign in notassignlist %}
             <tr>
-                <td>{{history.assignto}}</td>
-                <td>{{history.assignby}}</td>
-                <td>{{history.dept_name}}</td>
-                <td>{{history.duration}}</td>
-                <td>{{history.problem_description}}</td>
-                <td>{{history.priority}}</td>
-                <td>{{history.status}}</td>
+                <td>{{notassign.assignto}}</td>
+                <td>{{notassign.assignby}}</td>
+                <td>{{notassign.dept_name}}</td>
+                <td>{{notassign.duration}}</td>
+                <td>{{notassign.problem_description}}</td>
+                <td>{{notassign.priority}}</td>
+                <td>{{notassign.status}}</td>
             </tr><br>
 
             {% endfor %}
