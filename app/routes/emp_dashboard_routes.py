@@ -2,6 +2,10 @@ from flask import render_template, session, redirect
 from app.models import emp_dashboard
 import io, base64
 import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('Agg')  # Use the Agg backend for non-GUI rendering
+import matplotlib.pyplot as plt
+
 
 def register_employee_routes(app):
 

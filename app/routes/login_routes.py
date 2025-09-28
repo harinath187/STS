@@ -80,12 +80,12 @@ def register_routes(app):
         if not user:
             return redirect("/login")
         return render_template("dashboard/it_emp.html",user=user)
-    @app.route("/it_manager")
-    def it_manager():
-        user = session.get("user")
-        if not user:
-            return redirect("/login")
-        return render_template("dashboard/it_manager.html",user=user)
+    # @app.route("/it_manager")
+    # def it_manager():
+    #     user = session.get("user")
+    #     if not user:
+    #         return redirect("/login")
+    #     return render_template("dashboard/it_manager.html",user=user)
     @app.route("/logout")
     def logout():
         return render_template("auth/login.html")
