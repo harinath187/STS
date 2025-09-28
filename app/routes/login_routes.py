@@ -4,7 +4,7 @@ from app.models.db import get_db_connection
 
 from app.models.login import get_user_by_credentials  
 
-from app.models.support_history import historylist
+
 
 
 
@@ -95,14 +95,7 @@ def register_routes(app):
         return dict(user=session.get("user"))
 
 
-    @app.route("/supporthistory")
-    def supporthistory():
-        user = session.get("user")
-        listitem=historylist()
-        print(listitem)
-        if not user:
-            return redirect("/login")
-        return render_template("dashboard/support_historylist.html", user=user,historylist=listitem)
+  
         
     
         

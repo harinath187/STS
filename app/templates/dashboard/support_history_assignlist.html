@@ -50,15 +50,15 @@ table, th, td {
             </tr>
         </thead>
         <tbody>
-            {% for history in historylist %}
+            {% for assign in assignlist %}
             <tr>
-                <td>{{history.assignto}}</td>
-                <td>{{history.assignby}}</td>
-                <td>{{history.dept_name}}</td>
-                <td>{{history.duration}}</td>
-                <td>{{history.problem_description}}</td>
-                <td>{{history.priority}}</td>
-                <td>{{history.status}}</td>
+                <td>{{assign.assignto}}</td>
+                <td>{{assign.assignby}}</td>
+                <td>{{assign.dept_name}}</td>
+                <td>{{assign.duration}}</td>
+                <td>{{assign.problem_description}}</td>
+                <td>{{assign.priority}}</td>
+                <td>{{assign.status}}</td>
             </tr><br>
 
             {% endfor %}
