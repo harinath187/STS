@@ -13,7 +13,7 @@ def supporthistory(app):
     @login_required
     def histlist():
         listitem=historylist()
-        return render_template("dashboard/support_historylist.html",historylist=listitem)
+        return render_template("support_ticket/support_historylist.html",historylist=listitem)
 
 
 def suppassignlist(app):
@@ -21,7 +21,7 @@ def suppassignlist(app):
     @login_required
     def asslist():
         listitem=assignlist()
-        return render_template("dashboard/support_history_assignlist.html",assignlist=listitem)
+        return render_template("support_ticket/support_history_assignlist.html",assignlist=listitem)
     
 
 def notsuppassignlist(app):
@@ -30,7 +30,7 @@ def notsuppassignlist(app):
     def notasslist():
         listitem=notassignlist()
         print(listitem)
-        return render_template("/dashboard/support_history_notassign_list.html",notassignlist=listitem)
+        return render_template("support_ticket/support_history_notassign_list.html",notassignlist=listitem)
 
 
 
