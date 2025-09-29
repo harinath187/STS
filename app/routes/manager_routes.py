@@ -1,85 +1,73 @@
-# app/routes/manager_routes.py
+from flask import render_template, session, redirect
+import io, base64
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+from app.models import manager_dashboard
 
-from flask import Blueprint, render_template, redirect, session
-from app.models.db import get_db_connection
+def register_manager_routes(app):
+    @app.route("/manager")
+    def manager_dashboard_view():
+        user = session.get("user")
+        if not user:
+            return redirect("/login")
 
-manager_bp = Blueprint("manager", __name__, url_prefix="/manager")
+        manager_id = user["id"]
 
-@manager_bp.route("/")
-def manager_dashboard():
-    user = session.get("user")
-    if not user:
-        return redirect("/login")
+        # Top Cards
+        card_data = {
+            "total_projects": manager_dashboard.get_total_projects(manager_id),
+            "total_tasks": manager_dashboard.get_total_tasks(manager_id),
+            "completed_tasks": manager_dashboard.get_completed_tasks(manager_id),
+            "in_progress_tasks": manager_dashboard.get_in_progress_tasks(manager_id),
+            "unassigned_tasks": manager_dashboard.get_unassigned_tasks(manager_id)
+        }
 
-    conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
+        # Line Chart
+        months, counts = manager_dashboard.get_monthly_task_counts(manager_id)
+        fig1, ax1 = plt.subplots()
+        ax1.plot(months, counts, marker='o', color='green')
+        ax1.set_title('Tasks Created Per Month')
+        ax1.set_xlabel('Month')
+        ax1.set_ylabel('Count')
+        ax1.grid(True)
+        plt.xticks(rotation=45)
+        img1 = io.BytesIO()
+        plt.tight_layout()
+        fig1.savefig(img1, format='png')
+        img1.seek(0)
+        line_chart = base64.b64encode(img1.getvalue()).decode()
+        plt.close(fig1)
 
-    cursor.execute("""
-        SELECT * FROM project WHERE project_lead = %s
-    """, (user['id'],))
-    projects = cursor.fetchall()
+        # Pie Chart
+        sizes = [
+            card_data["completed_tasks"],
+            card_data["in_progress_tasks"],
+            card_data["unassigned_tasks"]
+        ]
+        labels = ['Completed', 'In Progress', 'Unassigned']
+        colors = ['#34d399', '#fbbf24', '#f87171']
+        pie_chart = None
+        if sum(sizes) > 0:
+            fig2, ax2 = plt.subplots()
+            ax2.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90, colors=colors)
+            ax2.axis('equal')
+            plt.title("Task Status")
+            img2 = io.BytesIO()
+            plt.tight_layout()
+            fig2.savefig(img2, format='png')
+            img2.seek(0)
+            pie_chart = base64.b64encode(img2.getvalue()).decode()
+            plt.close(fig2)
 
-    in_progress_count = 0
-    task_count = 0
-    unassigned_task_count = 0
+        # Recent Tasks
+        recent_tasks = manager_dashboard.get_recent_tasks(manager_id)
 
-    if projects:
-        project_ids = [p['id'] for p in projects]
-        format_strings = ','.join(['%s'] * len(project_ids))
-
-        cursor.execute(f"""
-            SELECT status, emp_id 
-            FROM project_ticket 
-            WHERE project_id IN ({format_strings})
-        """, tuple(project_ids))
-
-        tasks = cursor.fetchall()
-        task_count = len(tasks)
-        in_progress_count = sum(1 for t in tasks if t['status'] == 'In Progress')
-        unassigned_task_count = sum(1 for t in tasks if t['emp_id'] is None)
-
-    cursor.close()
-    conn.close()
-
-    return render_template(
-        "dashboard/pm.html",
-        user=user,
-        projects=projects,
-        in_progress_count=in_progress_count,
-        task_count=task_count,
-        unassigned_task_count=unassigned_task_count
-    )
-
-@manager_bp.route("/project/<int:project_id>/tasks")
-def manager_project_tasks(project_id):
-    user = session.get("user")
-    if not user:
-        return redirect("/login")
-
-    conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
-
-    cursor.execute("""
-        SELECT * FROM project 
-        WHERE id = %s AND project_lead = %s
-    """, (project_id, user['id']))
-    project = cursor.fetchone()
-
-    if not project:
-        return "Unauthorized access or project not found", 404
-
-    cursor.execute("""
-        SELECT 
-            pt.token_id, pt.description, pt.estimated_hrs, pt.worked_hrs, pt.status,
-            e.firstname, e.lastname, d.dept_name
-        FROM project_ticket pt
-        LEFT JOIN employee e ON pt.emp_id = e.id
-        LEFT JOIN department d ON e.dept_id = d.dept_id
-        WHERE pt.project_id = %s
-    """, (project_id,))
-    tasks = cursor.fetchall()
-
-    cursor.close()
-    conn.close()
-
-    return render_template("dashboard/pm_project_tasks.html", user=user, project=project, tasks=tasks)
+        return render_template(
+            "dashboard/pm.html",
+            user=user,
+            card_data=card_data,
+            line_chart=line_chart,
+            pie_chart=pie_chart,
+            recent_tasks=recent_tasks
+        )
