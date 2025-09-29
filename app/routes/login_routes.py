@@ -1,8 +1,8 @@
-
 from flask import render_template, request, redirect, session
 from app.models.db import get_db_connection
 
 from app.models.login import get_user_by_credentials  
+
 
 
 
@@ -13,6 +13,7 @@ def register_routes(app):
     @app.route("/")
     @app.route("/login", methods=["GET"])
     def login_page():
+        # print("connection success.....................")
         return render_template("auth/login.html")  
 
     @app.route("/login", methods=["POST"])
@@ -56,13 +57,14 @@ def register_routes(app):
         user = session.get("user")
         if not user:
             return redirect("/login")
-        return render_template("dashboard/admin.html",user=user)
+        return render_template("dashboard/admin.html", user=user)
 
     @app.route("/employee_home")
     def employee_home():
         user = session.get("user")
         if not user:
             return redirect("/login")
+
         return render_template("dashboard/employee.html",user=user)
     
 
@@ -80,12 +82,12 @@ def register_routes(app):
         if not user:
             return redirect("/login")
         return render_template("dashboard/it_emp.html",user=user)
-    @app.route("/it_manager")
-    def it_manager():
-        user = session.get("user")
-        if not user:
-            return redirect("/login")
-        return render_template("dashboard/it_manager.html",user=user)
+    # @app.route("/it_manager")
+    # def it_manager():
+    #     user = session.get("user")
+    #     if not user:
+    #         return redirect("/login")
+    #     return render_template("dashboard/it_manager.html",user=user)
     @app.route("/logout")
     def logout():
         return render_template("auth/login.html")
@@ -100,3 +102,7 @@ def register_routes(app):
     
         
 
+
+        return render_template("dashboard/employee.html", user=user)
+
+    
