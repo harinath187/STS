@@ -16,8 +16,9 @@
 <body class="bg-gray-100 font-sans">
 
   <div class="flex h-screen flex-col">
-    
+
     <div class="flex flex-1 overflow-hidden">
+
      
       <main class="flex-1 p-6 overflow-y-auto">
         <div class="w-full flex justify-end mb-6">
@@ -26,11 +27,14 @@
 
         {% block content %}
         {% endblock %}
+
       </main>
 
     </div>
-    
+
+    <!-- Footer -->
     {% include "common/footer.html" %}
+
   </div>
 
   {% block scripts %}
