@@ -14,6 +14,7 @@ app = Flask(
     static_folder=static_dir
 )
 
+#application secret key
 app.secret_key = "your-secret-key"
 
 # Register routes
