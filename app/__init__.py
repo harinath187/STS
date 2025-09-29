@@ -1,11 +1,10 @@
 
-import os
+
 from flask import Flask
 
 from app.routes.project_routes import project_bp
 
 from app.routes.login_routes import register_routes
-from app.routes.Project_routes import project_bpp
 
 def create_app():
     app = Flask(__name__)
@@ -16,5 +15,6 @@ def create_app():
     app.register_blueprint(project_bpp)
 
     register_routes(app)
-    
+
     return app
+

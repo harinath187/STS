@@ -4,7 +4,7 @@ from app.models.db import get_db_connection
 
 from app.models.login import get_user_by_credentials  
 
-from app.models.project_db import get_today_task
+
 
 
 
@@ -47,6 +47,8 @@ def register_routes(app):
             return redirect("/manager")
         elif role in ["IT Team", "Support / IT Helpdesk"]:
             return redirect("/it_employee")
+        elif role =="IT Project Manager":
+            return redirect("/it_manager")
         else:
             return render_template("auth/login.html", error="Unknown role")
 
@@ -57,12 +59,13 @@ def register_routes(app):
             return redirect("/login")
         return render_template("dashboard/admin.html",user=user)
 
-    @app.route("/employee")
-    def employee_dashboard():
+    @app.route("/employee_home")
+    def employee_home():
         user = session.get("user")
         if not user:
             return redirect("/login")
         return render_template("dashboard/employee.html",user=user)
+    
 
 
     @app.route("/manager")
@@ -78,13 +81,12 @@ def register_routes(app):
         if not user:
             return redirect("/login")
         return render_template("dashboard/it_emp.html",user=user)
+    # @app.route("/it_manager")
+    # def it_manager():
+    #     user = session.get("user")
+    #     if not user:
+    #         return redirect("/login")
+    #     return render_template("dashboard/it_manager.html",user=user)
     @app.route("/logout")
     def logout():
         return render_template("auth/login.html")
-    
-    @app.route("/today_task")
-    def get_new():
-        today_task = get_today_task()
-        # print("task must show here.............",today_task)
-        return render_template("project_management/due_today.html",today_task = today_task)
-    
