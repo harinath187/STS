@@ -52,3 +52,11 @@ def insert_project(data):
     finally:
         cursor.close()
         conn.close()
+
+
+def count_projects_by_pm(pm_name):
+    db = get_db_connection()
+    cursor = db.cursor()
+    print(cursor.execute("SELECT COUNT(*) FROM project WHERE project_manager = %s", (pm_name,    )))
+    result = cursor.fetchone()
+    return result[0] if result else 0

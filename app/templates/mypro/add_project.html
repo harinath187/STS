@@ -3,15 +3,79 @@
 <head>
     <title>Add New Project</title>
     <style>
-        form { max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ccc; }
-        label { display: block; margin-top: 10px; font-weight: bold; }
-        input, textarea, select { width: 100%; padding: 8px; margin-top: 5px; }
-        button { margin-top: 20px; padding: 10px 20px; background-color: #3498db; color: white; border: none; cursor: pointer; }
-        button:hover { background-color: #2980b9; }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            padding: 30px;
+        }
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        form {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+            color: #34495e;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .flash-message {
+            max-width: 600px;
+            margin: 10px auto;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+        .info { background-color: #fff3cd; color: #856404; }
     </style>
 </head>
 <body>
-    <h2 style="text-align:center;">Add New Project</h2>
+
+    <h2>Add New Project</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          {% set css_class = 'info' %}
+          {% if category == 'success' %}
+            {% set css_class = 'success' %}
+          {% elif category == 'error' %}
+            {% set css_class = 'error' %}
+          {% endif %}
+          <div class="flash-message {{ css_class }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
     <form method="POST" action="/projects/add" enctype="multipart/form-data">
         <label>Project Name</label>
         <input type="text" name="project_name" required>
@@ -35,13 +99,20 @@
         <input type="number" step="0.01" name="cost_hours">
 
         <label>Attachment</label>
-        <input type="file" name="attachment">
-
+        <input type="file" name="attachment" accept=".pdf,.doc,.docx,.xlsx,.png,.jpg,.jpeg">
 
         <label>Status (%)</label>
         <input type="number" name="status_percentage" min="0" max="100">
 
         <button type="submit">Add Project</button>
     </form>
+
+    <script>
+        document.querySelector('input[name="attachment"]').addEventListener('change', function() {
+            if (this.files.length > 0) {
+                alert("Selected file: " + this.files[0].name);
+            }
+        });
+    </script>
 </body>
 </html>
