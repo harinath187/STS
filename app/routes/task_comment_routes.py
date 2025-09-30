@@ -17,7 +17,7 @@ def register_task_comments_routes(app):
             # insert into DB and save file
             filename = insert_task_comment(task_id, message, file, app.config['UPLOAD_FOLDER'])
 
-            flash("Task comment created successfully!", "success")
+            flash("✅ Task comment created successfully!", "success")
             return redirect(url_for('test_routes.test_tasks')) 
 
         # Correct template path

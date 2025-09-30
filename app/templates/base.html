@@ -15,8 +15,36 @@
   <!-- Custom page-specific CSS -->
   {% block head %}{% endblock %}
 </head>
+
+<script>
+  // Auto-dismiss flash message after 3 seconds
+  setTimeout(function() {
+    const flash = document.getElementById('flash-message');
+    if (flash) {
+      flash.style.transition = 'opacity 0.5s ease';
+      flash.style.opacity = '0';
+      setTimeout(() => flash.remove(), 500); // remove from DOM
+    }
+  }, 3000);
+</script>
+
+
 <body class="bg-gray-100 font-sans">
- 
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="fixed top-6 left-0 right-0 z-50 flex justify-center">
+      {% for category, message in messages %}
+        <div id="flash-message" class="max-w-xl mx-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded shadow">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+
+
   <div class="flex h-screen flex-col">
  
     <div class="flex flex-1 overflow-hidden">
