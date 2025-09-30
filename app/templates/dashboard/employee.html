@@ -4,7 +4,7 @@
  
 {% block content %}
 <div class="flex min-h-screen bg-gray-50">
- 
+
   <!-- Sidebar -->
   <aside class="w-64 bg-white shadow-md flex flex-col fixed top-0 left-0 bottom-0">
     {% include "common/employee_dashboard.html" %}
@@ -12,7 +12,7 @@
  
   <!-- Main Content -->
   <main class="flex-1 ml-64 pt-8 pr-8 pb-8 pl-4">
- 
+
     <!-- Welcome Message -->
     <h1 class="text-3xl font-semibold mb-6">Welcome, {{ user.firstname }}!</h1>
  
@@ -35,7 +35,7 @@
         <p class="text-2xl font-bold mt-2">{{ card_data.support_tickets }}</p>
       </div>
     </div>
- 
+
     <!-- Charts Section -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
       <!-- Line Chart -->
@@ -47,7 +47,7 @@
           <p class="text-gray-400 text-center">No data available for the line chart.</p>
         {% endif %}
       </div>
- 
+
       <!-- Pie Chart -->
       <div class="bg-white p-6 rounded-xl shadow">
         <h3 class="text-xl font-semibold mb-4">Task Status</h3>
@@ -58,11 +58,13 @@
         {% endif %}
       </div>
     </div>
+
  
     <!-- Recent Tasks -->
     <div class="mb-8">
       <h3 class="text-xl font-semibold mb-4">Recent Tasks</h3>
  
+
       {% if recent_tasks %}
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {% for task in recent_tasks %}
