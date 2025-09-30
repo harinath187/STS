@@ -1,8 +1,18 @@
+
 {% extends "base.html" %}
-
-{% block title %}Create Support Ticket{% endblock %}
-
+ 
+{% block title %}Employee Dashboard{% endblock %}
+ 
 {% block content %}
+<div class="flex min-h-screen bg-gray-50">
+ 
+  <!-- Sidebar -->
+  <aside class="w-64 bg-white shadow-md flex flex-col fixed top-0 left-0 bottom-0">
+    {% include "common/employee_dashboard.html" %}
+  </aside>
+ 
+  <!-- Main Content -->
+  <main class="flex-1 ml-64 pt-8 pr-8 pb-8 pl-4">
 <div class="max-w-2xl mx-auto bg-white p-6 rounded-xl shadow mt-8 relative">
   
   <!-- Back to Tasks button -->
@@ -75,4 +85,9 @@
     </div>
   </form>
 </div>
+ 
+  </main>
+</div>
 {% endblock %}
+ 
+ 
