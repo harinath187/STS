@@ -5,6 +5,10 @@ import matplotlib
 matplotlib.use("Agg") 
 
 import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('Agg')  # Use the Agg backend for non-GUI rendering
+import matplotlib.pyplot as plt
+
 
 def register_employee_routes(app):
 
