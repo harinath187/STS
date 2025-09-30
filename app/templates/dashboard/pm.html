@@ -1,10 +1,15 @@
 {% extends "base.html" %}
 
-{% block title %}Admin Dashboard{% endblock %}
+{% block title %}Project Manager Dashboard{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/pm.css') }}">
+{% endblock %}
 
 {% block content %}
 <div class="flex min-h-screen">
 
+  <!-- Sidebar -->
   <aside class="w-64 bg-white shadow-md flex flex-col fixed top-0 left-0 bottom-0">
   <div class="p-4 text-2xl font-bold text-blue-600">Dashboard</div>
   <nav class="flex-1 px-4 mt-4 space-y-2">
@@ -30,15 +35,53 @@
 </aside>
 
 
-<main class="flex-1 ml-64 mt-0 p-6 bg-gray-50">
-  <h1 class="text-2xl font-semibold mb-6">Welcome Admin {{ user.name }}</h1>
-  <div class="grid grid-cols-3 gap-6">
-    <div class="bg-white p-4 rounded-xl shadow">Card 1</div>
-    <div class="bg-white p-4 rounded-xl shadow">Card 2</div>
-    <div class="bg-white p-4 rounded-xl shadow">Card 3</div>
-  </div>
-</main>
+  <!-- Main Content -->
+  <main class="flex-1 ml-64 mt-0 p-6 bg-gray-50">
+    <h1 class="text-2xl font-semibold mb-6">Project Manager {{ user.name }}</h1>
 
+    <div class="grid grid-cols-4 gap-6">
+  <!-- Total Projects -->
+  <div class="bg-glass p-4 rounded-xl shadow text-blue-700 ">
+    <h2 class="text-lg font-bold mb-2 text-blue-600">Total Projects</h2>
+    <p class="text-xl">{{ projects | length }}</p>
+    <ul class="list-disc ml-5 text-blue-700 mt-2">
+      {% for project in projects %}
+        <li>
+          <a href="/manager/project/{{ project.id }}/tasks" class="hover:underline">
+            {{ project.name }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <!-- In Progress Tasks -->
+  <div class="bg-glass p-4 rounded-xl shadow text-blue-700 ">
+    <h2 class="text-lg font-bold mb-2 text-yellow-600">In Progress Tasks</h2>
+    <p class="text-xl">{{ in_progress_count }}</p>
+  </div>
+
+  <!-- Total Tasks -->
+  <div class="bg-glass p-4 rounded-xl shadow text-blue-700 ">
+    <h2 class="text-lg font-bold mb-2 text-green-600">Total Tasks</h2>
+    <p class="text-xl">{{ task_count }}</p>
+  </div>
+
+  <!-- Unassigned Tasks -->
+  <div class="bg-glass p-4 rounded-xl shadow text-blue-700 ">
+    <h2 class="text-lg font-bold mb-2 text-red-600">Unassigned Tasks</h2>
+    <p class="text-xl">{{ unassigned_task_count }}</p>
+  </div>
+</div>
+
+    
+
+
+
+    
+   
+  </main>
 
 </div>
 {% endblock %}
+z

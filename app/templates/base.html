@@ -4,57 +4,43 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{% block title %}Dashboard{% endblock %}</title>
+
+  <!-- Global CSS/JS -->
+
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  
+
+  <!-- Custom page-specific CSS -->
+  {% block head %}{% endblock %}
 </head>
 <body class="bg-gray-100 font-sans">
-
+ 
   <div class="flex h-screen flex-col">
-
+ 
     <div class="flex flex-1 overflow-hidden">
-
-      <!-- Sidebar -->
-      <aside class="w-64 bg-white shadow-md flex flex-col fixed top-0 left-0 bottom-0">
-        {% set role = user.dep_name.strip() %}
-        {% if role == "Admin" %}
-          {% include 'common/admin_dashboard.html' %}
-        {% elif role in ["HR", "Backend Team", "Frontend Team", "QA / Testing", "Database / Data", "Security"] %}
-          {% include 'common/employee_dashboard.html' %}
-        {% elif role == "Project Manager" %}
-          {% include 'common/project_manager.html' %}
-        {% elif role in ["IT Team", "Support / IT Helpdesk"] %}
-          {% include 'common/it_employee.html' %}
-        {% elif role == "IT Project Manager" %}
-          {% include 'common/it_manager.html' %}
-        {% else %}
-          <p class="p-4 text-gray-500">No Sidebar Available</p>
-        {% endif %}
-      </aside>
-
-      <!-- Main Content -->
-      <main class="flex-1 ml-64 pt-6 pr-8 pb-6 pl-2 overflow-y-auto bg-gray-50">
-
-        <!-- Navbar -->
+     
+      <main class="flex-1 p-6 overflow-y-auto">
         <div class="w-full flex justify-end mb-6">
           {% include "common/navbar.html" %}
         </div>
-
-        <!-- Page Content -->
         {% block content %}
         {% endblock %}
-
+ 
       </main>
-
+ 
     </div>
-
+ 
     <!-- Footer -->
     {% include "common/footer.html" %}
-
+ 
   </div>
-
+ 
   {% block scripts %}
   {% endblock %}
-
+ 
 </body>
 </html>
+ 
+ 
