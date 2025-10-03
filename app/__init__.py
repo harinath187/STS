@@ -37,12 +37,7 @@ def create_app():
 
 
     # Register IT manager/test/support routes
-    test_routes(app)
-    supporthistory(app)
-    suppassignlist(app)
-    notsuppassignlist(app)
-
-    # Support history routes
+    # test_routes(app)
     supporthistory(app)
     suppassignlist(app)
     notsuppassignlist(app)
