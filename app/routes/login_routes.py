@@ -9,14 +9,14 @@ print("ffffffff")
 
 
 
+
+
 def register_routes(app):
 
     @app.route("/")
     @app.route("/login", methods=["GET"])
     def login_page():
-
         # print("connection success.....................")
-
         return render_template("auth/login.html")  
 
     @app.route("/login", methods=["POST"])
@@ -70,6 +70,7 @@ def register_routes(app):
         user = session.get("user")
         if not user:
             return redirect("/login")
+
         return render_template("dashboard/employee.html",user=user)
 
 
@@ -78,9 +79,7 @@ def register_routes(app):
     #     user = session.get("user")
     #     if not user:
     #         return redirect("/login")
-
-    #     conn = get_db_connection()
-    #     cursor = conn.cursor(dictionary=True)
+    #     return render_template("dashboard/pm.html",user=user)
 
     @app.route("/it_employee")
     def it_employee_dashboard():
@@ -144,8 +143,7 @@ def register_routes(app):
     #     if not user:
     #         return redirect("/login")
 
-    #     conn = get_db_connection()
-    #     cursor = conn.cursor(dictionary=True)
+  
         
     #     cursor.execute("""
     #         SELECT * FROM project 
@@ -192,3 +190,7 @@ def register_routes(app):
         # print("task must show here.............",today_task)
         return render_template("project_management/due_today.html",today_task = today_task)
 
+
+        return render_template("dashboard/employee.html", user=user)
+
+    
