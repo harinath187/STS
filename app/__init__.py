@@ -1,3 +1,5 @@
+
+import os
 from flask import Flask
 
 from app.routes.login_routes import register_routes
@@ -36,7 +38,9 @@ def create_app():
 
     # Register IT manager/test/support routes
     test_routes(app)
-    register_support_routes(app)
+    supporthistory(app)
+    suppassignlist(app)
+    notsuppassignlist(app)
 
     # Support history routes
     supporthistory(app)

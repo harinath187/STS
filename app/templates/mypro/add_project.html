@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Project Management Form</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- jQuery Validation -->
+  <script src="https://cdn.jsdelivr.net/jquery.validation/1.19.5/jquery.validate.min.js"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+  <div class="bg-white shadow-lg rounded-2xl w-full max-w-2xl p-8">
+    <h2 class="text-2xl font-bold mb-6 text-gray-700">Project Management Form</h2>
+    
+    <form method="POST" action="{{url_for('project_bpp.add_project')}}" id="projectForm" class="space-y-5" enctype="multipart/form-data">
+      
+      <!-- Project Name -->
+      <div>
+        <label class="block text-sm font-medium text-gray-600">Project Name</label>
+        <input name="project_name" type="text" placeholder="Enter project name"
+          class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500" required>
+      </div>
+
+      <!-- Client Name Dropdown -->
+      <div>
+        <label class="block text-sm font-medium text-gray-600">Client Name</label>
+        <select name="client_name" class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
+          <option value="">-- Select Client --</option>
+          {% for name in client_name %}
+            <option value="{{ name.client_id }}">{{ name.Company_Name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- Project Manager Dropdown -->
+      <div>
+        <label class="block text-sm font-medium text-gray-600">Project Manager</label>
+        <select name="project_manager" class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
+          <option value="">-- Select Manager --</option>
+          <option value="manager1">Manager 1</option>
+          <option value="manager2">Manager 2</option>
+          <option value="manager3">Manager 3</option>
+        </select>
+      </div>
+
+      <!-- Estimated Duration -->
+      <div>
+        <label class="block text-sm font-medium text-gray-600">Estimated Duration (days)</label>
+        <input name="estimated_duration" type="number" placeholder="e.g. 60"
+          class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <!-- Tech Stack -->
+      <div>
+        <label class="block text-sm font-medium text-gray-600">Tech Stack</label>
+        <input name="tech_stack" type="text" placeholder="e.g. React, Flask, MySQL"
+          class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <!-- Time Taken -->
+      <div>
+        <label class="block text-sm font-medium text-gray-600">Time Taken (days)</label>
+        <input name="time_taken" type="number" placeholder="e.g. 45"
+          class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <!-- Cost Hours -->
+      <div>
+        <label class="block text-sm font-medium text-gray-600">Cost Hours</label>
+        <input name="cost_hours" type="number" placeholder="e.g. 1200"
+          class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <!-- Attachments -->
+      <div>
+        <label class="block text-sm font-medium text-gray-600">Attachments</label>
+        <input name="attachments" type="file" multiple
+          class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <!-- Status Percentage -->
+      <div>
+        <label class="block text-sm font-medium text-gray-600">Status (%)</label>
+        <input id="statusRange" name="status_percentage" type="range" min="0" max="100" value="50" class="w-full">
+        <div class="text-right text-sm text-gray-500">
+          <span id="statusValue">50</span>%
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="pt-4">
+        <button type="submit"
+          class="w-full bg-blue-600 text-white py-2 px-4 rounded-xl shadow hover:bg-blue-700 transition">
+          Save Project
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+<script>
+$(document).ready(function() {
+  // Live status update
+  const statusRange = document.getElementById("statusRange");
+  const statusValue = document.getElementById("statusValue");
+  statusRange.addEventListener("input", () => {
+    statusValue.textContent = statusRange.value;
+  });
+
+  // Prevent typing negative numbers
+  $('input[type=number]').on('input', function() {
+    if ($(this).val() < 0) $(this).val('');
+  });
+
+  $("#projectForm").validate({
+    rules: {
+      project_name: "required",
+      client_name: "required",
+      project_manager: "required",
+      estimated_duration: {
+        required: true,
+        number: true,
+        min: 1
+      },
+      tech_stack: "required",
+      time_taken: {
+        required: true,
+        number: true,
+        min: 0
+      },
+      cost_hours: {
+        required: true,
+        number: true,
+        min: 0
+      }
+    },
+    messages: {
+      project_name: "Please enter project name",
+      client_name: "Please select a client",
+      project_manager: "Please select a manager",
+      estimated_duration: "Enter a valid duration (≥1)",
+      tech_stack: "Enter tech stack",
+      time_taken: "Enter valid time taken (≥0)",
+      cost_hours: "Enter valid cost hours (≥0)"
+    },
+    errorElement: 'p',
+    errorClass: 'text-red-500 text-sm mt-1',
+    highlight: function(element) {
+      $(element).addClass('border-red-500');
+    },
+    unhighlight: function(element) {
+      $(element).removeClass('border-red-500');
+    },
+    errorPlacement: function(error, element) {
+      error.insertAfter(element);
+    },
+    // LIVE VALIDATION
+    onkeyup: function(element) {
+      $(element).valid();
+    },
+    onfocusout: function(element) {
+      $(element).valid();
+    },
+    onclick: function(element) {
+      $(element).valid();
+    },
+    // Force validation on submit
+    submitHandler: function(form) {
+      if (!$(form).valid()) return false; // prevent submit if invalid
+      let formData = new FormData(form);
+      $.ajax({
+        url: "/save_project",
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+          alert("Project saved successfully!");
+          console.log(response);
+          form.reset();
+          $("#statusValue").text("50");
+        },
+        error: function(err) {
+          alert("Error saving project.");
+          console.error(err);
+        }
+      });
+    }
+  });
+});
+</script>
+
+
+</body>
+</html>
