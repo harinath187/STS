@@ -37,23 +37,20 @@ def create_app():
 
 
     # Register IT manager/test/support routes
-    test_routes(app)
+    
     supporthistory(app)
     suppassignlist(app)
     notsuppassignlist(app)
 
-    # Support history routes
-    supporthistory(app)
-    suppassignlist(app)
-    notsuppassignlist(app)
 
     # Ticket detail/edit/delete routes
     ticket_detail_route(app)
     ticket_delete_route(app)
 
-    # ✅ Register dynamic employee dropdown route
+    #  Register dynamic employee dropdown route
     employee_routes(app)
 
+    
     # Manager dashboard routes
     register_manager_routes(app)
 
