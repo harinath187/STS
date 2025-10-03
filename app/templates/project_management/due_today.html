@@ -58,7 +58,7 @@
 </head>
 <body>  
  
-  <form id="dateForm" method="POST"   >
+  <form id="dateForm" method="POST"   action="{{ url_for('project_bpp.get_by_task_date_route()') }}" >
     <label for="hiddenDateInput" class="date-picker-button">Select Date</label>
     <input type="date" id="hiddenDateInput" name="selectedDate" required>
   

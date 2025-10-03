@@ -14,28 +14,29 @@ def show_projects():
 
 UPLOAD_FOLDER = 'static/uploads'
 
-@project_bp.route('/projects/add', methods=['GET', 'POST'])
-def add_project():
-    if request.method == 'POST':
-        form_data = request.form.to_dict()
-        file = request.files.get('attachment')
+# @project_bp.route('/save_project', methods=['GET', 'POST'])
+# def add_project():
+#     if request.method == 'POST':
+#         form_data = request.form.to_dict()
+#         file = request.files.get('attachment')
 
-        upload_folder = current_app.config['UPLOAD_FOLDER']
-        os.makedirs(upload_folder, exist_ok=True)
+#         upload_folder = current_app.config['UPLOAD_FOLDER']
+#         os.makedirs(upload_folder, exist_ok=True)
 
-        if file and file.filename:
-            filename = secure_filename(file.filename)
-            filepath = os.path.join(upload_folder, filename)
-            file.save(filepath)
-            form_data['Attachment'] = filepath
-        else:
-            form_data['Attachment'] = None
+#         if file and file.filename:
+#             filename = secure_filename(file.filename)
+#             filepath = os.path.join(upload_folder, filename)
+#             file.save(filepath)
+#             form_data['Attachment'] = filepath
+#         else:
+#             form_data['Attachment'] = None
 
-        success = insert_project(form_data)
-        if success:
-            flash("Project added successfully!", "success")
-            return redirect('/projects')
-        else:
-            flash("Failed to add project.", "error")
+#         success = insert_project(form_data)
+#         if success:
+#             flash("Project added successfully!", "success")
+#             return redirect('/projects')
+#         else:
+#             flash("Failed to add project.", "error")
 
-    return render_template('mypro/add_project.html')
+#     return render_template('mypro/add_project.html')
+

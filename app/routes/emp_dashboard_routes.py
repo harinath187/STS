@@ -10,7 +10,9 @@ import matplotlib.pyplot as plt
 def register_employee_routes(app):
 
     @app.route("/employee")
+    
     def employee_dashboard_view():
+        
         user = session.get("user")
         if not user:
             return redirect("/login")

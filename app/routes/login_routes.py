@@ -3,8 +3,9 @@ from flask import render_template, request, redirect, session
 from app.models.db import get_db_connection
 
 from app.models.login import get_user_by_credentials  
+# from app.routes.emp_dashboard_routes import employee_dashboard_view
 
-
+print("ffffffff")
 
 
 
@@ -13,13 +14,15 @@ def register_routes(app):
     @app.route("/")
     @app.route("/login", methods=["GET"])
     def login_page():
+        print("qqqqqqqqq")
         return render_template("auth/login.html")  
 
     @app.route("/login", methods=["POST"])
     def login():
+        print("qqqqqqqqq")
         username = request.form["username"]
         password = request.form["password"]
-        print("username ", username)
+        # print("username ", username)
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
         cursor.execute("""
@@ -29,7 +32,7 @@ def register_routes(app):
             WHERE employee.username = %s AND employee.password = %s
         """, (username, password))
         user = cursor.fetchone()
-        print("username of th employee", user)
+        # print("username of th employee", user)
         cursor.close()
         conn.close()
 
@@ -42,6 +45,7 @@ def register_routes(app):
         if role == "Admin":
             return redirect("/admin")
         elif role in ["HR", "Backend Team", "Frontend Team", "QA / Testing", "Database / Data", "Security"]:
+            print('hhhhhh')
             return redirect("/employee")
         elif role == "Project Manager":
             return redirect("/manager")
@@ -90,3 +94,4 @@ def register_routes(app):
     @app.route("/logout")
     def logout():
         return render_template("auth/login.html")
+    
