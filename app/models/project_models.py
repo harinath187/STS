@@ -68,3 +68,39 @@ def count_projects_by_pm(pm_name):
     cursor.execute(query, (pm_name,))
     result = cursor.fetchone()
     return result[0] if result else 0
+
+
+def fetch_team_tasks_under_pm(pm_id):
+    conn = get_db_connection()
+    if not conn:
+        return []
+
+    try:
+        cursor = conn.cursor(dictionary=True)
+        query = """
+            SELECT 
+    e.id,
+    e.firstname,
+    e.lastname,
+    e.email,
+    e.username,
+    e.role_id,
+    pt.task_name,
+    pt.task_description,
+    pt.status,
+    pt.Start_Date,
+    pt.End_Date,
+    p.project_name
+FROM project_task pt
+JOIN project p ON pt.project_id = p.id
+JOIN employee e ON pt.assigned_to = e.id
+WHERE p.project_manager = %s;
+        """
+        cursor.execute(query, (pm_id,))
+        return cursor.fetchall()
+    except Exception as e:
+        print("Error fetching team tasks:", e)
+        return []
+    finally:
+        cursor.close()
+        conn.close()

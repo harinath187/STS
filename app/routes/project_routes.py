@@ -1,7 +1,7 @@
 import os
 from flask import Blueprint, render_template, request, redirect, flash, current_app, session ,url_for
 from werkzeug.utils import secure_filename
-from app.models.project_models import insert_project, fetch_projects_by_pm
+from app.models.project_models import insert_project, fetch_projects_by_pm, fetch_team_tasks_under_pm
 from flask import send_from_directory
 from app.models.project_models import count_projects_by_pm
 
@@ -64,3 +64,16 @@ def count_pm_projects():
     project_count = count_projects_by_pm(user["username"])
     print(project_count)
     return render_template('mypro/project_count.html', user=user, count=project_count)
+
+
+
+@project_bp.route('/team-tasks')
+def show_team_tasks():
+    user = session.get("user")
+    if not user:
+        return redirect(url_for("auth_bp.login"))
+
+    pm_id = user.get("id")
+    team_tasks = fetch_team_tasks_under_pm(pm_id)
+    print(team_tasks)
+    return render_template("mypro/project_count.html", team_tasks=team_tasks, user=user)
