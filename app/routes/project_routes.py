@@ -19,11 +19,11 @@ def show_projects():
     projects = fetch_projects_by_pm(user_id)
     return render_template('mypro/project_list.html', projects=projects, user=user)
 
-@project_bp.route('/projects/add', methods=['GET', 'POST'])
-def add_project():
-    if request.method == 'POST':
-        form_data = request.form.to_dict()
-        file = request.files.get('attachment')
+# @project_bp.route('/save_project', methods=['GET', 'POST'])
+# def add_project():
+#     if request.method == 'POST':
+#         form_data = request.form.to_dict()
+#         file = request.files.get('attachment')
 
         upload_folder = os.path.join(current_app.root_path, 'static', 'uploads')
         os.makedirs(upload_folder, exist_ok=True)
