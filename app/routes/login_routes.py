@@ -1,7 +1,6 @@
 from flask import render_template, request, redirect, session
 from app.models.db import get_db_connection
 
-<<<<<<< HEAD
 from app.models.login import get_user_by_credentials  
 # from app.routes.emp_dashboard_routes import employee_dashboard_view
 
@@ -9,18 +8,15 @@ print("ffffffff")
 
 
 
-=======
->>>>>>> 72a9ad704c7a30a3cbee8e84841c0dc2c4c5590d
+
 def register_routes(app):
 
     @app.route("/")
     @app.route("/login", methods=["GET"])
     def login_page():
-<<<<<<< HEAD
-        print("qqqqqqqqq")
-=======
+
         # print("connection success.....................")
->>>>>>> 72a9ad704c7a30a3cbee8e84841c0dc2c4c5590d
+
         return render_template("auth/login.html")  
 
     @app.route("/login", methods=["POST"])
@@ -101,9 +97,7 @@ def register_routes(app):
     @app.route("/logout")
     def logout():
         return render_template("auth/login.html")
-<<<<<<< HEAD
-    
-=======
+
     #     # Get all projects for this manager
     #     cursor.execute("""
     #         SELECT * 
@@ -198,4 +192,3 @@ def register_routes(app):
         # print("task must show here.............",today_task)
         return render_template("project_management/due_today.html",today_task = today_task)
 
->>>>>>> 72a9ad704c7a30a3cbee8e84841c0dc2c4c5590d

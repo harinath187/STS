@@ -1,13 +1,12 @@
 
 import os
 from flask import Flask
-<<<<<<< HEAD
 import os
 from app.routes.Project_routes import project_bpp
 from app.routes.emp_dashboard_routes import register_employee_routes
-=======
+
 from app.routes.project_routes import project_bp
->>>>>>> 72a9ad704c7a30a3cbee8e84841c0dc2c4c5590d
+
 from app.routes.login_routes import register_routes
 
 from app.routes.it_manager_routes import register_support_routes
@@ -21,18 +20,18 @@ def create_app():
     upload_folder = 'static/uploads'
     app.config['UPLOAD_FOLDER'] = upload_folder
     os.makedirs(upload_folder, exist_ok=True)   
-<<<<<<< HEAD
+
     app.register_blueprint(project_bpp)
     register_employee_routes(app)
     register_routes(app)
 
-=======
+
     app.register_blueprint(project_bp) # login, admin, etc.
     register_employee_routes(app)  # employee dashboard routes
     test_routes(app)
     supporthistory(app)
     suppassignlist(app)
     notsuppassignlist(app)
->>>>>>> 72a9ad704c7a30a3cbee8e84841c0dc2c4c5590d
+
     return app
 
