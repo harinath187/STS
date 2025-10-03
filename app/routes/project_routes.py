@@ -29,7 +29,6 @@ def add_project():
             filepath = os.path.join(upload_folder, filename)
             file.save(filepath)
 
-            # Store relative path like 'uploads/filename.ext'
             form_data['Attachment'] = f"uploads/{filename}"
 
             print(f"[UPLOAD] Saved to: {filepath}")
@@ -53,10 +52,11 @@ def serve_uploaded_file(filename):
 @project_bp.route('/projects/count')
 def count_pm_projects():
     user = session.get("user")
+    print(user)
     if not user:
         flash("You must be logged in to view your project count.", "error")
         return redirect('/login')
 
-    project_count = count_projects_by_pm(user)
+    project_count = count_projects_by_pm(user["firstname"])
     print(project_count)
     return render_template('mypro/project_count.html', user=user, count=project_count)
