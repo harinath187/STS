@@ -24,8 +24,6 @@ def get_db_connection():
             print("Failed to connect to the database.")
             return None
     except Error as e:
-
         print(f"Database connection error: {e}")
-
         return None
 

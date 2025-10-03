@@ -1,9 +1,15 @@
 {% extends "base.html" %}
 
+<<<<<<< HEAD
 {% block title %}Support Dashboard{% endblock %}
 
 {% block content %}
 <div class="flex min-h-screen bg-gray-50">
+=======
+{% block title %}Employee Dashboard{% endblock %}
+
+{% block content %}
+>>>>>>> 1f7b375 (updated the code of support_ticket_history)
 
   <!-- Sidebar -->
   <aside class="w-64 bg-white shadow-md flex flex-col fixed top-0 left-0 bottom-0">
@@ -11,6 +17,7 @@
   </aside>
 
   <!-- Main Content -->
+<<<<<<< HEAD
   <main class="flex-1 ml-64 pt-8 pr-8 pb-8 pl-4">
 
     <!-- Welcome Message -->
@@ -97,4 +104,18 @@
 
   </main>
 </div>
+=======
+  <main class="ml-64 p-8 min-h-screen bg-gray-50">
+
+    <!-- Page Title -->
+    <h1 class="text-3xl font-semibold mb-6">Welcome, {{ user.firstname }}!</h1>
+
+    <!-- Main content area (empty for now) -->
+    <div class="bg-white p-6 rounded-xl shadow text-center text-gray-400">
+      No content added yet.
+    </div>
+
+  </main>
+
+>>>>>>> 1f7b375 (updated the code of support_ticket_history)
 {% endblock %}

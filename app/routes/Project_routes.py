@@ -3,8 +3,10 @@
 
 # Import other route files
 #from app.routes import due_today
+
 import os
 from flask import Blueprint, render_template, request, redirect, flash, current_app
+
 from flask import Flask,render_template, request, Blueprint
 from werkzeug.utils import secure_filename
 from app.models.project_models import fetch_all_projects, insert_project
@@ -27,9 +29,23 @@ def get_dropdown_data():
 def html_file():
     # print("task must show here.............",today_task)
     return render_template("project_management/due_today.html")
+from flask import Flask,render_template, request
+from app.models.project_db import get_today_task,get_all_task,get_pending_task,get_completed_task,get_task_by_date, over_due_task
+
+
+app = Flask(__name__,template_folder='../templates/project_management')
 
 
 @project_bpp.route("/today_task")
+
+@app.route("/task")
+def html_file():
+    # print("task must show here.............",today_task)
+    return render_template("project_management/due_today.html")
+
+
+@app.route("/today_task")
+
 def get_today_task_route():
     today_task = get_today_task()
     # print("task must show here.............",today_task)
