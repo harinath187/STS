@@ -1,0 +1,53 @@
+
+
+{% extends "base.html" %}
+ 
+{% block title %}Employee Dashboard{% endblock %}
+ 
+{% block content %}
+<div class="flex min-h-screen bg-gray-50">
+ 
+  <!-- Sidebar -->
+  <aside class="w-64 bg-white shadow-md flex flex-col fixed top-0 left-0 bottom-0">
+    {% include "common/employee_dashboard.html" %}
+  </aside>
+ 
+  <!-- Main Content -->
+  <main class="flex-1 ml-64 pt-8 pr-8 pb-8 pl-4">
+  <div class="max-w-2xl mx-auto bg-white p-6 sm:p-8 rounded-xl shadow mt-8">
+
+  <h2 class="text-2xl font-bold mb-4">Create Support Ticket Comment</h2>
+
+  <form action="{{ url_for('create_support_comment') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+    
+    <div>
+      <label for="supt_id" class="block font-medium">Support Ticket ID:</label>
+      <input type="number" id="supt_id" name="supt_id" required class="w-full border rounded px-3 py-2">
+    </div>
+
+    <div>
+      <label for="message" class="block font-medium">Message:</label>
+      <textarea id="message" name="message" required class="w-full border rounded px-3 py-2"></textarea>
+    </div>
+
+    <div>
+      <label for="attachment" class="block font-medium">Attachment:</label>
+      <input type="file" id="attachment" name="attachment" class="w-full border rounded px-3 py-2">
+    </div>
+
+    <div class="flex space-x-4">
+      <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+        Create Comment
+      </button>
+      <a href="{{ url_for('test_routes.test_tasks') }}" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">
+        Cancel
+      </a>
+    </div>
+
+  </form>
+</div>
+  </main>
+</div>
+{% endblock %}
+ 
+ 

@@ -21,6 +21,7 @@ Thumbs.db
 # Other common exclusions
 *.log
 *.sqlite3
+<<<<<<< HEAD
 
-.env
-.flaskenv
+=======
+>>>>>>> e897742 (hey)
