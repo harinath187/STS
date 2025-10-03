@@ -1,7 +1,7 @@
 import os
 from flask import Blueprint, render_template, request, redirect, flash, current_app, session ,url_for
 from werkzeug.utils import secure_filename
-from app.models.project_models import fetch_all_projects, insert_project
+from app.models.project_models import insert_project, fetch_projects_by_pm
 from flask import send_from_directory
 from app.models.project_models import count_projects_by_pm
 
@@ -11,8 +11,12 @@ project_bp = Blueprint('project_bp', __name__)
 
 @project_bp.route('/projects')
 def show_projects():
-    projects = fetch_all_projects()
     user = session.get("user")
+    if not user:
+        return redirect(url_for("auth_bp.login")) 
+
+    user_id = user.get("id") 
+    projects = fetch_projects_by_pm(user_id)
     return render_template('mypro/project_list.html', projects=projects, user=user)
 
 @project_bp.route('/projects/add', methods=['GET', 'POST'])
@@ -57,6 +61,6 @@ def count_pm_projects():
         flash("You must be logged in to view your project count.", "error")
         return redirect('/login')
 
-    project_count = count_projects_by_pm(user["firstname"])
+    project_count = count_projects_by_pm(user["username"])
     print(project_count)
     return render_template('mypro/project_count.html', user=user, count=project_count)

@@ -1,15 +1,11 @@
 import os
-from flask import Flask
+from flask import Blueprint, Flask
 from app.routes.project_routes import project_bp
 from app.routes.login_routes import register_routes
-from app.routes.emp_dashboard_routes import register_employee_routes
-from app.routes.test import test_routes  # Blueprint
 from app.routes.support_ticket_routes import register_support_ticket_routes
 from app.routes.task_comment_routes import register_task_comments_routes
 from app.routes.support_comment_routes import register_support_comment_routes  # <-- new
 from app.routes.it_manager_routes import register_support_routes
-from app.routes.supporthistoryroute import supporthistory,suppassignlist,notsuppassignlist
-
 from app.routes.test import test_routes
 from app.routes.emp_dashboard_routes import register_employee_routes
 from app.routes.supporthistoryroute import (
@@ -18,7 +14,7 @@ from app.routes.supporthistoryroute import (
     notsuppassignlist,
     ticket_detail_route,
     ticket_delete_route,
-    employee_routes  # ✅ Add this
+    employee_routes 
 )
 from app.routes.manager_routes import register_manager_routes
 
@@ -36,7 +32,7 @@ def create_app():
     register_employee_routes(app)
     #test_routes(app)
     register_support_routes(app)
-
+    # test_routes(app)
     register_support_ticket_routes(app)
     register_task_comments_routes(app)
     register_support_comment_routes(app) 
@@ -45,8 +41,7 @@ def create_app():
 
 
     # Register IT manager/test/support routes
-    test_routes(app)
-    register_support_routes(app)
+
     # Support history routes
     supporthistory(app)
     suppassignlist(app)

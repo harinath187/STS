@@ -1,21 +1,23 @@
 from app.models.db import get_db_connection
 
-def fetch_all_projects():
+def fetch_projects_by_pm(pm_id):
     conn = get_db_connection()
     if not conn:
         return []
 
     try:
         cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM project")
+        query = "SELECT * FROM project WHERE project_manager = %s"
+        cursor.execute(query, (pm_id,))
         projects = cursor.fetchall()
         return projects
     except Exception as e:
-        print(" Error fetching projects:", e)
+        print("Error fetching projects:", e)
         return []
     finally:
         cursor.close()
         conn.close()
+
 
 def insert_project(data):
     conn = get_db_connection()
@@ -57,6 +59,12 @@ def insert_project(data):
 def count_projects_by_pm(pm_name):
     db = get_db_connection()
     cursor = db.cursor()
-    print(cursor.execute("SELECT COUNT(*) FROM project WHERE project_manager = %s", (pm_name,    )))
+    query = """
+        SELECT COUNT(*)
+        FROM project p
+        JOIN employee e ON p.project_manager = e.id
+        WHERE e.username = %s
+    """
+    cursor.execute(query, (pm_name,))
     result = cursor.fetchone()
     return result[0] if result else 0
