@@ -1,15 +1,6 @@
 from flask import render_template, request, redirect, session
 from app.models.db import get_db_connection
 
-<<<<<<< HEAD
-=======
-from app.models.login import get_user_by_credentials  
-
-from app.models.project_db import get_today_task
-
-
-
->>>>>>> 8783371 (updated code of support history)
 def register_routes(app):
 
     @app.route("/")
@@ -67,12 +58,8 @@ def register_routes(app):
         user = session.get("user")
         if not user:
             return redirect("/login")
-<<<<<<< HEAD
         return render_template("dashboard/employee.html",user=user)
-    
-=======
-        return render_template("dashboard/employee.html", user=user)
->>>>>>> 748b2b7 (project_manager)
+
 
     # @app.route("/manager")
     # def manager_dashboard():
@@ -83,7 +70,6 @@ def register_routes(app):
     #     conn = get_db_connection()
     #     cursor = conn.cursor(dictionary=True)
 
-<<<<<<< HEAD
     @app.route("/it_employee")
     def it_employee_dashboard():
         user = session.get("user")
@@ -99,8 +85,6 @@ def register_routes(app):
     @app.route("/logout")
     def logout():
         return render_template("auth/login.html")
-<<<<<<< HEAD
-=======
     #     # Get all projects for this manager
     #     cursor.execute("""
     #         SELECT * 
@@ -108,10 +92,6 @@ def register_routes(app):
     #         WHERE project_lead = %s
     #     """, (user['id'],))
     #     projects = cursor.fetchall()
-=======
-<<<<<<< HEAD
->>>>>>> 10c6969 (solamaten)
-
     #     # If no projects, counts are zero
     #     in_progress_count = 0
     #     task_count = 0
@@ -153,13 +133,6 @@ def register_routes(app):
 
     #     conn = get_db_connection()
     #     cursor = conn.cursor(dictionary=True)
-
-<<<<<<< HEAD
-=======
-  
-        
-    
->>>>>>> 8783371 (updated code of support history)
         
     #     cursor.execute("""
     #         SELECT * FROM project 
@@ -182,7 +155,7 @@ def register_routes(app):
     #     """, (project_id,))
     #     tasks = cursor.fetchall()
 
-<<<<<<< HEAD
+
     #     cursor.close()
     #     conn.close()
 
@@ -199,15 +172,10 @@ def register_routes(app):
     # def logout():
     #     session.clear()
     #     return redirect("/login")
->>>>>>> 748b2b7 (project_manager)
-=======
-=======
     
     @app.route("/today_task")
     def get_new():
         today_task = get_today_task()
         # print("task must show here.............",today_task)
         return render_template("project_management/due_today.html",today_task = today_task)
->>>>>>> 51ed321 (solamaten)
-    
->>>>>>> 10c6969 (solamaten)
+
