@@ -6,6 +6,11 @@
 {% block content %}
 <div class="flex min-h-screen bg-gray-50">
 
+{% block title %}Employee Dashboard{% endblock %}
+
+{% block content %}
+
+
 
   <!-- Sidebar -->
   <aside class="w-64 bg-white shadow-md flex flex-col fixed top-0 left-0 bottom-0">
@@ -101,17 +106,6 @@
   </main>
 </div>
 
-  <main class="ml-64 p-8 min-h-screen bg-gray-50">
-
-    <!-- Page Title -->
-    <h1 class="text-3xl font-semibold mb-6">Welcome, {{ user.firstname }}!</h1>
-
-    <!-- Main content area (empty for now) -->
-    <div class="bg-white p-6 rounded-xl shadow text-center text-gray-400">
-      No content added yet.
-    </div>
-
-  </main>
-
+ 
 
 {% endblock %}
