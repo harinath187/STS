@@ -1,5 +1,5 @@
 import os
-from flask import render_template, request, current_app, url_for, redirect, flash, send_from_directory
+from flask import render_template, request, current_app, url_for, redirect, flash, send_from_directory, session
 from app.models.task_comments import insert_task_comment
 
 def register_task_comments_routes(app):
@@ -9,6 +9,9 @@ def register_task_comments_routes(app):
 
     @app.route('/create_task_comment', methods=['GET', 'POST'])
     def create_task_comment():
+        user = session.get("user")
+        if not user:
+            return redirect("/login")
         if request.method == 'POST':
             task_id = request.form['task_id']
             message = request.form['message']
@@ -21,7 +24,7 @@ def register_task_comments_routes(app):
             return redirect(url_for('test_routes.test_tasks')) 
 
         # Correct template path
-        return render_template('employee/create_task_comment.html')
+        return render_template('employee/create_task_comment.html',user=user)
 
     @app.route('/uploads/<filename>')
     def uploaded_file(filename):

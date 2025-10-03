@@ -1,5 +1,5 @@
 import os
-from flask import render_template, request, redirect, flash, url_for, send_from_directory
+from flask import render_template, request, redirect, flash, url_for, send_from_directory, session
 from app.models.support_comments import insert_support_comment
 
 def register_support_comment_routes(app):
@@ -9,6 +9,9 @@ def register_support_comment_routes(app):
 
     @app.route('/create_support_comment', methods=['GET', 'POST'])
     def create_support_comment():
+        user = session.get("user")
+        if not user:
+            return redirect("/login")
         if request.method == 'POST':
             supt_id = request.form['supt_id']
             message = request.form['message']
@@ -19,7 +22,7 @@ def register_support_comment_routes(app):
             flash("✅ Support ticket comment created successfully!","success")
             return redirect(url_for('create_support_comment'))  # redirect to the same page or a list page
 
-        return render_template('employee/create_support_comment.html')
+        return render_template('employee/create_support_comment.html',user=user)
 
     @app.route('/support_uploads/<filename>')
     def uploaded_support_file(filename):
