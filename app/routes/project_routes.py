@@ -1,89 +1,109 @@
+
+
+
+# Import other route files
+#from app.routes import due_today
+
 import os
-from flask import Blueprint, render_template, request, redirect, flash, current_app, session ,url_for
+from flask import Blueprint, render_template, request, redirect, flash, current_app
+
+from flask import Flask,render_template, request, Blueprint
 from werkzeug.utils import secure_filename
-from app.models.project_models import insert_project, fetch_projects_by_pm, fetch_team_tasks_under_pm ,fetch_all_employees
-from flask import send_from_directory
-from app.models.project_models import count_projects_by_pm
+from app.models.project_models import fetch_all_projects, insert_project
+
+from app.models.project_db import get_today_task,get_all_task,get_pending_task,get_completed_task,get_task_by_date, over_due_task
+from app.models.client import get_client_name
+
+
+project_bpp = Blueprint('project_bpp', __name__)
+
+
+def get_dropdown_data():
+    client_name = get_client_name()
+    print("client_name...........",client_name)
+    return render_template("mypro/add_project.html",client_name = client_name)
 
 
 
-project_bp = Blueprint('project_bp', __name__)
+@project_bpp.route("/task")
+def html_file():
+    # print("task must show here.............",today_task)
+    return render_template("project_management/due_today.html")
+from flask import Flask,render_template, request
+from app.models.project_db import get_today_task,get_all_task,get_pending_task,get_completed_task,get_task_by_date, over_due_task
 
-@project_bp.route('/projects')
-def show_projects():
-    user = session.get("user")
-    if not user:
-        return redirect(url_for("auth_bp.login")) 
 
-    user_id = user.get("id") 
-    projects = fetch_projects_by_pm(user_id)
-    return render_template('mypro/project_list.html', projects=projects, user=user)
+app = Flask(__name__,template_folder='../templates/project_management')
 
-@project_bp.route('/save_project', methods=['GET', 'POST'])
+
+@project_bpp.route("/today_task")
+
+@app.route("/task")
+def html_file():
+    # print("task must show here.............",today_task)
+    return render_template("project_management/due_today.html")
+
+
+@app.route("/today_task")
+
+def get_today_task_route():
+    today_task = get_today_task()
+    # print("task must show here.............",today_task)
+    return render_template("project_management/due_today.html",today_task = today_task)
+
+@project_bpp.route("/all_task")
+def get_all_task_route():
+    all_task = get_all_task()
+    return render_template("project_management/due_today.html",today_task = all_task)
+
+@project_bpp.route("/pending_task")
+def get_pending_task_route():
+    all_task = get_pending_task()
+    return render_template("due_today.html",today_task = all_task)
+
+
+@project_bpp.route("/completed_task")
+def get_completed_task_route():
+    all_task = get_completed_task()
+    return render_template("due_today.html",today_task = all_task)
+
+@project_bpp.route("/get_task_date", methods=['POST'])
+def get_by_task_date_route():
+    a = request.form.get("selectedDate")
+    get_date = get_task_by_date(a)
+    # print("geting_data",get_date)
+    return render_template("due_today.html",today_task = get_date)
+
+@project_bpp.route("/overdue_task")
+def overdue():
+    get_overdue = over_due_task()
+    return render_template("due_today.html",today_task = get_overdue)
+
+@project_bpp.route('/save_project', methods=['GET', 'POST'])
 def add_project():
     if request.method == 'POST':
         form_data = request.form.to_dict()
         file = request.files.get('attachment')
 
-        upload_folder = os.path.join(current_app.root_path, 'static', 'uploads')
+        upload_folder = current_app.config['UPLOAD_FOLDER']
         os.makedirs(upload_folder, exist_ok=True)
-
+        print("Project_details...............", form_data)
         if file and file.filename:
             filename = secure_filename(file.filename)
             filepath = os.path.join(upload_folder, filename)
             file.save(filepath)
-
-            form_data['Attachment'] = f"uploads/{filename}"
-
-            print(f"[UPLOAD] Saved to: {filepath}")
-            print(f"[UPLOAD] Stored path: {form_data['Attachment']}")
+            form_data['Attachment'] = filepath
         else:
             form_data['Attachment'] = None
 
         success = insert_project(form_data)
-        flash("Project added successfully!" if success else "Failed to add project.", "success" if success else "error")
-        return redirect('/projects')
+        if success:
+            flash("Project added successfully!", "success")
+            return redirect('/projects')
+        else:
+            flash("Failed to add project.", "error")
 
     return render_template('mypro/add_project.html')
 
 
-@project_bp.route('/upload/<filename>')
-def serve_uploaded_file(filename):
-    upload_folder = current_app.config.get('UPLOAD_FOLDER', os.path.join('static', 'uploads'))
-    return send_from_directory(upload_folder, filename)
 
-
-@project_bp.route('/projects/count')
-def count_pm_projects():
-    user = session.get("user")
-    print(user)
-    if not user:
-        flash("You must be logged in to view your project count.", "error")
-        return redirect('/login')
-
-    project_count = count_projects_by_pm(user["username"])
-    print(project_count)
-    return render_template('mypro/project_count.html', user=user, count=project_count)
-
-
-
-@project_bp.route('/team-tasks')
-def show_team_tasks():
-    user = session.get("user")
-    if not user:
-        return redirect(url_for("auth_bp.login"))
-
-    pm_id = user.get("id")
-    team_tasks = fetch_team_tasks_under_pm(pm_id)
-    print(team_tasks)
-    return render_template("mypro/project_count.html", team_tasks=team_tasks, user=user)
-
-@project_bp.route('/all-employees', methods=['GET'])
-def all_employees():
-    username = session.get('username')
-
-    if username != 'harinath.reddy':
-        return "Unauthorized", 403
-
-    employees = fetch_all_employees()
-    return render_template('all_employees.html', employees=employees)
