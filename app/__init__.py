@@ -17,15 +17,13 @@ from app.routes.supporthistoryroute import (
     notsuppassignlist,
     ticket_detail_route,
     ticket_delete_route,
-    employee_routes  # ✅ Add this
+    employee_routes  
 )
 from app.routes.manager_routes import register_manager_routes
 
 def create_app():
     app = Flask(__name__)
     app.secret_key = "sts"
-
-
 
     # Register all routes
     register_routes(app)
@@ -35,9 +33,9 @@ def create_app():
     register_support_comment_routes(app) 
     app.register_blueprint(test_routes)
 
+    register_support_routes(app)
 
-    # Register IT manager/test/support routes
-    # test_routes(app)
+    # Support history routes
     supporthistory(app)
     suppassignlist(app)
     notsuppassignlist(app)
@@ -46,7 +44,7 @@ def create_app():
     ticket_detail_route(app)
     ticket_delete_route(app)
 
-    # ✅ Register dynamic employee dropdown route
+    # Employee dropdown routes
     employee_routes(app)
 
     # Manager dashboard routes

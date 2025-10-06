@@ -1,25 +1,17 @@
 {% extends "base.html" %}
 
-
-{% block title %}Support Dashboard{% endblock %}
+{% block title %}Support History{% endblock %}
 
 {% block content %}
+<div class="flex min-h-screen">
+
 <div class="flex min-h-screen bg-gray-50">
 
-{% block title %}Employee Dashboard{% endblock %}
-
-{% block content %}
-
-
-
-  <!-- Sidebar -->
-  <aside class="w-64 bg-white shadow-md flex flex-col fixed top-0 left-0 bottom-0">
+  <!-- Sidebar --> <aside class="w-64 bg-white shadow-md flex flex-col fixed top-0 left-0 bottom-0">
     {% include "common/it_manager.html" %}
   </aside>
 
-  <!-- Main Content -->
-
-  <main class="flex-1 ml-64 pt-8 pr-8 pb-8 pl-4">
+  <main class="flex-1 ml-64 mt-0 p-6 bg-gray-50">
 
     <!-- Welcome Message -->
     <h1 class="text-3xl font-semibold mb-6">Welcome, {{ user.firstname }}!</h1>
@@ -105,7 +97,4 @@
 
   </main>
 </div>
-
- 
-
 {% endblock %}
