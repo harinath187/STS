@@ -91,3 +91,11 @@ def get_overdue_tasks(emp_id):
     conn.close()
     return tasks
 
+def get_all_departments():
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT dept_id, dept_name FROM department ORDER BY dept_name")
+    departments = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return departments
