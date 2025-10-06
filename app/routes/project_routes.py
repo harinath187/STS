@@ -1,7 +1,7 @@
 import os
 from flask import Blueprint, render_template, request, redirect, flash, current_app, session ,url_for
 from werkzeug.utils import secure_filename
-from app.models.project_models import insert_project, fetch_projects_by_pm, fetch_team_tasks_under_pm
+from app.models.project_models import insert_project, fetch_projects_by_pm, fetch_team_tasks_under_pm ,fetch_all_employees
 from flask import send_from_directory
 from app.models.project_models import count_projects_by_pm
 
@@ -19,11 +19,11 @@ def show_projects():
     projects = fetch_projects_by_pm(user_id)
     return render_template('mypro/project_list.html', projects=projects, user=user)
 
-# @project_bp.route('/save_project', methods=['GET', 'POST'])
-# def add_project():
-#     if request.method == 'POST':
-#         form_data = request.form.to_dict()
-#         file = request.files.get('attachment')
+@project_bp.route('/save_project', methods=['GET', 'POST'])
+def add_project():
+    if request.method == 'POST':
+        form_data = request.form.to_dict()
+        file = request.files.get('attachment')
 
         upload_folder = os.path.join(current_app.root_path, 'static', 'uploads')
         os.makedirs(upload_folder, exist_ok=True)
@@ -77,3 +77,13 @@ def show_team_tasks():
     team_tasks = fetch_team_tasks_under_pm(pm_id)
     print(team_tasks)
     return render_template("mypro/project_count.html", team_tasks=team_tasks, user=user)
+
+@project_bp.route('/all-employees', methods=['GET'])
+def all_employees():
+    username = session.get('username')
+
+    if username != 'harinath.reddy':
+        return "Unauthorized", 403
+
+    employees = fetch_all_employees()
+    return render_template('all_employees.html', employees=employees)

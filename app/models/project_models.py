@@ -104,3 +104,31 @@ WHERE p.project_manager = %s;
     finally:
         cursor.close()
         conn.close()
+
+def fetch_all_employees():
+    conn = get_db_connection()
+    if not conn:
+        return []
+
+    try:
+        cursor = conn.cursor(dictionary=True)
+        query = """
+            SELECT 
+                id,
+                firstname,
+                lastname,
+                username,
+                email,
+                role_id,
+                dept_id
+            FROM employee;
+        """
+        cursor.execute(query)
+        return cursor.fetchall()
+    except Exception as e:
+        print("Error fetching employees:", e)
+        return []
+    finally:
+        cursor.close()
+        conn.close()
+
