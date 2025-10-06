@@ -1,6 +1,6 @@
 import os
 from flask import Blueprint, Flask
-from app.routes.project_routes import project_bp
+from app.routes.Project_route import project_bp
 from app.routes.login_routes import register_routes
 from app.routes.support_ticket_routes import register_support_ticket_routes
 from app.routes.task_comment_routes import register_task_comments_routes
