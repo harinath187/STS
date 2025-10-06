@@ -9,8 +9,10 @@ from app.routes.support_ticket_routes import register_support_ticket_routes
 from app.routes.task_comment_routes import register_task_comments_routes
 from app.routes.support_comment_routes import register_support_comment_routes  # <-- new
 from app.routes.it_manager_routes import register_support_routes
+from app.routes.register_it_employee_routes import register_it_employee_routes
 from app.routes.test import test_routes
 from app.routes.emp_dashboard_routes import register_employee_routes
+
 from app.routes.supporthistoryroute import (
     supporthistory,
     suppassignlist,
@@ -49,5 +51,6 @@ def create_app():
 
     # Manager dashboard routes
     register_manager_routes(app)
+    register_it_employee_routes(app)
 
     return app

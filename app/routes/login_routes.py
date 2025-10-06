@@ -81,12 +81,12 @@ def register_routes(app):
     #         return redirect("/login")
     #     return render_template("dashboard/pm.html",user=user)
 
-    @app.route("/it_employee")
-    def it_employee_dashboard():
-        user = session.get("user")
-        if not user:
-            return redirect("/login")
-        return render_template("dashboard/it_emp.html",user=user)
+    # @app.route("/it_employee")
+    # def it_employee_dashboard():
+    #     user = session.get("user")
+    #     if not user:
+    #         return redirect("/login")
+    #     return render_template("dashboard/it_emp.html",user=user)
     # @app.route("/it_manager")
     # def it_manager():
     #     user = session.get("user")
