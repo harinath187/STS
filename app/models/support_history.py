@@ -4,23 +4,25 @@ def historylist():
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
     cursor.execute("""
-        SELECT 
-            sh.id,
-            CONCAT(e1.firstname, ' ', e1.lastname) AS assignto,
-            CONCAT(e2.firstname, ' ', e2.lastname) AS assignby,
-            d.dept_id,
-            d.dept_name,
-            sh.duration,
-            sh.comments,
-            sh.problem_description,
-            sh.priority,
-            sh.start_date,
-            sh.end_date,
-            sh.status
-        FROM support_history sh
-        LEFT JOIN employee e1 ON sh.assigned_to = e1.id
-        LEFT JOIN employee e2 ON sh.assigned_by = e2.id
-        LEFT JOIN department d ON sh.dept_id = d.dept_id
+       SELECT 
+    h.id,
+    CONCAT(e1.firstname, ' ', e1.lastname) AS assignto,
+    CONCAT(e2.firstname, ' ', e2.lastname) AS assignby,
+    d.dept_id,
+    d.dept_name,
+    h.duration,
+    h.comments,
+    h.problem_description,
+    h.priority,
+    h.start_date,
+    h.end_date,
+    h.status
+FROM support_ticket h
+INNER JOIN employee e1 ON h.assigned_to = e1.id
+INNER JOIN employee e2 ON h.assigned_by = e2.id
+LEFT JOIN department d ON h.dept_id = d.dept_id
+WHERE h.status IN ('RESOLVED', 'CLOSED')
+ORDER BY h.id;  
     """)
     results = cursor.fetchall()
     cursor.close()
@@ -78,7 +80,7 @@ def notassignlist():
         LEFT JOIN employee e1 ON h.assigned_to = e1.id
         LEFT JOIN employee e2 ON h.assigned_by = e2.id
         LEFT JOIN department d ON h.dept_id = d.dept_id
-        WHERE h.assigned_to IS NULL
+        WHERE (h.assigned_to IS NULL and h.status = "OPEN")
     """)
     results = cursor.fetchall()
     cursor.close()
@@ -126,10 +128,15 @@ def update_ticket(ticket_id, data):
     Update support_ticket including assigned_to.
     Expects:
         assigned_to, assigned_by, dept_id, duration,
-        comments, problem_description, priority, start_date, end_date, status
+        comments, problem_description, Priority (or priority), 
+        Start_Date (or start_date), status
     """
     conn = get_db_connection()
     cursor = conn.cursor()
+    
+    priority = data.get('Priority') or data.get('priority')
+    start_date = data.get('Start_Date') or data.get('start_date')
+    
     cursor.execute("""
         UPDATE support_ticket
         SET
@@ -141,7 +148,6 @@ def update_ticket(ticket_id, data):
             problem_description = %s,
             priority = %s,
             start_date = %s,
-            end_date = %s,
             status = %s
         WHERE id = %s
     """, (
@@ -149,11 +155,10 @@ def update_ticket(ticket_id, data):
         data.get('assigned_by'),
         data.get('dept_id'),
         data.get('duration'),
-        data.get('comments'),
+        data.get('comments', ''),
         data.get('problem_description'),
-        data.get('priority'),
-        data.get('start_date'),
-        data.get('end_date'),
+        priority,
+        start_date,
         data.get('status'),
         ticket_id
     ))
