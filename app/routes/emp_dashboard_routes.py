@@ -1,6 +1,9 @@
 from flask import render_template, session, redirect
 from app.models import emp_dashboard
 import io, base64
+import matplotlib
+matplotlib.use("Agg") 
+
 import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.use('Agg')  # Use the Agg backend for non-GUI rendering
@@ -10,7 +13,9 @@ import matplotlib.pyplot as plt
 def register_employee_routes(app):
 
     @app.route("/employee")
+    
     def employee_dashboard_view():
+        
         user = session.get("user")
         if not user:
             return redirect("/login")

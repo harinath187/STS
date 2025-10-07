@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Tasks for {{ project.name }}{% endblock %}
+
+{% block content %}
+<div class="p-6">
+  <h1 class="text-2xl font-bold mb-4">Tasks for Project: {{ project.name }}</h1>
+  
+  {% if tasks %}
+    <table class="min-w-full bg-white rounded shadow">
+      <thead>
+        <tr>
+          <th class="px-4 py-2">Task ID</th>
+          <th class="px-4 py-2">Description</th>
+          <th class="px-4 py-2">Employee</th>
+          <th class="px-4 py-2">Department</th>
+          <th class="px-4 py-2">Estimated Hrs</th>
+          <th class="px-4 py-2">Worked Hrs</th>
+          <th class="px-4 py-2">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for task in tasks %}
+        <tr class="border-t">
+          <td class="px-4 py-2">{{ task.token_id }}</td>
+          <td class="px-4 py-2">{{ task.description }}</td>
+          <td class="px-4 py-2">{{ task.firstname }} {{ task.lastname }}</td>
+          <td class="px-4 py-2">{{ task.dept_name }}</td>
+          <td class="px-4 py-2">{{ task.estimated_hrs }}</td>
+          <td class="px-4 py-2">{{ task.worked_hrs }}</td>
+          <td class="px-4 py-2">{{ task.status }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No tasks assigned for this project yet.</p>
+  {% endif %}
+
+  <a href="/manager" class="mt-4 inline-block text-blue-600 hover:underline">← Back to Dashboard</a>
+</div>
+{% endblock %}

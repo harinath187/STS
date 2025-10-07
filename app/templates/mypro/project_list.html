@@ -1,0 +1,91 @@
+<!-- app/templates/mypro/project_list.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All Projects</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        h2 { margin-bottom: 20px; color: #2c3e50; }
+        table.dataTable thead th {
+            background-color: #f2f2f2;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h2>Project List</h2>
+    {% if projects %}
+    <div style="margin-bottom: 20px;">
+    <a href="/projects/add" style="
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #3498db;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+    ">
+        ➕ Add New Project
+    </a>
+</div>
+    <table id="projectTable" class="display">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Project Name</th>
+                <th>Client ID</th>
+                <th>Project Manager</th>
+                <th>Duration (months)</th>
+                <th>Tech Stack</th>
+                <th>Actual Time Taken</th>
+                <th>Cost (hours)</th>
+                <th>Attachment</th>
+                <th>Status (%)</th>
+                <th>Created At</th>
+                <th>Updated At</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for project in projects %}
+            <tr>
+                <td>{{ project.id }}</td>
+                <td>{{ project.project_name }}</td>
+                <td>{{ project.client_id }}</td>
+                <td>{{ project.project_manager }}</td>
+                <td>{{ project.estimated_duration_months }}</td>
+                <td>{{ project.tech_stack }}</td>
+                <td>{{ project.actual_time_taken }}</td>
+                <td>{{ project.cost_hours }}</td>
+                <td>
+                {% if project.Attachment %}
+                    <a href="{{ url_for('static', filename=project.Attachment.split('static/')[-1]) }}" target="_blank">View</a>
+                {% else %}
+                    No file
+                {% endif %}
+                </td>
+
+                <td>{{ project.status_percentage }}</td>
+                <td>{{ project.created_at }}</td>
+                <td>{{ project.updated_at }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>No projects found.</p>
+    {% endif %}
+
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#projectTable').DataTable({
+                pageLength: 10,
+                lengthMenu: [5, 10, 25, 50, 100],
+                order: [[0, 'asc']]
+            });
+        });
+    </script>
+</body>
+</html>
