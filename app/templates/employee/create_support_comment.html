@@ -18,17 +18,6 @@
 
   <h2 class="text-2xl font-bold mb-4">Create Support Ticket Comment</h2>
 
-  <!-- Flash Messages -->
-  {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-      {% for category, message in messages %}
-        <div class="mb-4 p-3 rounded {{ 'bg-green-100 text-green-800' if category=='success' else 'bg-red-100 text-red-800' }}">
-          {{ message }}
-        </div>
-      {% endfor %}
-    {% endif %}
-  {% endwith %}
-
   <form action="{{ url_for('create_support_comment') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
     
     <div>
