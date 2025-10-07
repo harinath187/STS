@@ -41,7 +41,7 @@ def register_routes(app):
         if role == "Admin":
             return redirect("/admin")
         elif role in ["HR", "Backend Team", "Frontend Team", "QA / Testing", "Database / Data", "Security"]:
-            return redirect("/employee")
+            return redirect("/manager")
         elif role == "Project Manager":
             return redirect("/manager")
         elif role in ["IT Team", "Support / IT Helpdesk"]:
