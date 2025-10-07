@@ -1,0 +1,116 @@
+<!-- app/templates/project_task/view_task.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task Details</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50">
+
+<div class="flex min-h-screen">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white shadow-md flex flex-col fixed top-0 left-0 bottom-0 overflow-y-auto">
+        {% include "common/project_sidebar.html" %}
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 ml-64 p-8">
+        <div class="container">
+            
+            <!-- Back to Dashboard Button -->
+            <div class="mb-4">
+                <a href="{{ url_for('project_dashboard_bp.project_dashboard') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+
+            <div class="card shadow-lg">
+                <div class="card-header bg-info text-white">
+                    <h3 class="mb-0"><i class="fas fa-eye"></i> Task Details</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Task Name:</strong> {{ task.task_name }}</p>
+                            <p><strong>Project:</strong> {{ task.project_name }}</p>
+                            <p><strong>Assigned To:</strong> {{ task.employee_name or 'Not Assigned' }}</p>
+                            <p><strong>Manager:</strong> {{ task.manager_name or 'Not Assigned' }}</p>
+                            <p><strong>Status:</strong> 
+                                <span class="badge {% if task.status == 'COMPLETED' %}bg-success{% else %}bg-warning{% endif %}">
+                                    {{ task.status }}
+                                </span>
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Estimated Hours:</strong> {{ task.estimated_hrs }}</p>
+                            <p><strong>Worked Hours:</strong> {{ task.worked_hrs }}</p>
+                            <p><strong>Duration:</strong> {{ task.task_Duration }} days</p>
+                            <p><strong>Start Date:</strong> {{ task.Start_Date }}</p>
+                            <p><strong>End Date:</strong> {{ task.End_Date }}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <p><strong>Description:</strong> {{ task.task_description or 'No description' }}</p>
+                    <p><strong>Comments:</strong> {{ task.Comments or 'No comments' }}</p>
+                    
+                    <hr>
+                    <h5 class="mb-3"><i class="fas fa-paperclip"></i> Attachments ({{ attachments|length }})</h5>
+                    
+                    {% if attachments %}
+                        <div class="row">
+                            {% for att in attachments %}
+                            <div class="col-md-4 mb-3">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        {% if att.clean_path.endswith(('.jpg', '.jpeg', '.png', '.gif')) %}
+                                            <img src="/static/{{ att.clean_path }}" class="img-fluid mb-2" alt="Attachment">
+                                        {% else %}
+                                            <div class="text-center p-4 bg-light">
+                                                <i class="fas fa-file fa-4x text-secondary mb-2"></i>
+                                                <p class="small mb-0">{{ att.clean_path.split('/')[-1] }}</p>
+                                            </div>
+                                        {% endif %}
+                                        <hr>
+                                        <p class="small mb-2"><strong>Message:</strong> {{ att.Message or 'No message' }}</p>
+                                        <div class="d-flex gap-2">
+                                            <a href="/static/{{ att.clean_path }}" target="_blank" class="btn btn-sm btn-primary flex-fill">
+                                                <i class="fas fa-download"></i> Download
+                                            </a>
+                                            <form method="POST" action="{{ url_for('task_bp.delete_attachment', comment_id=att.Comment_id) }}" style="display:inline;" class="flex-fill">
+                                                <button type="submit" class="btn btn-sm btn-danger w-100" onclick="return confirm('Delete this attachment?')">
+                                                    <i class="fas fa-trash"></i> Delete
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i> No attachments for this task
+                        </div>
+                    {% endif %}
+                    
+                    <hr>
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('task_bp.list_tasks', project_id=task.project_id) }}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Back to List
+                        </a>
+                        <a href="{{ url_for('task_bp.edit_task', task_id=task.task_id) }}" class="btn btn-warning">
+                            <i class="fas fa-edit"></i> Edit Task
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
