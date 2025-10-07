@@ -60,21 +60,28 @@ def ticket_detail_route(app):
             data = request.get_json()
             print("Received POST data:", data) 
 
-            
             required_fields = [
                 "assigned_to", "assigned_by", "dept_id", "duration",
-                "comments", "problem_description", "priority",
-                "start_date", "status"
+                "problem_description", "status"
             ]
 
+            missing_fields = []
+            for field in required_fields:
+                if field not in data or data[field] in [None, ""]:
+                    missing_fields.append(field)
             
-            missing_fields = [field for field in required_fields if field not in data or data[field] in [None, ""]]
+            if not (data.get('Priority') or data.get('priority')):
+                missing_fields.append('priority')
+            
             if missing_fields:
+                print(f"Missing fields: {missing_fields}")  
                 return jsonify({
                     "error": "Missing required fields",
                     "fields": missing_fields
                 }), 400
 
+            if "comments" not in data or data["comments"] is None:
+                data["comments"] = ""
             
             if "end_date" not in data:
                 data["end_date"] = None
@@ -83,6 +90,7 @@ def ticket_detail_route(app):
                 update_ticket(ticket_id, data)
                 return jsonify({"message": "Ticket updated successfully"})
             except Exception as e:
+                print(f"Error in update_ticket: {str(e)}") 
                 return jsonify({"error": str(e)}), 500
 
 
