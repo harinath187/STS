@@ -44,10 +44,9 @@ def register_routes(app):
         session["user"] = user
         role = user["dep_name"].strip()
 
-        if role == "Admin":
+        if role == "HR":
             return redirect("/admin")
-        elif role in ["HR", "Backend Team", "Frontend Team", "QA / Testing", "Database / Data", "Security"]:
-            print('hhhhhh')
+        elif role in ["Backend Team", "Frontend Team", "QA / Testing", "Database / Data", "Security"]:
             return redirect("/employee")
         elif role == "Project Manager":
             return redirect("/manager")
@@ -81,12 +80,12 @@ def register_routes(app):
     #         return redirect("/login")
     #     return render_template("dashboard/pm.html",user=user)
 
-    @app.route("/it_employee")
-    def it_employee_dashboard():
-        user = session.get("user")
-        if not user:
-            return redirect("/login")
-        return render_template("dashboard/it_emp.html",user=user)
+    # @app.route("/it_employee")
+    # def it_employee_dashboard():
+    #     user = session.get("user")
+    #     if not user:
+    #         return redirect("/login")
+    #     return render_template("dashboard/it_emp.html",user=user)
     # @app.route("/it_manager")
     # def it_manager():
     #     user = session.get("user")
