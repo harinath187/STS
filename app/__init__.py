@@ -8,12 +8,6 @@ from app.routes.task_comment_routes import register_task_comments_routes
 from app.routes.support_comment_routes import register_support_comment_routes
 from app.routes.it_manager_routes import register_support_routes
 from app.routes.register_it_employee_routes import register_it_employee_routes
-<<<<<<< HEAD
-from app.routes.test import test_routes
-from app.routes.emp_dashboard_routes import register_employee_routes
-from app.routes.hrroute import employeeslist,updateemplist,addemployee,add_employeelist #sai added
-=======
->>>>>>> bae99840821a2c4a5a4abea6c557b4a1a8dca662
 from app.routes.supporthistoryroute import (
     supporthistory,
     suppassignlist,
@@ -45,15 +39,6 @@ def create_app():
     supporthistory(app)
     suppassignlist(app)
     notsuppassignlist(app)
-<<<<<<< HEAD
-    employeeslist(app)
-    updateemplist(app)
-    addemployee(app)
-    add_employeelist(app)
-
-    # Ticket detail/edit/delete routes
-=======
->>>>>>> bae99840821a2c4a5a4abea6c557b4a1a8dca662
     ticket_detail_route(app)
     ticket_delete_route(app)
     employee_routes(app)
