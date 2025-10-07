@@ -44,10 +44,9 @@ def register_routes(app):
         session["user"] = user
         role = user["dep_name"].strip()
 
-        if role == "Admin":
+        if role == "HR":
             return redirect("/admin")
-        elif role in ["HR", "Backend Team", "Frontend Team", "QA / Testing", "Database / Data", "Security"]:
-            print('hhhhhh')
+        elif role in ["Backend Team", "Frontend Team", "QA / Testing", "Database / Data", "Security"]:
             return redirect("/employee")
         elif role == "Project Manager":
             return redirect("/manager")
