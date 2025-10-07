@@ -184,6 +184,14 @@ $(document).ready(function () {
         $("#deleteForm").attr("action", `/tasks/delete/${taskId}`);
         $("#deleteModal").modal("show");
     });
+
+
+    setTimeout(function() {
+        $('.alert').fadeOut('slow', function() {
+            $(this).remove();
+        });
+    }, 2000); // 2 seconds
+
 });
 </script>
 
