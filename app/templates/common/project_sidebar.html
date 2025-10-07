@@ -1,82 +1,37 @@
-<!-- app/templates/common/project_sidebar.html -->
-<div class="p-6 text-2xl font-bold text-blue-600 border-b">
+<aside class="w-64 bg-white shadow-md flex flex-col fixed top-0 left-0 bottom-0">
+  <div class="p-6 text-2xl font-bold text-blue-600">
     <i class="fas fa-project-diagram"></i> Project Manager
-</div>
+  </div>
 
-<nav class="flex-1 px-4 mt-4 space-y-2">
-    <!-- Dashboard Home -->
+  <nav class="flex-1 px-4 mt-4 space-y-2">
     <a href="{{ url_for('project_dashboard_bp.project_dashboard') }}" 
-       class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-100 text-gray-700 transition
-              {% if request.endpoint == 'project_dashboard_bp.project_dashboard' %}bg-blue-50 border-l-4 border-blue-600{% endif %}">
-        <i class="fas fa-home w-5"></i>
-        <span class="font-medium">Dashboard</span>
+       class="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-100 text-gray-700">
+      <i class="fas fa-home w-5"></i><span>Dashboard</span>
     </a>
 
-    <!-- Projects Section -->
-    <div class="pt-2">
-        <p class="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Projects</p>
-        
-        <a href="/projects" 
-           class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-100 text-gray-700 transition">
-            <i class="fas fa-folder w-5"></i>
-            <span>All Projects</span>
-        </a>
-        
-        <a href="/projects/add" 
-           class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-100 text-gray-700 transition">
-            <i class="fas fa-plus-circle w-5"></i>
-            <span>Create Project</span>
-        </a>
-    </div>
-
-    <!-- Project Tasks Section -->
-    <div class="pt-2">
-        <p class="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Tasks</p>
-        
-        <a href="{{ url_for('task_bp.list_tasks') }}" 
-           class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-100 text-gray-700 transition
-                  {% if request.endpoint == 'task_bp.list_tasks' %}bg-blue-50 border-l-4 border-blue-600{% endif %}">
-            <i class="fas fa-tasks w-5"></i>
-            <span>All Tasks</span>
-        </a>
-        
-        <a href="{{ url_for('task_bp.add_task') }}" 
-           class="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-100 text-gray-700 transition
-                  {% if request.endpoint == 'task_bp.add_task' %}bg-blue-50 border-l-4 border-blue-600{% endif %}">
-            <i class="fas fa-plus-circle w-5"></i>
-            <span>Create Task</span>
-        </a>
-    </div>
-
-    <!-- Analytics -->
-    <div class="pt-2">
-        <a href="/project-analytics" 
-           class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-100 text-gray-700 transition">
-            <i class="fas fa-chart-line w-5"></i>
-            <span>Analytics</span>
-        </a>
-    </div>
-
-    <!-- Reports -->
-    <a href="/project-reports" 
-       class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-100 text-gray-700 transition">
-        <i class="fas fa-file-alt w-5"></i>
-        <span>Reports</span>
+    <a href="/projects" 
+       class="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-100 text-gray-700">
+      <i class="fas fa-folder w-5"></i><span>All Projects</span>
+    </a>
+    
+    <a href="/projects/add" 
+       class="flex items-center space-x-3 p-2 rounded-lg hover:bg-green-100 text-gray-700">
+      <i class="fas fa-plus-circle w-5"></i><span>Create Project</span>
     </a>
 
-    <!-- Settings -->
-    <a href="/project-settings" 
-       class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-100 text-gray-700 transition">
-        <i class="fas fa-cog w-5"></i>
-        <span>Settings</span>
+    <a href="{{ url_for('task_bp.list_tasks') }}" 
+       class="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-100 text-gray-700">
+      <i class="fas fa-tasks w-5"></i><span>All Tasks</span>
     </a>
-</nav>
+    
+    <a href="{{ url_for('task_bp.add_task') }}" 
+       class="flex items-center space-x-3 p-2 rounded-lg hover:bg-green-100 text-gray-700">
+      <i class="fas fa-plus-circle w-5"></i><span>Create Task</span>
+    </a>
 
-<!-- Logout at bottom -->
-<div class="p-4 border-t mt-auto">
     <a href="/logout" 
-       class="flex items-center space-x-3 p-3 rounded-lg hover:bg-red-100 text-red-600 transition">
-        <i class="fas fa-sign-out-alt w-5"></i>
-        <span class="font-medium">Logout</span>
+       class="flex items-center space-x-3 p-2 mt-auto mb-4 rounded-lg hover:bg-red-100 text-red-600">
+      <i class="fas fa-sign-out-alt w-5"></i><span>Logout</span>
     </a>
-</div>
+  </nav>
+</aside>
