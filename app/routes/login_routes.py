@@ -49,7 +49,7 @@ def register_routes(app):
         elif role in ["Backend Team", "Frontend Team", "QA / Testing", "Database / Data", "Security"]:
             return redirect("/employee")
         elif role == "Project Manager":
-            return redirect("/manager")
+            return redirect("/project-dashboard")
         elif role in ["IT Team", "Support / IT Helpdesk"]:
             return redirect("/it_employee")
         elif role =="IT Project Manager":
