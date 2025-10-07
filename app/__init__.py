@@ -1,4 +1,3 @@
-
 import os
 from flask import Flask
 
@@ -22,6 +21,10 @@ from app.routes.supporthistoryroute import (
     employee_routes  
 )
 from app.routes.manager_routes import register_manager_routes
+
+# import your new task_update route
+from app.routes.task_update_routes import register_task_update_routes
+
 
 def create_app():
     app = Flask(__name__)
@@ -52,5 +55,8 @@ def create_app():
     # Manager dashboard routes
     register_manager_routes(app)
     register_it_employee_routes(app)
+
+    # Register Task Updation (Dummy) route
+    register_task_update_routes(app)
 
     return app
