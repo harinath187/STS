@@ -94,3 +94,64 @@ def get_recent_tickets_for_employee(emp_id, limit=5):
         'status': row[2],
         'created_at': row[3]
     } for row in rows]
+
+
+
+# def get_tickets_by_employee(employee_id):
+#         conn=get_db_connection()
+#         cursor = conn.cursor(dictionary=True)
+#         query = """
+#             SELECT st.*, e1.firstname AS assigned_to_name, e2.firstname AS assigned_by_name, r.role_name
+#             FROM support_ticket st
+#             LEFT JOIN employee e1 ON st.assigned_to = e1.id
+#             LEFT JOIN employee e2 ON st.assigned_by = e2.id
+#             LEFT JOIN roles r ON st.role_id = r.id
+#             WHERE st.assigned_to = %s
+#             ORDER BY st.created_at DESC
+#         """
+#         print(1)
+#         print(cursor.execute(query, (employee_id,)))
+#         return cursor.fetchall()
+
+def get_employee_by_id(employee_id):
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        query = """
+            SELECT id, firstname, email, dept_id, role_id
+            FROM employee
+            WHERE id = %s
+        """
+        cursor.execute(query, (employee_id,))
+        result = cursor.fetchone()
+        cursor.close()
+        conn.close()
+        return result
+    
+def get_tickets_by_employee(employee_id):
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        query = """
+        SELECT 
+    e1.id AS employee_id,
+    e1.firstname,
+    e1.lastname,
+    e1.email,
+    d.dept_name AS department,
+    r.role_name AS role
+FROM employee e1
+LEFT JOIN department d ON e1.dept_id = d.dept_id
+LEFT JOIN roles r ON e1.role_id = r.id
+WHERE e1.id IN (
+    SELECT st.assigned_to 
+    FROM support_ticket st 
+    WHERE st.assigned_by = %s
+)
+ORDER BY e1.firstname;
+        """
+        cursor.execute(query, (employee_id,))
+        result = cursor.fetchall()
+        print(2)
+        print(result)
+        cursor.close()
+        conn.close()
+        return result

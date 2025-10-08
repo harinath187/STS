@@ -1,0 +1,237 @@
+{% extends "base.html" %}
+
+{% block title %}Employee List{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+  crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css" />
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap4.min.css" />
+
+<style>
+  table#employeeTable thead th {
+    background-color: black !important;
+    color: white !important;
+  }
+</style>
+
+<div class="flex min-h-screen">
+
+  <aside class="w-64 bg-white shadow-md flex flex-col fixed top-0 left-0 bottom-0">
+    {% include "common/admin_dashboard.html" %}
+  </aside>
+
+  <main class="flex-1 ml-64 mt-0 p-6 bg-gray-50">
+    <h1 class="text-2xl font-semibold mb-6">Welcome HR {{ user.firstname }}</h1>
+
+    <div class="table-responsive">
+      <table id="employeeTable" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Username</th>
+            <th>Department</th>
+            <th>Role</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for emp in employeelist %}
+          <tr>
+            <td>{{ emp.id }}</td>
+            <td>{{ emp.firstname }}</td>
+            <td>{{ emp.lastname }}</td>
+            <td>{{ emp.email }}</td>
+            <td>{{ emp.username }}</td>
+            <td>{{ emp.dept_name }}</td>
+            <td>{{ emp.role_name }}</td>
+            <td>
+              <button class="btn btn-sm btn-primary edit-btn" data-id="{{ emp.id }}"
+                data-firstname="{{ emp.firstname }}" data-lastname="{{ emp.lastname }}" data-email="{{ emp.email }}"
+                data-dept="{{ emp.dept_id }}" data-role="{{ emp.role_id }}">
+                Edit
+              </button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+
+    <div class="modal fade" id="editEmployeeModal" tabindex="-1" aria-labelledby="editEmployeeLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <form id="editEmployeeForm" method="POST" action="/update_employee">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="editEmployeeLabel">Edit Employee</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span>&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <input type="hidden" id="edit_id" name="id">
+
+              <div class="form-group">
+                <label>First Name</label>
+                <input type="text" id="edit_firstname" name="firstname" class="form-control" required disabled>
+              </div>
+
+              <div class="form-group">
+                <label>Last Name</label>
+                <input type="text" id="edit_lastname" name="lastname" class="form-control" required disabled>
+              </div>
+
+              <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="edit_email" name="email" class="form-control" required>
+                <small id="emailError" class="error-text text-danger"></small>
+              </div>
+
+              <div class="form-group">
+                <label>Department</label>
+                <select id="edit_dept" name="dept_id" class="form-control">
+                  <option value="">-- Select Department --</option>
+                  {% for dept in dept_list %}
+                  <option value="{{ dept.dept_id }}">{{ dept.dept_name }}</option>
+                  {% endfor %}
+                </select>
+                <small id="deptError" class="error-text text-danger"></small>
+              </div>
+
+             
+              <div class="form-group">
+                <label>Role</label>
+                <select id="edit_role" name="role_id" class="form-control" required>
+                  <option value="">-- Select Role --</option>
+                  {% for r in role %}
+                  <option value="{{ r.id }}" data-dept="{{ r.dept_id }}">{{ r.role_name }}</option>
+                  {% endfor %}
+                </select>
+                <small id="roleError" class="error-text text-danger"></small>
+              </div>
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-success">Save Changes</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+  crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap4.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+   
+    var table = $('#employeeTable').DataTable({
+      responsive: true,
+      paging: true,
+      searching: true,
+      ordering: true,
+      info: true,
+      lengthChange: true,
+      pageLength: 10
+    });
+
+   
+    $('#employeeTable').on('click', '.edit-btn', function () {
+      $('#edit_id').val($(this).data('id'));
+      $('#edit_firstname').val($(this).data('firstname'));
+      $('#edit_lastname').val($(this).data('lastname'));
+      $('#edit_email').val($(this).data('email'));
+      $('#edit_dept').val($(this).data('dept'));
+      $('#edit_role').val($(this).data('role'));
+      clearValidation(); 
+      $('#editEmployeeModal').modal('show');
+    });
+
+    
+    function clearValidation() {
+      $('.error-text').text('');
+      $('input, select').removeClass('is-invalid');
+    }
+
+
+
+    
+$('#edit_dept').on('change', function () {
+  const selectedDept = $(this).val();
+
+ 
+  $('#edit_role').val('');
+  $('#edit_role option').hide(); 
+
+ 
+  $('#edit_role option[value=""]').show();
+
+  if (selectedDept) {
+   
+    $('#edit_role option').each(function () {
+      const roleDept = $(this).data('dept');
+      if (roleDept == selectedDept || $(this).val() === "") {
+        $(this).show();
+      }
+    });
+  }
+});
+
+
+   
+    $('#editEmployeeForm').on('submit', function (e) {
+      e.preventDefault();
+
+      clearValidation();
+
+      let isValid = true;
+      const email = $('#edit_email').val().trim();
+      const dept = $('#edit_dept').val();
+      const role = $('#edit_role').val();
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+     
+      if (!emailRegex.test(email)) {
+        $('#edit_email').addClass('is-invalid');
+        $('#emailError').text('Please enter a valid email address.');
+        isValid = false;
+      }
+
+      
+      if (dept === "") {
+        $('#edit_dept').addClass('is-invalid');
+        $('#deptError').text('Please select a department.');
+        isValid = false;
+      }
+
+      
+      if (role === "") {
+        $('#edit_role').addClass('is-invalid');
+        $('#roleError').text('Please select a role.');
+        isValid = false;
+      }
+
+      if (isValid) {
+        this.submit();
+      }
+    });
+  });
+</script>
+{% endblock %}
