@@ -1,4 +1,3 @@
-
 import os
 from flask import Flask
 
@@ -7,7 +6,7 @@ from app.routes.emp_dashboard_routes import register_employee_routes
 from app.routes.test import test_routes  # Blueprint
 from app.routes.support_ticket_routes import register_support_ticket_routes
 from app.routes.task_comment_routes import register_task_comments_routes
-from app.routes.support_comment_routes import register_support_comment_routes  # <-- new
+from app.routes.support_comment_routes import register_support_comment_routes
 from app.routes.it_manager_routes import register_support_routes
 from app.routes.register_it_employee_routes import register_it_employee_routes
 from app.routes.test import test_routes
@@ -23,18 +22,20 @@ from app.routes.supporthistoryroute import (
 )
 from app.routes.manager_routes import register_manager_routes
 
+# Import your project_task blueprint
+from app.routes.project_task_routes import task_bp
+
 def create_app():
     app = Flask(__name__)
     app.secret_key = "sts"
 
-    # Register all routes
+    # Register all existing routes
     register_routes(app)
     register_employee_routes(app)
     register_support_ticket_routes(app)
     register_task_comments_routes(app)
-    register_support_comment_routes(app) 
+    register_support_comment_routes(app)
     app.register_blueprint(test_routes)
-
     register_support_routes(app)
 
     # Support history routes
@@ -57,4 +58,8 @@ def create_app():
     register_manager_routes(app)
     register_it_employee_routes(app)
 
+    # **Register Project Task blueprint**
+    app.register_blueprint(task_bp)
+  
+  
     return app
