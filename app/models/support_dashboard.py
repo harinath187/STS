@@ -21,7 +21,7 @@ def get_open_tickets():
 def get_resolved_tickets():
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT COUNT(*) FROM support_history WHERE status = 'RESOLVED'")
+    cursor.execute("SELECT COUNT(*) FROM support_ticket WHERE status = 'RESOLVED'")
     total = cursor.fetchone()[0]
     cursor.close()
     conn.close()
@@ -30,7 +30,7 @@ def get_resolved_tickets():
 def get_closed_tickets():
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT COUNT(*) FROM support_history WHERE status = 'CLOSED'")
+    cursor.execute("SELECT COUNT(*) FROM support_ticket WHERE status = 'CLOSED'")
     total = cursor.fetchone()[0]
     cursor.close()
     conn.close()
