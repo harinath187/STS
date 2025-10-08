@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # app/routes/project_dashboard_routes.py
+=======
+# app/routes/project_task/project_dashboard_routes.py
+>>>>>>> 15c383bad0065b8a338521e2cf0cf442fb6d562d
 from flask import Blueprint, render_template, session
 from app.models.project_task_dashboard import ProjectTaskDashboard
 import io
@@ -10,7 +14,13 @@ import matplotlib.pyplot as plt
 project_dashboard_bp = Blueprint('project_dashboard_bp', __name__)
 
 def generate_task_status_chart():
+<<<<<<< HEAD
     results = ProjectTaskDashboard.get_task_status_counts()
+=======
+    """Generate pie chart for task status"""
+    results = ProjectTaskDashboard.get_task_status_counts()
+    
+>>>>>>> 15c383bad0065b8a338521e2cf0cf442fb6d562d
     if not results:
         return None
     
@@ -33,7 +43,13 @@ def generate_task_status_chart():
     return chart
 
 def generate_monthly_tasks_chart():
+<<<<<<< HEAD
     results = ProjectTaskDashboard.get_monthly_task_counts()
+=======
+    """Generate line chart for monthly task creation"""
+    results = ProjectTaskDashboard.get_monthly_task_counts()
+    
+>>>>>>> 15c383bad0065b8a338521e2cf0cf442fb6d562d
     if not results:
         return None
     
@@ -60,6 +76,10 @@ def generate_monthly_tasks_chart():
 
 @project_dashboard_bp.route('/project-dashboard')
 def project_dashboard():
+<<<<<<< HEAD
+=======
+    """Main project dashboard"""
+>>>>>>> 15c383bad0065b8a338521e2cf0cf442fb6d562d
     user = session.get('user')
     
     stats = ProjectTaskDashboard.get_dashboard_stats()

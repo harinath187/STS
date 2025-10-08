@@ -5,6 +5,7 @@ class ProjectTaskDashboard:
     
     @staticmethod
     def get_dashboard_stats():
+<<<<<<< HEAD
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
         
@@ -20,6 +21,29 @@ class ProjectTaskDashboard:
         cursor.execute("SELECT COUNT(*) as total FROM project_task WHERE status='PENDING'")
         pending_tasks = cursor.fetchone()['total']
         
+=======
+        """Get all dashboard statistics"""
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        
+        # Total projects
+        cursor.execute("SELECT COUNT(*) as total FROM project")
+        total_projects = cursor.fetchone()['total']
+        
+        # Total tasks
+        cursor.execute("SELECT COUNT(*) as total FROM project_task")
+        total_tasks = cursor.fetchone()['total']
+        
+        # Completed tasks
+        cursor.execute("SELECT COUNT(*) as total FROM project_task WHERE status='COMPLETED'")
+        completed_tasks = cursor.fetchone()['total']
+        
+        # Pending tasks
+        cursor.execute("SELECT COUNT(*) as total FROM project_task WHERE status='PENDING'")
+        pending_tasks = cursor.fetchone()['total']
+        
+        # Active projects
+>>>>>>> 15c383bad0065b8a338521e2cf0cf442fb6d562d
         cursor.execute("SELECT COUNT(*) as total FROM project WHERE status_percentage < 100")
         active_projects = cursor.fetchone()['total']
         
@@ -36,6 +60,10 @@ class ProjectTaskDashboard:
     
     @staticmethod
     def get_recent_tasks(limit=6):
+<<<<<<< HEAD
+=======
+        """Get recent tasks"""
+>>>>>>> 15c383bad0065b8a338521e2cf0cf442fb6d562d
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
         cursor.execute("""
@@ -55,6 +83,10 @@ class ProjectTaskDashboard:
     
     @staticmethod
     def get_task_status_counts():
+<<<<<<< HEAD
+=======
+        """Get task counts by status for pie chart"""
+>>>>>>> 15c383bad0065b8a338521e2cf0cf442fb6d562d
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
         cursor.execute("""
@@ -69,6 +101,10 @@ class ProjectTaskDashboard:
     
     @staticmethod
     def get_monthly_task_counts():
+<<<<<<< HEAD
+=======
+        """Get monthly task creation counts for line chart"""
+>>>>>>> 15c383bad0065b8a338521e2cf0cf442fb6d562d
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
         cursor.execute("""

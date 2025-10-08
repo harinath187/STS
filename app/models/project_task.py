@@ -31,6 +31,24 @@ class ProjectTask:
         return employees
 
     @staticmethod
+<<<<<<< HEAD
+=======
+    def get_project_manager(project_id):
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("""
+            SELECT CONCAT(e.firstname, ' ', COALESCE(e.lastname, '')) AS manager_name
+            FROM project p
+            LEFT JOIN employee e ON p.project_manager = e.id
+            WHERE p.id = %s
+        """, (project_id,))
+        result = cursor.fetchone()
+        cursor.close()
+        conn.close()
+        return result['manager_name'] if result else None
+
+    @staticmethod
+>>>>>>> 15c383bad0065b8a338521e2cf0cf442fb6d562d
     def fetch_all_tasks():
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
@@ -76,13 +94,65 @@ class ProjectTask:
         return tasks
 
     @staticmethod
+<<<<<<< HEAD
     def add_task(project_id, task_name, task_description, task_duration, assigned_to, assigned_by, 
                  estimated_hrs, worked_hrs, start_date, end_date, comments, status):
+=======
+    def fetch_tasks_by_name(task_name):
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("""
+            SELECT t.*, 
+                   p.project_name,
+                   t.`Start_Date`,
+                   t.`End_Date`,
+                   CONCAT(e.firstname, ' ', COALESCE(e.lastname, '')) AS employee_name,
+                   CONCAT(m.firstname, ' ', COALESCE(m.lastname, '')) AS manager_name,
+                   t.Comments AS manager_comments
+            FROM project_task t
+            LEFT JOIN employee e ON t.assigned_to = e.id
+            LEFT JOIN employee m ON t.assigned_by = m.id
+            LEFT JOIN project p ON t.project_id = p.id
+            WHERE t.task_name LIKE %s
+        """, ('%' + task_name + '%',))
+        tasks = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        return tasks
+
+    @staticmethod
+    def fetch_tasks_by_project_and_name(project_id, task_name):
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("""
+            SELECT t.*, 
+                   p.project_name,
+                   t.`Start_Date`,
+                   t.`End_Date`,
+                   CONCAT(e.firstname, ' ', COALESCE(e.lastname, '')) AS employee_name,
+                   CONCAT(m.firstname, ' ', COALESCE(m.lastname, '')) AS manager_name,
+                   t.Comments AS manager_comments
+            FROM project_task t
+            LEFT JOIN employee e ON t.assigned_to = e.id
+            LEFT JOIN employee m ON t.assigned_by = m.id
+            LEFT JOIN project p ON t.project_id = p.id
+            WHERE t.project_id = %s AND t.task_name LIKE %s
+        """, (project_id, '%' + task_name + '%'))
+        tasks = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        return tasks
+
+    @staticmethod
+    def add_task(project_id, task_name, task_description, task_duration, assigned_to, assigned_by, 
+                 estimated_hrs, worked_hrs, start_date, end_date, comments, status, attachment=None):
+>>>>>>> 15c383bad0065b8a338521e2cf0cf442fb6d562d
         conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute("""
             INSERT INTO project_task 
             (project_id, task_name, task_description, task_Duration, assigned_to, assigned_by, 
+<<<<<<< HEAD
              estimated_hrs, worked_hrs, Start_Date, End_Date, Comments, status)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """, (project_id, task_name, task_description, task_duration, assigned_to, assigned_by,
@@ -92,6 +162,15 @@ class ProjectTask:
         cursor.close()
         conn.close()
         return task_id
+=======
+             estimated_hrs, worked_hrs, Start_Date, End_Date, Comments, status, attachments)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """, (project_id, task_name, task_description, task_duration, assigned_to, assigned_by,
+              estimated_hrs, worked_hrs, start_date, end_date, comments, status, attachment))
+        conn.commit()
+        cursor.close()
+        conn.close()
+>>>>>>> 15c383bad0065b8a338521e2cf0cf442fb6d562d
 
     @staticmethod
     def get_task_by_id(task_id):
@@ -115,6 +194,7 @@ class ProjectTask:
 
     @staticmethod
     def update_task(task_id, project_id, task_name, task_description, task_duration, assigned_to, 
+<<<<<<< HEAD
                     assigned_by, estimated_hrs, worked_hrs, start_date, end_date, comments, status):
         conn = get_db_connection()
         cursor = conn.cursor()
@@ -126,6 +206,29 @@ class ProjectTask:
             WHERE task_id=%s
         """, (project_id, task_name, task_description, task_duration, assigned_to, assigned_by,
               estimated_hrs, worked_hrs, start_date, end_date, comments, status, task_id))
+=======
+                    assigned_by, estimated_hrs, worked_hrs, start_date, end_date, comments, status, attachment=None):
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        if attachment:
+            cursor.execute("""
+                UPDATE project_task 
+                SET project_id=%s, task_name=%s, task_description=%s, task_Duration=%s, 
+                    assigned_to=%s, assigned_by=%s, estimated_hrs=%s, worked_hrs=%s, 
+                    Start_Date=%s, End_Date=%s, Comments=%s, status=%s, attachments=%s
+                WHERE task_id=%s
+            """, (project_id, task_name, task_description, task_duration, assigned_to, assigned_by,
+                  estimated_hrs, worked_hrs, start_date, end_date, comments, status, attachment, task_id))
+        else:
+            cursor.execute("""
+                UPDATE project_task 
+                SET project_id=%s, task_name=%s, task_description=%s, task_Duration=%s, 
+                    assigned_to=%s, assigned_by=%s, estimated_hrs=%s, worked_hrs=%s, 
+                    Start_Date=%s, End_Date=%s, Comments=%s, status=%s
+                WHERE task_id=%s
+            """, (project_id, task_name, task_description, task_duration, assigned_to, assigned_by,
+                  estimated_hrs, worked_hrs, start_date, end_date, comments, status, task_id))
+>>>>>>> 15c383bad0065b8a338521e2cf0cf442fb6d562d
         conn.commit()
         cursor.close()
         conn.close()
@@ -137,6 +240,7 @@ class ProjectTask:
         cursor.execute("DELETE FROM project_task WHERE task_id = %s", (task_id,))
         conn.commit()
         cursor.close()
+<<<<<<< HEAD
         conn.close()
 
     # ========== TASK_COMMENTS METHODS ==========
@@ -191,4 +295,6 @@ class ProjectTask:
         cursor.execute("DELETE FROM Task_Comments WHERE Comment_id = %s", (comment_id,))
         conn.commit()
         cursor.close()
+=======
+>>>>>>> 15c383bad0065b8a338521e2cf0cf442fb6d562d
         conn.close()
