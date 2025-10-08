@@ -1,0 +1,25 @@
+
+.bg-glass {
+  background: rgba(231, 219, 219, 0.1);  
+  backdrop-filter: blur(10px);  
+  -webkit-backdrop-filter: blur(10px); 
+  border: 1px solid rgba(145, 138, 138, 0.3);  
+  color: white;  
+}
+
+.bg-glass a {
+  color: rgb(34, 29, 29);  
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.bg-glass a:hover {
+  color: #076cdf;  
+  text-decoration: none;
+}
+
+.grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(4, 1fr);
+}

@@ -1,0 +1,220 @@
+<!-- app/templates/project_dashboard/dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50">
+
+<div class="flex min-h-screen">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white shadow-md flex flex-col fixed top-0 left-0 bottom-0 overflow-y-auto">
+        {% include "common/project_sidebar.html" %}
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 ml-64 pt-8 pr-8 pb-8 pl-4">
+        
+        <!-- Welcome Message -->
+        <div class="mb-6">
+            <h1 class="text-3xl font-bold text-gray-800">Welcome, {{ user.firstname }}!</h1>
+            <p class="text-gray-600 mt-1">Here's your project overview</p>
+        </div>
+
+        <!-- Dashboard Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
+            <!-- Total Projects -->
+            <div class="bg-gradient-to-br from-blue-500 to-blue-600 p-6 rounded-xl shadow-lg text-white">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-blue-100 text-sm">Total Projects</p>
+                        <p class="text-3xl font-bold mt-2">{{ stats.total_projects }}</p>
+                    </div>
+                    <div class="bg-blue-400 bg-opacity-30 p-3 rounded-lg">
+                        <i class="fas fa-folder text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Projects -->
+            <div class="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-xl shadow-lg text-white">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-green-100 text-sm">Active Projects</p>
+                        <p class="text-3xl font-bold mt-2">{{ stats.active_projects }}</p>
+                    </div>
+                    <div class="bg-green-400 bg-opacity-30 p-3 rounded-lg">
+                        <i class="fas fa-rocket text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total Tasks -->
+            <div class="bg-gradient-to-br from-purple-500 to-purple-600 p-6 rounded-xl shadow-lg text-white">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-purple-100 text-sm">Total Tasks</p>
+                        <p class="text-3xl font-bold mt-2">{{ stats.total_tasks }}</p>
+                    </div>
+                    <div class="bg-purple-400 bg-opacity-30 p-3 rounded-lg">
+                        <i class="fas fa-tasks text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Completed Tasks -->
+            <div class="bg-gradient-to-br from-teal-500 to-teal-600 p-6 rounded-xl shadow-lg text-white">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-teal-100 text-sm">Completed Tasks</p>
+                        <p class="text-3xl font-bold mt-2">{{ stats.completed_tasks }}</p>
+                    </div>
+                    <div class="bg-teal-400 bg-opacity-30 p-3 rounded-lg">
+                        <i class="fas fa-check-circle text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pending Tasks -->
+            <div class="bg-gradient-to-br from-yellow-500 to-yellow-600 p-6 rounded-xl shadow-lg text-white">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-yellow-100 text-sm">Pending Tasks</p>
+                        <p class="text-3xl font-bold mt-2">{{ stats.pending_tasks }}</p>
+                    </div>
+                    <div class="bg-yellow-400 bg-opacity-30 p-3 rounded-lg">
+                        <i class="fas fa-clock text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Line Chart -->
+            <div class="bg-white p-6 rounded-xl shadow-lg">
+                <h3 class="text-xl font-semibold mb-4 text-gray-800">
+                    <i class="fas fa-chart-line text-blue-600"></i> Tasks Created Per Month
+                </h3>
+                {% if line_chart %}
+                    <img src="data:image/png;base64,{{ line_chart }}" alt="Tasks Per Month" class="w-full h-auto">
+                {% else %}
+                    <div class="flex items-center justify-center h-64 text-gray-400">
+                        <div class="text-center">
+                            <i class="fas fa-chart-line text-5xl mb-3"></i>
+                            <p>No data available</p>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Pie Chart -->
+            <div class="bg-white p-6 rounded-xl shadow-lg">
+                <h3 class="text-xl font-semibold mb-4 text-gray-800">
+                    <i class="fas fa-chart-pie text-green-600"></i> Task Status Distribution
+                </h3>
+                {% if pie_chart %}
+                    <img src="data:image/png;base64,{{ pie_chart }}" alt="Task Status" class="w-full h-auto">
+                {% else %}
+                    <div class="flex items-center justify-center h-64 text-gray-400">
+                        <div class="text-center">
+                            <i class="fas fa-chart-pie text-5xl mb-3"></i>
+                            <p>No tasks to display</p>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Recent Tasks -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-2xl font-bold text-gray-800">
+                    <i class="fas fa-history text-blue-600"></i> Recent Tasks
+                </h3>
+                <a href="{{ url_for('task_bp.list_tasks') }}" class="text-blue-600 hover:text-blue-800 font-medium">
+                    View All <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            {% if recent_tasks %}
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {% for task in recent_tasks %}
+                    <div class="bg-white p-5 rounded-xl shadow-md hover:shadow-xl transition border-l-4 
+                                {% if task.status == 'COMPLETED' %}border-green-500
+                                {% else %}border-yellow-500{% endif %}">
+                        <div class="flex items-start justify-between mb-3">
+                            <h4 class="font-bold text-lg text-gray-800">{{ task.task_name }}</h4>
+                            <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold
+                                {% if task.status == 'COMPLETED' %}bg-green-100 text-green-800
+                                {% else %}bg-yellow-100 text-yellow-800{% endif %}">
+                                {{ task.status }}
+                            </span>
+                        </div>
+                        
+                        <p class="text-gray-600 text-sm mb-3">{{ task.task_description[:80] }}...</p>
+                        
+                        <div class="space-y-2 text-sm text-gray-500">
+                            <p><i class="fas fa-project-diagram text-blue-500"></i> <strong>Project:</strong> {{ task.project_name or 'N/A' }}</p>
+                            <p><i class="fas fa-user text-purple-500"></i> <strong>Assigned:</strong> {{ task.employee_name or 'Unassigned' }}</p>
+                            <p><i class="fas fa-clock text-orange-500"></i> <strong>Hours:</strong> {{ task.worked_hrs or 0 }}/{{ task.estimated_hrs or 0 }}</p>
+                        </div>
+                        
+                        <div class="mt-4 flex gap-2">
+                            <a href="{{ url_for('task_bp.edit_task', task_id=task.task_id) }}" 
+                               class="flex-1 text-center bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg text-sm font-medium transition">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                            <a href="{{ url_for('task_bp.list_tasks', project_id=task.project_id) }}" 
+                               class="flex-1 text-center bg-gray-500 hover:bg-gray-600 text-white py-2 rounded-lg text-sm font-medium transition">
+                                <i class="fas fa-eye"></i> View
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="bg-white p-12 rounded-xl shadow text-center">
+                    <i class="fas fa-tasks text-gray-300 text-6xl mb-4"></i>
+                    <p class="text-gray-400 text-lg">No recent tasks available</p>
+                    <a href="{{ url_for('task_bp.add_task') }}" class="mt-4 inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition">
+                        <i class="fas fa-plus"></i> Create First Task
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="bg-white p-6 rounded-xl shadow-lg">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">
+                <i class="fas fa-bolt text-yellow-500"></i> Quick Actions
+            </h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <a href="{{ url_for('task_bp.add_task') }}" class="flex flex-col items-center p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition">
+                    <i class="fas fa-plus-circle text-3xl text-blue-600 mb-2"></i>
+                    <span class="text-sm font-medium text-gray-700">New Task</span>
+                </a>
+                <a href="/projects/add" class="flex flex-col items-center p-4 bg-green-50 hover:bg-green-100 rounded-lg transition">
+                    <i class="fas fa-folder-plus text-3xl text-green-600 mb-2"></i>
+                    <span class="text-sm font-medium text-gray-700">New Project</span>
+                </a>
+                <a href="{{ url_for('task_bp.list_tasks') }}" class="flex flex-col items-center p-4 bg-purple-50 hover:bg-purple-100 rounded-lg transition">
+                    <i class="fas fa-list text-3xl text-purple-600 mb-2"></i>
+                    <span class="text-sm font-medium text-gray-700">View Tasks</span>
+                </a>
+                <a href="/project-reports" class="flex flex-col items-center p-4 bg-orange-50 hover:bg-orange-100 rounded-lg transition">
+                    <i class="fas fa-file-alt text-3xl text-orange-600 mb-2"></i>
+                    <span class="text-sm font-medium text-gray-700">Reports</span>
+                </a>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+</body>
+</html>
