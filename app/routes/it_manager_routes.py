@@ -3,9 +3,8 @@ from app.utils.auth import login_required
 from app.models import support_dashboard
 import io
 import base64
-import matplotlib.pyplot as plt
 import matplotlib
-matplotlib.use('Agg')  # Use the Agg backend for non-GUI rendering
+matplotlib.use('Agg')  # Non-GUI backend for matplotlib
 import matplotlib.pyplot as plt
 
 
@@ -25,7 +24,7 @@ def register_support_routes(app):
             "unassigned_tickets": support_dashboard.get_unassigned_tickets(),
         }
 
-        # Pie chart data
+        # ---------- Pie Chart ----------
         labels = ['Pending (Open)', 'Resolved', 'Completed (Closed)', 'Unassigned']
         sizes = [
             card_data['pending_tickets'],
@@ -36,7 +35,7 @@ def register_support_routes(app):
         colors = ['#fbbf24', '#34d399', '#60a5fa', '#9ca3af']
 
         pie_chart = None
-        if sum(sizes) > 0:
+        if any(sizes):  # Ensure there's data
             fig, ax = plt.subplots()
             ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90, colors=colors)
             ax.axis('equal')
@@ -48,12 +47,13 @@ def register_support_routes(app):
             pie_chart = base64.b64encode(img.getvalue()).decode()
             plt.close(fig)
 
-        # Line chart data - monthly ticket creation
+        # ---------- Line Chart (Monthly Ticket Creation) ----------
         months, ticket_counts = support_dashboard.get_monthly_ticket_counts()
+
         line_chart = None
         if months and ticket_counts:
             fig2, ax2 = plt.subplots()
-            ax2.plot(months, ticket_counts, marker='o', color='blue')
+            ax2.plot(months, ticket_counts, marker='o', color='blue', linewidth=2)
             ax2.set_title('Tickets Created Per Month')
             ax2.set_xlabel('Month')
             ax2.set_ylabel('Number of Tickets')
@@ -66,9 +66,10 @@ def register_support_routes(app):
             line_chart = base64.b64encode(img2.getvalue()).decode()
             plt.close(fig2)
 
-        # Recent tickets
+        # ---------- Recent Tickets ----------
         recent_tickets = support_dashboard.get_recent_tickets()
 
+        # ---------- Render Template ----------
         return render_template(
             "dashboard/it_manager.html",
             user=user,

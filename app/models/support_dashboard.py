@@ -48,8 +48,9 @@ def get_monthly_ticket_counts():
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("""
-        SELECT DATE_FORMAT(created_at, '%Y-%m') AS month, COUNT(*) AS ticket_count
+        SELECT DATE_FORMAT(Start_Date, '%Y-%m') AS month, COUNT(*) AS ticket_count
         FROM support_ticket
+        WHERE Start_Date IS NOT NULL
         GROUP BY month
         ORDER BY month
     """)
@@ -57,9 +58,15 @@ def get_monthly_ticket_counts():
     cursor.close()
     conn.close()
 
-    months = [row[0] for row in rows]
-    ticket_counts = [row[1] for row in rows]
-    return months, ticket_counts
+    # Unpack rows into two lists
+    if rows:
+        months = [row[0] for row in rows]
+        ticket_counts = [row[1] for row in rows]
+        return months, ticket_counts
+    else:
+        return [], []
+
+
 
 
 def get_recent_tickets(limit=5):
