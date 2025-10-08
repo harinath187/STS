@@ -4,7 +4,6 @@ from app.models.db import get_db_connection
 from app.models.login import get_user_by_credentials  
 # from app.routes.emp_dashboard_routes import employee_dashboard_view
 
-print("ffffffff")
 
 
 
@@ -193,4 +192,4 @@ def register_routes(app):
 
         return render_template("dashboard/employee.html", user=user)
 
-    
+        
