@@ -183,13 +183,5 @@ def register_routes(app):
     #     session.clear()
     #     return redirect("/login")
     
-    @app.route("/today_task")
-    def get_new():
-        today_task = get_today_task()
-        # print("task must show here.............",today_task)
-        return render_template("project_management/due_today.html",today_task = today_task)
-
-
-        return render_template("dashboard/employee.html", user=user)
-
+    
         

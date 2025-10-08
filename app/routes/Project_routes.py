@@ -18,10 +18,6 @@ def register_project_routes(app):
     def get_dropdown_data():
         # print("here data come..........")
         client_name = get_client_name()
-        
-        print("client_name",client_name)
-        
-        
         # a = user["id"]
         # print(a)
         # print(f'{user["firstname"]} {user["lastname"]}')
@@ -33,14 +29,14 @@ def register_project_routes(app):
     
     @app.route("/task")
     def html_file():
-        # print("task must show here.............",today_task)
+        
         return render_template("project_management/due_today.html")
 
 
     @app.route("/today_task")
     def get_today_task_route():
         today_task = get_today_task()
-        # print("task must show here.............",today_task)
+        
         return render_template("project_management/due_today.html",today_task = today_task)
 
     @app.route("/all_task")
@@ -76,7 +72,7 @@ def register_project_routes(app):
     def add_project():
         user = session.get("user")
         clients = get_dropdown_data()
-        print("clients_details.......",clients)
+       
         # print("project_added getting data............")
         if request.method == 'POST':
             form_data = request.form.to_dict()
@@ -119,7 +115,7 @@ def register_project_routes(app):
 
 
 
-# GET: show prefilled form
+
     @app.route('/update_project/<int:project_id>', methods=['GET'])
     def edit_project(project_id):
         user=session.get("user")
@@ -127,11 +123,11 @@ def register_project_routes(app):
         cursor = conn.cursor(dictionary=True)
         # print("project iddddd.......",project_id)
 
-        # Fetch project details
+
         cursor.execute("SELECT * FROM project WHERE id=%s", (project_id,))
         project = cursor.fetchone()
 
-        # Fetch clients for dropdown
+       
         cursor.execute("SELECT client_id, Company_Name FROM Client_Details")
         clients = cursor.fetchall()
 
@@ -142,7 +138,7 @@ def register_project_routes(app):
         return render_template('mypro/update_project.html', project=project, client_name=clients,user=user)
 
 
-    # POST: update project
+    
     @app.route('/update_project/<int:project_id>', methods=['POST'])
     def update_project(project_id):
         # print("project idiiii.......",project_id)
@@ -192,7 +188,7 @@ def register_project_routes(app):
 
         return redirect(url_for('show_projects'))
 
-    #  Delete 
+    
     @app.route("/project/delete/<int:project_id>")
     def delete_project(project_id):
         delete_project_by_id(project_id)
