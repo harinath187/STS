@@ -11,6 +11,7 @@ from app.routes.support_comment_routes import register_support_comment_routes  #
 from app.routes.it_manager_routes import register_support_routes
 from app.routes.test import test_routes
 from app.routes.emp_dashboard_routes import register_employee_routes
+from app.routes.Project_routes import register_project_routes
 from app.routes.supporthistoryroute import (
     supporthistory,
     suppassignlist,
@@ -33,22 +34,18 @@ def create_app():
     register_support_ticket_routes(app)
     register_task_comments_routes(app)
     register_support_comment_routes(app) 
+    register_project_routes(app)
     app.register_blueprint(test_routes)
 
 
     # Register IT manager/test/support routes
-<<<<<<< HEAD
-    # test_routes(app)
-    supporthistory(app)
-    suppassignlist(app)
-    notsuppassignlist(app)
-=======
+
     
     supporthistory(app)
     suppassignlist(app)
     notsuppassignlist(app)
 
->>>>>>> refs/remotes/origin/Jana
+
 
     # Ticket detail/edit/delete routes
     ticket_detail_route(app)
