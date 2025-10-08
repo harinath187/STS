@@ -1,4 +1,4 @@
-import mysql.connector
+from app.models.db import get_db_connection
 from datetime import datetime
 from app.models.db import get_db_connection 
 

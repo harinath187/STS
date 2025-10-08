@@ -22,3 +22,4 @@ def register_support_ticket_routes(app: Flask):
 
         departments = get_all_departments()
         return render_template('employee/create_support_ticket.html', departments=departments,user=user)
+    

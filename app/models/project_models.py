@@ -58,6 +58,31 @@ def insert_project(data):
         cursor.close()
         conn.close()
 
+
+def get_employees_assigned_by(manager_id):
+    conn=get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    query = """
+SELECT DISTINCT
+    e.id,
+    e.firstname,
+    e.lastname,
+    e.email,
+    e.dept_id,
+    r.role_name,
+    d.dept_name
+FROM project_task pt
+JOIN employee e ON pt.assigned_to = e.id
+LEFT JOIN roles r ON e.role_id = r.id
+left join department d on e.dept_id=d.dept_id
+WHERE pt.assigned_by = %s
+ORDER BY e.firstname;
+    """
+    cursor.execute(query, (manager_id,))
+    return cursor.fetchall()
+ 
+
+
 def update_project_model(project_id):
     conn = get_db_connection()
     if not conn:

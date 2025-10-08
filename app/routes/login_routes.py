@@ -1,5 +1,6 @@
 from flask import render_template, request, redirect, session
 from app.models.db import get_db_connection
+from app.models.hr import employeelist,departmentlist,roleslist
 
 from app.models.login import get_user_by_credentials  
 # from app.routes.emp_dashboard_routes import employee_dashboard_view
@@ -43,10 +44,9 @@ def register_routes(app):
         session["user"] = user
         role = user["dep_name"].strip()
 
-        if role == "Admin":
+        if role == "HR":
             return redirect("/admin")
-        elif role in ["HR", "Backend Team", "Frontend Team", "QA / Testing", "Database / Data", "Security"]:
-            print('hhhhhh')
+        elif role in ["Backend Team", "Frontend Team", "QA / Testing", "Database / Data", "Security"]:
             return redirect("/employee")
         elif role == "Project Manager":
             return redirect("/manager")
@@ -60,17 +60,20 @@ def register_routes(app):
     @app.route("/admin")
     def admin_dashboard():
         user = session.get("user")
+        department=departmentlist()
+        roles=roleslist()
+        listitem=employeelist()
         if not user:
             return redirect("/login")
-        return render_template("dashboard/admin.html", user=user)
+        return render_template("hr/list_of_employees.html", user=user,employeelist=listitem,dept_list=department,role=roles)
 
-    @app.route("/employee_home")
-    def employee_home():
-        user = session.get("user")
-        if not user:
-            return redirect("/login")
+    # @app.route("/employee_home")
+    # def employee_home():
+    #     user = session.get("user")
+    #     if not user:
+    #         return redirect("/login")
 
-        return render_template("dashboard/employee.html",user=user)
+    #     return render_template("dashboard/employee.html",user=user)
 
 
     # @app.route("/manager")
@@ -80,12 +83,12 @@ def register_routes(app):
     #         return redirect("/login")
     #     return render_template("dashboard/pm.html",user=user)
 
-    @app.route("/it_employee")
-    def it_employee_dashboard():
-        user = session.get("user")
-        if not user:
-            return redirect("/login")
-        return render_template("dashboard/it_emp.html",user=user)
+    # @app.route("/it_employee")
+    # def it_employee_dashboard():
+    #     user = session.get("user")
+    #     if not user:
+    #         return redirect("/login")
+    #     return render_template("dashboard/it_emp.html",user=user)
     # @app.route("/it_manager")
     # def it_manager():
     #     user = session.get("user")
