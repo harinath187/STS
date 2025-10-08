@@ -11,6 +11,7 @@ from app.routes.support_comment_routes import register_support_comment_routes  #
 from app.routes.it_manager_routes import register_support_routes
 from app.routes.register_it_employee_routes import register_it_employee_routes
 from app.routes.test import test_routes
+from app.routes.project_routes import project_bp
 from app.routes.emp_dashboard_routes import register_employee_routes
 from app.routes.hrroute import employeeslist,updateemplist,addemployee,add_employeelist #sai added
 from app.routes.supporthistoryroute import (
@@ -34,7 +35,7 @@ def create_app():
     register_task_comments_routes(app)
     register_support_comment_routes(app) 
     app.register_blueprint(test_routes)
-
+    app.register_blueprint(project_bp)
     register_support_routes(app)
 
     # Support history routes

@@ -7,6 +7,9 @@ import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.use('Agg')  # Use the Agg backend for non-GUI rendering
 import matplotlib.pyplot as plt
+from app.models.db import get_db_connection
+from flask import redirect,url_for,session
+from app.models.it_employee_dashboard_data import get_tickets_by_employee,get_employee_by_id
 
 
 def register_support_routes(app):
@@ -76,4 +79,22 @@ def register_support_routes(app):
             pie_chart=pie_chart,
             line_chart=line_chart,
             recent_tickets=recent_tickets
+        )
+    @app.route("/employee_tickets")
+    def employee_tickets():
+        user = session.get("user")
+        if not user:
+            return redirect(url_for("login"))
+ 
+        employee_id = user.get("id")
+        employee_details = get_employee_by_id(employee_id)
+        assigned_tickets = get_tickets_by_employee(employee_id)
+        print(employee_details)
+        print(assigned_tickets)
+ 
+        return render_template(
+            "support_ticket/employee_tickets.html",
+            user=user,
+            employee=employee_details,
+            tickets=assigned_tickets
         )

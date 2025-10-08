@@ -74,5 +74,4 @@ def add_employeelist(app):
         conn.commit() 
         cursor.close()
         conn.close()
-
         return redirect(url_for('emplist'))
