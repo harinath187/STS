@@ -126,14 +126,8 @@
                     <div class="col-md-6 mb-3">
                         <label for="attachment" class="form-label fw-bold">Attachment</label>
                         <input type="file" id="attachment" name="attachment" class="form-control" accept=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg,.gif">
-                        <small class="text-muted">
-                            {% if task.attachments %}
-                                Current: <a href="/static/{{ task.attachments }}" target="_blank">View Current File</a>
-                            {% else %}
-                                No attachment uploaded
-                            {% endif %}
-                        </small>
-                    </div>
+                      
+
                 </div>
 
                 <!-- Action Buttons -->
