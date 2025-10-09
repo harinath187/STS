@@ -166,27 +166,7 @@
       errorPlacement: function(error, element) {
         error.insertAfter(element);
       },
-      submitHandler: function(form) {
-        let formData = new FormData(form);
-        $.ajax({
-          url: "/save_project",
-          type: "POST",
-          data: formData,
-          processData: false,
-          contentType: false,
-          success: function(response) {
-            alert("Project saved successfully!");
-            form.reset();
-            $("#statusValue").text("50");
-            $(".border-green-500").removeClass("border-green-500");
-          },
-          error: function(err) {
-            alert("Error saving project.");
-            console.error(err);
-          }
-        });
-        
-      }
+      
     });
   
     // File change alert

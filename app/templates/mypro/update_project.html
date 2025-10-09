@@ -1,154 +1,161 @@
 {% extends "base.html" %}
-{% block title %}Project UPDaTE{% endblock %}
+{% block title %}Project Update{% endblock %}
 
 {% block content %}
-
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/jquery.validation/1.19.5/jquery.validate.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
 
 <body class="bg-gray-100 min-h-screen flex">
 
   <!-- Sidebar -->
-   <aside class="w-64 bg-white shadow-md flex flex-col fixed top-0 left-0 bottom-0">
+  <aside class="w-64 bg-white shadow-md flex flex-col fixed top-0 left-0 bottom-0">
     {% include "common/project_manager.html" %}
   </aside>
 
   <!-- Main content -->
   <main class="flex-1 flex items-center justify-center ml-64 p-8">
-      <div class="bg-white shadow-lg rounded-2xl w-full max-w-2xl p-8">
-          <h2 class="text-2xl font-bold mb-6 text-gray-700 text-center">Update Project</h2>
+    <div class="bg-white shadow-lg rounded-2xl w-full max-w-2xl p-8">
+      <h2 class="text-2xl font-bold mb-6 text-gray-700 text-center">Update Project</h2>
 
-          <form id="updateProjectForm" method="POST" action="/update_project/{{ project['id'] }}" enctype="multipart/form-data" class="space-y-5">
+      <form id="updateProjectForm" method="POST" action="/update_project/{{ project['id'] }}" class="space-y-5">
+        
         <!-- Project Name -->
         <div>
-            <label class="block text-sm font-medium text-gray-600">Project Name</label>
-            <input type="text" name="project_name" value="{{ project.project_name }}" 
-                class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500" required>
+          <label class="block text-sm font-medium text-gray-600">Project Name</label>
+          <input type="text" name="project_name" value="{{ project.project_name }}"
+            class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500" required>
         </div>
 
         <!-- Client Dropdown -->
         <div>
-            <label class="block text-sm font-medium text-gray-600">Client</label>
-            <select name="client_name" class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500" required>
+          <label class="block text-sm font-medium text-gray-600">Client</label>
+          <select name="client_name" class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500" required>
             <option value="">-- Select Client --</option>
             {% for c in client_name %}
-                <option value="{{ c['client_id'] }}" {% if c['client_id'] == project.client_id %}selected{% endif %}>
+              <option value="{{ c['client_id'] }}" {% if c['client_id'] == project.client_id %}selected{% endif %}>
                 {{ c['Company_Name'] }}
-                </option>
+              </option>
             {% endfor %}
-            </select>
+          </select>
         </div>
 
         <!-- Estimated Duration -->
         <div>
-            <label class="block text-sm font-medium text-gray-600">Estimated Duration (days)</label>
-            <input type="number" name="estimated_duration" value="{{ project.estimated_duration_months }}" min="1"
-                class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
+          <label class="block text-sm font-medium text-gray-600">Estimated Duration (days)</label>
+          <input type="number" name="estimated_duration" value="{{ project.estimated_duration_months }}" min="1"
+            class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
         </div>
 
         <!-- Tech Stack -->
         <div>
-            <label class="block text-sm font-medium text-gray-600">Tech Stack</label>
-            <input type="text" name="tech_stack" value="{{ project.tech_stack }}"
-                class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
+          <label class="block text-sm font-medium text-gray-600">Tech Stack</label>
+          <input type="text" name="tech_stack" value="{{ project.tech_stack }}"
+            class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
         </div>
 
         <!-- Time Taken -->
         <div>
-            <label class="block text-sm font-medium text-gray-600">Time Taken (days)</label>
-            <input type="number" name="time_taken" value="{{ project.actual_time_taken }}" min="0"
-                class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
+          <label class="block text-sm font-medium text-gray-600">Time Taken (days)</label>
+          <input type="number" name="time_taken" value="{{ project.actual_time_taken }}" min="0"
+            class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
         </div>
 
         <!-- Cost Hours -->
         <div>
-            <label class="block text-sm font-medium text-gray-600">Cost Hours</label>
-            <input type="number" name="cost_hours" value="{{ project.cost_hours }}" min="0"
-                class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
-        </div>
-
-        <!-- Attachments -->
-        <div>
-            <label class="block text-sm font-medium text-gray-600">Attachments</label>
-            <input type="file" name="attachments" multiple
-                class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
-            {% if project.attachments %}
-            <p class="text-sm text-gray-500 mt-1">Current: {{ project.attachments }}</p>
-            {% endif %}
+          <label class="block text-sm font-medium text-gray-600">Cost Hours</label>
+          <input type="number" name="cost_hours" value="{{ project.cost_hours }}" min="0" step="0.01"
+            class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
         </div>
 
         <!-- Status -->
         <div>
-            <label class="block text-sm font-medium text-gray-600">progress (%)</label>
-            <input id="statusRange" type="range" name="status_percentage" min="0" max="100"
-                value="{{ project.status_percentage }}" class="w-full">
-            <div class="text-right text-sm text-gray-500 mt-1">
+          <label class="block text-sm font-medium text-gray-600">Progress (%)</label>
+          <input id="statusRange" type="range" name="status_percentage" min="0" max="100"
+            value="{{ project.status_percentage }}" class="w-full">
+          <div class="text-right text-sm text-gray-500 mt-1">
             <span id="statusValue">{{ project.status_percentage }}</span>%
-            </div>
+          </div>
         </div>
 
         <!-- Submit Button -->
         <div class="pt-4">
-            <button type="submit"
-                    class="w-full bg-green-600 text-white py-2 px-4 rounded-xl shadow hover:bg-green-700 transition">
+          <button type="submit"
+            class="w-full bg-green-600 text-white py-2 px-4 rounded-xl shadow hover:bg-green-700 transition">
             Update Project
-            </button>
+          </button>
         </div>
 
-        </form>
+      </form>
     </div>
-    </body>
-  <script>
-  $(document).ready(function() {
-    // Live update of status percentage
-    const statusRange = document.getElementById("statusRange");
-    const statusValue = document.getElementById("statusValue");
-    statusRange.addEventListener("input", () => statusValue.textContent = statusRange.value);
+  </main>
 
-    // Prevent negative numbers
-    $('input[type=number]').on('input', function() {
-      if ($(this).val() < 0) $(this).val('');
-    });
-
-    // jQuery validation rules
-    $("#updateProjectForm").validate({
-      rules: {
-        project_name: "required",
-        client_name: "required",
-        estimated_duration: { required: true, number: true, min: 1 },
-        tech_stack: "required",
-        time_taken: { required: true, number: true, min: 0 },
-        cost_hours: { required: true, number: true, min: 0 }
-      },
-      messages: {
-        project_name: "Please enter a project name",
-        client_name: "Please select a client",
-        estimated_duration: "Enter valid duration",
-        tech_stack: "Enter tech stack details",
-        time_taken: "Enter time taken (≥0)",
-        cost_hours: "Enter cost hours (≥0)"
-      },
-      submitHandler: function(form) {
-        const formData = new FormData(form);
-
-        $.ajax({
-          url: form.action,
-          method: "POST",
-          data: formData,
-          processData: false,
-          contentType: false,
-          success: function() {
-            alert(" Project updated successfully!");
-            // Redirect to your list page after update
-            window.location.href = "/project_list";
-          },
-          error: function() {
-            alert(" Error updating project");
-          }
-        });
-      }
-    });
+<script>
+$(document).ready(function() {
+  // Live update of status percentage
+  $("#statusRange").on("input", function() {
+    $("#statusValue").text($(this).val());
   });
-  </script>
-{% endblock %} 
+
+  // Prevent negative numbers
+  $('input[type=number]').on('input', function() {
+    if ($(this).val() < 0) $(this).val('');
+  });
+
+  // jQuery validation setup
+  $("#updateProjectForm").validate({
+    rules: {
+      project_name: "required",
+      client_name: "required",
+      estimated_duration: {
+        required: true,
+        number: true,
+        min: 1
+      },
+      tech_stack: {
+        required: true,
+        maxlength: 100
+      },
+      time_taken: {
+        required: true,
+        number: true,
+        min: 0
+      },
+      cost_hours: {
+        required: true,
+        number: true,
+        min: 0
+      },
+      status_percentage: {
+        required: true,
+        range: [0, 100]
+      }
+    },
+    messages: {
+      project_name: "Please enter a project name",
+      client_name: "Please select a client",
+      estimated_duration: "Enter valid duration (≥1)",
+      tech_stack: "Enter tech stack (max 100 characters)",
+      time_taken: "Enter time taken (≥0)",
+      cost_hours: "Enter cost hours (≥0, decimals allowed)",
+      status_percentage: "Progress must be between 0 and 100"
+    },
+    errorElement: 'p',
+    errorClass: 'text-red-500 text-sm mt-1',
+    highlight: function(element) {
+      $(element).addClass('border-red-500').removeClass('border-green-500');
+    },
+    unhighlight: function(element) {
+      $(element).removeClass('border-red-500').addClass('border-green-500');
+    },
+    success: function(label, element) {
+      $(element).removeClass('border-red-500').addClass('border-green-500');
+    },
+    errorPlacement: function(error, element) {
+      error.insertAfter(element);
+    }
+  });
+});
+</script>
+</body>
+{% endblock %}
