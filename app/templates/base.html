@@ -5,72 +5,96 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{% block title %}Dashboard{% endblock %}</title>
 
-  <!-- Global CSS/JS -->
-
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  
 
-  <!-- Custom page-specific CSS -->
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <!-- Additional Page-Specific Head -->
   {% block head %}{% endblock %}
 </head>
 
-<script>
-  // Auto-dismiss flash message after 3 seconds
-  setTimeout(function() {
-    const flash = document.getElementById('flash-message');
-    if (flash) {
-      flash.style.transition = 'opacity 0.5s ease';
-      flash.style.opacity = '0';
-      setTimeout(() => flash.remove(), 500); // remove from DOM
-    }
-  }, 3000);
-</script>
-
-
 <body class="bg-gray-100 font-sans">
 
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    <div class="fixed top-6 left-0 right-0 z-50 flex justify-center">
-      {% for category, message in messages %}
-        <div id="flash-message" class="max-w-xl mx-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded shadow">
-          {{ message }}
-        </div>
-      {% endfor %}
-    </div>
-  {% endif %}
-{% endwith %}
+  <!-- Flash Messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="fixed top-6 left-0 right-0 z-50 flex justify-center">
+        {% for category, message in messages %}
+          <div id="flash-message" class="max-w-xl mx-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded shadow">
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
 
-
-
+  <!-- Page Layout -->
   <div class="flex h-screen flex-col">
- 
-
     <div class="flex flex-1 overflow-hidden">
-     
+      <!-- Main Content Area -->
       <main class="flex-1 p-6 overflow-y-auto">
+        <!-- Top Navbar -->
         <div class="w-full flex justify-end mb-6">
           {% include "common/navbar.html" %}
         </div>
-        {% block content %}
-        {% endblock %}
- 
 
+        <!-- Page Content -->
+        {% block content %}{% endblock %}
       </main>
- 
     </div>
- 
+
     <!-- Footer -->
     {% include "common/footer.html" %}
- 
   </div>
- 
-  {% block scripts %}
-  {% endblock %}
- 
+
+  <!-- Scripts -->
+  {% block scripts %}{% endblock %}
+
+  <!-- Flash Message Auto-Dismiss -->
+  <script>
+    setTimeout(function () {
+      const flash = document.getElementById('flash-message');
+      if (flash) {
+        flash.style.transition = 'opacity 0.5s ease';
+        flash.style.opacity = '0';
+        setTimeout(() => flash.remove(), 500);
+      }
+    }, 3000);
+  </script>
+
+  <!-- Auto Logout on Inactivity (15 minutes) -->
+  <script>
+    const AUTO_LOGOUT_TIME = 15 * 60 * 1000;  // 15 minutes
+
+    let logoutTimer;
+    let warningTimer;
+
+    function resetLogoutTimer() {
+      clearTimeout(logoutTimer);
+      clearTimeout(warningTimer);
+
+      // 1-minute warning before logout
+      warningTimer = setTimeout(() => {
+        alert("You will be logged out in 1 minute due to inactivity.");
+      }, AUTO_LOGOUT_TIME - 60000);
+
+      // Actual logout
+      logoutTimer = setTimeout(() => {
+        window.location.href = "/logout";
+      }, AUTO_LOGOUT_TIME);
+    }
+
+    ['click', 'mousemove', 'keydown', 'scroll', 'touchstart'].forEach(event => {
+      document.addEventListener(event, resetLogoutTimer);
+    });
+
+    resetLogoutTimer();
+  </script>
+
 </body>
 </html>
- 
- 

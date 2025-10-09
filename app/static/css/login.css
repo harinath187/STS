@@ -1,14 +1,16 @@
- body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f5f7fa;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      color: #34495e;
-     
-    }
+body {
+  background-image: url("../images/Ticket-Management-System.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 100vh;
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #34495e;
+}
     h2 {
       text-align: center;
       font-weight: 700;
@@ -16,21 +18,31 @@
       color: #2c3e50;
       letter-spacing: 0.05em;
     }
-    form {
-      background: white;
-      padding: 50px;
-      border-radius: 10px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-      width: 320px;
-      padding-left:29px;
-     
-    }
+       form {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 15px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(147, 155, 246, 0.3);
+ 
+  padding: 40px 60px;
+  width: 350px;
+ 
+  
+  margin: 240px auto 0;
+  
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #222;
+  margin-right: 250px;
+}
     label {
       display: block;
       margin-bottom: 6px;
       font-weight: 600;
-      color: #34495e;
+      color: #f5f9fc;
       margin-top: 15px;
+      font-size: 22px;
     }
     input[type="text"], input[type="password"] {
       width: 100%;
@@ -78,3 +90,9 @@
       font-weight: 600;
       letter-spacing: 0.03em;
     }
+
+
+
+
+
+    

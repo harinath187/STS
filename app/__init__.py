@@ -1,4 +1,4 @@
-
+from datetime import timedelta
 import os
 from flask import Flask
 
@@ -26,6 +26,7 @@ from app.routes.manager_routes import register_manager_routes
 def create_app():
     app = Flask(__name__)
     app.secret_key = "sts"
+    app.permanent_session_lifetime = timedelta(minutes=15)
 
     # Register all routes
     register_routes(app)
