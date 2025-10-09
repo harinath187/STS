@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, session, url_for
 from datetime import timedelta
 from app.models.db import get_db_connection
 from app.models.login import get_user_by_credentials
- 
+from app.models.hr import employeelist,departmentlist,roleslist
  
 def register_routes(app):
     # Session will expire after 15 minutes of inactivity
@@ -31,9 +31,9 @@ def register_routes(app):
         # Redirect based on role
         role = user["dep_name"].strip()
  
-        if role == "Admin":
+        if role == "HR":
             return redirect("/admin")
-        elif role in ["HR", "Backend Team", "Frontend Team", "QA / Testing", "Database / Data", "Security"]:
+        elif role in ["Backend Team", "Frontend Team", "QA / Testing", "Database / Data", "Security"]:
             return redirect("/employee")
         elif role == "Project Manager":
             return redirect("/manager")
@@ -52,10 +52,12 @@ def register_routes(app):
     @app.route("/admin")
     def admin_dashboard():
         user = session.get("user")
+        department=departmentlist()
+        roles=roleslist()
+        listitem=employeelist()
         if not user:
             return redirect("/login")
-        return render_template("dashboard/admin.html", user=user)
- 
+        return render_template("hr/list_of_employees.html", user=user,employeelist=listitem,dept_list=department,role=roles)
     @app.route("/employee_home")
     def employee_home():
         user = session.get("user")
