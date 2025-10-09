@@ -1,20 +1,23 @@
-
 import os
 from flask import Flask
 
+# Existing route imports
 from app.routes.login_routes import register_routes
 from app.routes.emp_dashboard_routes import register_employee_routes
 from app.routes.test import test_routes  # Blueprint
 from app.routes.support_ticket_routes import register_support_ticket_routes
 from app.routes.task_comment_routes import register_task_comments_routes
-from app.routes.support_comment_routes import register_support_comment_routes  # <-- new
+from app.routes.support_comment_routes import register_support_comment_routes
 from app.routes.it_manager_routes import register_support_routes
 from app.routes.register_it_employee_routes import register_it_employee_routes
-from app.routes.test import test_routes
 from app.routes.project_routes import project_bp
-from app.routes.emp_dashboard_routes import register_employee_routes
-from app.routes.hrroute import employeeslist,updateemplist,addemployee,add_employeelist #sai added
 from app.routes.Project_routes import register_project_routes
+from app.routes.hrroute import (
+    employeeslist,
+    updateemplist,
+    addemployee,
+    add_employeelist
+)  # sai added
 from app.routes.supporthistoryroute import (
     supporthistory,
     suppassignlist,
@@ -25,26 +28,31 @@ from app.routes.supporthistoryroute import (
 )
 from app.routes.manager_routes import register_manager_routes
 
+# ✅ New import for Project Task blueprint
+from app.routes.project_task_routes import task_bp
+
+
 def create_app():
     app = Flask(__name__)
     app.secret_key = "sts"
 
-    # Register all routes
+    # Register all major routes
     register_routes(app)
     register_employee_routes(app)
     register_support_ticket_routes(app)
     register_task_comments_routes(app)
-    register_support_comment_routes(app) 
+    register_support_comment_routes(app)
     register_project_routes(app)
+    register_support_routes(app)
+    register_manager_routes(app)
+    register_it_employee_routes(app)
+
+    # Blueprints
     app.register_blueprint(test_routes)
     app.register_blueprint(project_bp)
-    register_support_routes(app)
+    app.register_blueprint(task_bp)   # ✅ added for project task module
 
-    # Support history routes
-
-    # Register IT manager/test/support routes
-
-    
+    # Support history & HR routes
     supporthistory(app)
     suppassignlist(app)
     notsuppassignlist(app)
@@ -53,19 +61,11 @@ def create_app():
     addemployee(app)
     add_employeelist(app)
 
-
-
     # Ticket detail/edit/delete routes
     ticket_detail_route(app)
     ticket_delete_route(app)
 
     # Employee dropdown routes
-    #  Register dynamic employee dropdown route
     employee_routes(app)
-
-    
-    # Manager dashboard routes
-    register_manager_routes(app)
-    register_it_employee_routes(app)
 
     return app
