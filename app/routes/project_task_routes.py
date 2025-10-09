@@ -1,16 +1,4 @@
-# from flask import Blueprint, render_template, request, redirect, url_for, flash, session
-# from app.models.project_task import ProjectTask
-# import os
-# from werkzeug.utils import secure_filename
-# from app.utils.auth import login_required
 
-# task_bp = Blueprint('task_bp', __name__)
-
-# UPLOAD_FOLDER = 'app/static/uploads/task_attachments'
-# ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'doc', 'docx'}
-
-# def allowed_file(filename):
-#     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from app.models.project_task import ProjectTask
@@ -41,7 +29,7 @@ def list_tasks():
     else:
         tasks = []
 
-           # Fix attachments path
+          
     for task in tasks:
         if task.get("attachments"):
             attachment_path = task["attachments"]
@@ -50,7 +38,7 @@ def list_tasks():
             elif "static/" in attachment_path:
                 task["attachments"] = attachment_path.split("static/")[1]
 
-    # Pass user from session to template
+  
     user = session.get('user')
 
     return render_template(
@@ -63,7 +51,7 @@ def list_tasks():
     )
 
 
-# -------------------- Add Task --------------------
+
 @task_bp.route('/tasks/add', methods=['GET', 'POST'])
 @login_required
 def add_task():
@@ -106,7 +94,6 @@ def add_task():
     return render_template('project_task/add_task.html', projects=projects, employees=employees, user=user)
 
 
-# -------------------- Edit Task --------------------
 @task_bp.route('/tasks/edit/<int:task_id>', methods=['GET', 'POST'])
 @login_required
 def edit_task(task_id):
@@ -154,7 +141,7 @@ def edit_task(task_id):
     return render_template('project_task/edit_task.html', task=task, projects=projects, employees=employees, user=user)
 
 
-# -------------------- Delete Task --------------------
+
 @task_bp.route('/tasks/delete/<int:task_id>', methods=['POST'])
 @login_required
 def delete_task(task_id):
