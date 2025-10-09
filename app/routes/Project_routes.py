@@ -27,7 +27,7 @@ def register_project_routes(app):
 
 
     
-    @app.route("/task")
+    @app.route("/task_1")
     def html_file():
         
         return render_template("project_management/due_today.html")
