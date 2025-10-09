@@ -6,14 +6,84 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.bootstrap5.min.css">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+
  
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
+<style>
 
-<div class="flex">
+.dataTables_wrapper {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+
+table.dataTable {
+    width: 100% !important;
+    background-color: white;
+}
+
+
+thead th {
+    background-color: #1f2937; 
+    color: white;
+}
+
+
+.dataTables_wrapper .dataTables_filter input {
+    border: 1px solid black;  
+    border-radius: 4px;
+    padding: 4px 8px;
+    height: 32px;
+}
+
+.dataTables_wrapper .dataTables_filter input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    border: 0px solid #d1d5db; 
+    padding: 4px 10px;
+    margin: 0 2px;
+    border-radius: 4px;
+    background: white;
+    color: #1f2937; 
+    cursor: pointer;
+    font-size: 0.875rem; 
+}
+
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background: #e0f2fe; 
+    color: #1e3a8a;     
+}
+
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
+}
+
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:focus {
+    outline: none;
+}
+
+
+.dataTables_paginate {
+    float: right;
+}
+</style>
+
+
   <!-- Sidebar -->
-  <div class="w-64 bg-white shadow-md h-screen overflow-y-auto fixed">
+   <aside class="w-64 bg-white shadow-md flex flex-col fixed top-0 left-0 bottom-0">
     {% include "common/project_manager.html" %}
-  </div>
+  </aside>
  
   <!-- Main Content -->
   <div class="flex-1 ml-64 p-6">
@@ -26,14 +96,16 @@
     </div>
  
     {% if projects %}
-    <div class="overflow-x-auto bg-white shadow rounded-lg">
-      <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-800 text-white">
+    
+      <div class="table-responsive">
+        <table id="projectTable" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
+      
+        <thead class="bg-gray-800  text-white">
           <tr>
             <th class="px-4 py-2 text-left text-sm font-semibold">ID</th>
             <th class="px-4 py-2 text-left text-sm font-semibold">Project Name</th>
-            <th class="px-4 py-2 text-left text-sm font-semibold">Client ID</th>
-            <th class="px-4 py-2 text-left text-sm font-semibold">Project Manager</th>
+            <th class="px-4 py-2 text-left text-sm font-semibold">Client </th>
+            
             <th class="px-4 py-2 text-left text-sm font-semibold">Duration</th>
             <th class="px-4 py-2 text-left text-sm font-semibold">Tech Stack</th>
             <th class="px-4 py-2 text-left text-sm font-semibold">Actual Time</th>
@@ -50,8 +122,8 @@
           <tr class="hover:bg-gray-50">
             <td class="px-4 py-2 text-sm text-gray-700">{{ project.id }}</td>
             <td class="px-4 py-2 text-sm text-gray-700">{{ project.project_name or '-' }}</td>
-            <td class="px-4 py-2 text-sm text-gray-700">{{ project.client_id }}</td>
-            <td class="px-4 py-2 text-sm text-gray-700">{{ project.project_manager }}</td>
+            <td class="px-4 py-2 text-sm text-gray-700">{{ project.Company_Name }}</td>
+            
             <td class="px-4 py-2 text-sm text-gray-700">{{ project.estimated_duration_months }}</td>
             <td class="px-4 py-2 text-sm text-gray-700">{{ project.tech_stack or '-' }}</td>
             <td class="px-4 py-2 text-sm text-gray-700">{{ project.actual_time_taken }}</td>
@@ -63,12 +135,17 @@
                 <span class="text-gray-400">No file</span>
               {% endif %}
             </td>
+            
             <td class="px-4 py-2 text-sm">
-              {% if project.status_percentage >= 100 %}
-                <span class="inline-block px-2 py-1 text-xs font-semibold bg-green-600 text-white rounded">Completed</span>
-              {% else %}
-                <span class="inline-block px-2 py-1 text-xs font-semibold bg-yellow-400 text-black rounded">Pending</span>
-              {% endif %}
+              <div class="w-full bg-gray-200 rounded-full h-4 relative">
+                {% if project.status_percentage >= 100 %}
+                  <div class="bg-green-600 h-4 rounded-full" style="width: 100%;"></div>
+                  <span class="absolute top-0 left-1/2 transform -translate-x-1/2 text-xs font-semibold text-white">100%</span>
+                {% else %}
+                  <div class="bg-yellow-400 h-4 rounded-full" style="width: {{ project.status_percentage }}%;"></div>
+                  <span class="absolute top-0 left-1/2 transform -translate-x-1/2 text-xs font-semibold text-black">{{ project.status_percentage }}%</span>
+                {% endif %}
+              </div>
             </td>
             <td>
                 <div class="d-flex justify-content-center gap-2 flex-wrap">
@@ -93,5 +170,23 @@
     {% endif %}
   </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#projectTable').DataTable({
+                responsive: true,
+                paging: true,
+                searching: true,
+                ordering: true,
+                info: true,
+                lengthChange: true,
+                pageLength: 10
+            });  
+      
+        });
+    </script>
 {% endblock %}
+
  

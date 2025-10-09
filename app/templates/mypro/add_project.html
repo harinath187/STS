@@ -1,32 +1,26 @@
 {% extends "base.html" %}
-{% block title %}Add Project {% endblock %}
+{% block title %}Add Project{% endblock %}
 
 {% block content %}
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- jQuery -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <!-- jQuery Validation -->
-  <script src="https://cdn.jsdelivr.net/jquery.validation/1.19.5/jquery.validate.min.js"></script>
-</head>
+<script src="https://cdn.tailwindcss.com"></script>
 
-<body class="bg-gray-100 min-h-screen flex">
-  <!-- Sidebar -->
-  <aside class="w-64 bg-white shadow-md flex flex-col fixed top-0 left-0 bottom-0">
-    {% include "common/employee_dashboard.html" %}
-  </aside>
+<!-- Sidebar -->
+<aside class="w-64 bg-white shadow-md flex flex-col fixed top-0 left-0 bottom-0">
+  {% include "common/project_manager.html" %}
+</aside>
 
-  <!-- Main content -->
-  <main class="flex-1 ml-64 p-10">
-    <div class="bg-white shadow-lg rounded-2xl w-full max-w-2xl p-8 mx-auto">
-      <h2 class="text-2xl font-bold mb-6 text-gray-700">Project Management Form</h2>
+<!-- Main content -->
+<main class="flex-1 ml-64 p-10">
+  <div class="bg-white shadow-lg rounded-2xl w-full max-w-2xl p-8 mx-auto">
+    <h2 class="text-2xl font-bold mb-6 text-gray-700">Project Management Form</h2>
 
-      <form method="POST" action="/save_project" id="projectForm" class="space-y-5" enctype="multipart/form-data">
-     
+    <form method="POST" action="/save_project" id="projectForm" class="space-y-5" enctype="multipart/form-data" novalidate>
+      
       <!-- Project Name -->
       <div>
         <label class="block text-sm font-medium text-gray-600">Project Name</label>
         <input name="project_name" type="text" placeholder="Enter project name"
-          class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500" required>
+          class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
       </div>
 
       <!-- Client Name Dropdown -->
@@ -34,13 +28,11 @@
         <label class="block text-sm font-medium text-gray-600">Client Name</label>
         <select name="client_name" class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
           <option value="">-- Select Client --</option>
-          {% for name in client_name %} 
+          {% for name in client_name %}
             <option value="{{name[0]}}">{{ name[2] }}</option>
           {% endfor %}
         </select>
       </div>
-
-      
 
       <!-- Estimated Duration -->
       <div>
@@ -54,6 +46,7 @@
         <label class="block text-sm font-medium text-gray-600">Tech Stack</label>
         <input name="tech_stack" type="text" placeholder="e.g. React, Flask, MySQL"
           class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
+        <p class="text-sm text-gray-500 mt-1" id="techStackCount">0 / 100</p>
       </div>
 
       <!-- Time Taken -->
@@ -70,12 +63,7 @@
           class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
       </div>
 
-      <!-- Attachments -->
-      <div>
-        <label class="block text-sm font-medium text-gray-600">Attachments</label>
-        <input name="attachments" type="file" multiple
-          class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
-      </div>
+      
 
       <!-- Status Percentage -->
       <div>
@@ -97,106 +85,117 @@
     </form>
   </div>
 
-<script>
-$(document).ready(function() {
-  // Live status update
-  const statusRange = document.getElementById("statusRange");
-  const statusValue = document.getElementById("statusValue");
-  statusRange.addEventListener("input", () => {
-    statusValue.textContent = statusRange.value;
-  });
+  <!-- jQuery & Validation -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
 
-  // Prevent typing negative numbers
-  $('input[type=number]').on('input', function() {
-    if ($(this).val() < 0) $(this).val('');
-  });
+  <script>
+  $(document).ready(function() {
+    // Live status update
+    $("#statusRange").on("input", function() {
+      $("#statusValue").text($(this).val());
+      $(this).valid();
+    });
 
-  $("#projectForm").validate({
-    rules: {
-      project_name: "required",
-      client_name: "required",
-      project_manager: "required",
-      estimated_duration: {
-        required: true,
-        number: true,
-        min: 1
-      },
-      tech_stack: "required",
-      time_taken: {
-        required: true,
-        number: true,
-        min: 0
-      },
-      cost_hours: {
-        required: true,
-        number: true,
-        min: 0
-      }
-    },
-    messages: {
-      project_name: "Please enter project name",
-      client_name: "Please select a client",
-      project_manager: "Please select a manager",
-      estimated_duration: "Enter a valid duration (≥1)",
-      tech_stack: "Enter tech stack",
-      time_taken: "Enter valid time taken (≥0)",
-      cost_hours: "Enter valid cost hours (≥0)"
-    },
-    errorElement: 'p',
-    errorClass: 'text-red-500 text-sm mt-1',
-    highlight: function(element) {
-      $(element).addClass('border-red-500');
-    },
-    unhighlight: function(element) {
-      $(element).removeClass('border-red-500');
-    },
-    errorPlacement: function(error, element) {
-      error.insertAfter(element);
-    },
-    // LIVE VALIDATION
-    onkeyup: function(element) {
-      $(element).valid();
-    },
-    onfocusout: function(element) {
-      $(element).valid();
-    },
-    onclick: function(element) {
-      $(element).valid();
-    },
-    // Force validation on submit
-    submitHandler: function(form) {
-      if (!$(form).valid()) return false; // prevent submit if invalid
-      let formData = new FormData(form);
-      $.ajax({
-        url: "/save_project",
-        type: "POST",
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function(response) {
-          alert("Project saved successfully!");
-          console.log(response);
-          form.reset();
-          $("#statusValue").text("50");
+    // Tech stack character count
+    $('input[name="tech_stack"]').on('input', function() {
+      $('#techStackCount').text(`${$(this).val().length} / 100`);
+    });
+
+    // Prevent negative numbers
+    $('input[type=number]').on('input', function() {
+      if ($(this).val() < 0) $(this).val('');
+    });
+
+    // Trigger validation on select and file change
+    $('select, input[type="file"]').on('change', function() {
+      $(this).valid();
+    });
+
+    // Validation setup
+    $("#projectForm").validate({
+      rules: {
+        project_name: "required",
+        client_name: "required",
+        estimated_duration: {
+          required: true,
+          number: true,
+          min: 1
         },
-        error: function(err) {
-          alert("Error saving project.");
-          console.error(err);
+        tech_stack: {
+          required: true,
+          maxlength: 100
+        },
+        time_taken: {
+          required: true,
+          number: true,
+          min: 0
+        },
+        cost_hours: {
+          required: true,
+          number: true,
+          min: 0
+        },
+        
+        status_percentage: {
+          required: true,
+          range: [0, 100]
         }
-      });
-    }
-  });
-});
-
-  document.querySelector('input[name="attachments"]').addEventListener('change', function() {
-    if (this.files.length > 0) {
-      alert("Selected file: " + this.files[0].name);
+      },
+      messages: {
+        project_name: "Please enter project name",
+        client_name: "Please select a client",
+        estimated_duration: "Enter a valid duration (≥1)",
+        tech_stack: "Enter tech stack (max 100 characters)",
+        time_taken: "Enter valid time taken (≥0)",
+        cost_hours: "Enter valid cost hours (≥0)",
+        attachments: "Only PDF, DOC, JPG, or PNG files allowed",
+        status_percentage: "Status must be between 0 and 100"
+      },
+      errorElement: 'p',
+      errorClass: 'text-red-500 text-sm mt-1',
+      highlight: function(element) {
+        $(element).addClass('border-red-500').removeClass('border-green-500');
+      },
+      unhighlight: function(element) {
+        $(element).removeClass('border-red-500').addClass('border-green-500');
+      },
+      success: function(label, element) {
+        $(element).removeClass('border-red-500').addClass('border-green-500');
+      },
+      errorPlacement: function(error, element) {
+        error.insertAfter(element);
+      },
+      submitHandler: function(form) {
+        let formData = new FormData(form);
+        $.ajax({
+          url: "/save_project",
+          type: "POST",
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function(response) {
+            alert("Project saved successfully!");
+            form.reset();
+            $("#statusValue").text("50");
+            $(".border-green-500").removeClass("border-green-500");
+          },
+          error: function(err) {
+            alert("Error saving project.");
+            console.error(err);
+          }
+        });
+        
       }
+    });
+  
+    // File change alert
+    $('input[name="attachments"]').on('change', function() {
+      if (this.files.length > 0) {
+        alert("Selected file: " + this.files[0].name);
+      }
+    });
   });
- 
-</script>
-
-
-</body>
-</html>
-{% endblock %} 
+  </script>
+</main>
+{% endblock %}

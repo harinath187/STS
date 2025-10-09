@@ -10,8 +10,8 @@
 <body class="bg-gray-100 min-h-screen flex">
 
   <!-- Sidebar -->
-  <aside class="w-64 bg-white shadow-md flex flex-col fixed top-0 left-0 bottom-0">
-      {% include "common/employee_dashboard.html" %}
+   <aside class="w-64 bg-white shadow-md flex flex-col fixed top-0 left-0 bottom-0">
+    {% include "common/project_manager.html" %}
   </aside>
 
   <!-- Main content -->
@@ -80,7 +80,7 @@
 
         <!-- Status -->
         <div>
-            <label class="block text-sm font-medium text-gray-600">Status (%)</label>
+            <label class="block text-sm font-medium text-gray-600">progress (%)</label>
             <input id="statusRange" type="range" name="status_percentage" min="0" max="100"
                 value="{{ project.status_percentage }}" class="w-full">
             <div class="text-right text-sm text-gray-500 mt-1">
@@ -139,12 +139,12 @@
           processData: false,
           contentType: false,
           success: function() {
-            alert("✅ Project updated successfully!");
+            alert(" Project updated successfully!");
             // Redirect to your list page after update
             window.location.href = "/project_list";
           },
           error: function() {
-            alert("❌ Error updating project");
+            alert(" Error updating project");
           }
         });
       }

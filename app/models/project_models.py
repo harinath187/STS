@@ -7,7 +7,7 @@ def fetch_all_projects():
 
     try:
         cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM project")
+        cursor.execute("SELECT p.*,c.Company_Name FROM project p join Client_Details c on p.client_id = c.client_id")
         projects = cursor.fetchall()
         return projects
     except Exception as e:
