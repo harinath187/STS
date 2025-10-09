@@ -156,11 +156,11 @@ def delete_task(task_id):
         return redirect(url_for('task_bp.list_tasks'))
 
 
-# -------------------- Back to Dashboard --------------------
+
 @task_bp.route('/back-to-dashboard')
 @login_required
 def back_to_dashboard():
-    # Make sure this matches your actual endpoint name in manager_bp
+  
     return redirect(url_for('manager_bp.it_manager_dashboard'))
 
 @task_bp.route('/task', methods=['GET'])
@@ -177,7 +177,7 @@ def list_tasks():
     else:
         tasks = []
 
-    # Fix attachments path
+   
     for task in tasks:
         if task.get("attachments"):
             attachment_path = task["attachments"]
@@ -186,7 +186,7 @@ def list_tasks():
             elif "static/" in attachment_path:
                 task["attachments"] = attachment_path.split("static/")[1]
 
-    # Pass user from session to template
+ 
     user = session.get('user')
 
     return render_template(
@@ -199,7 +199,7 @@ def list_tasks():
     )
 
 
-# -------------------- Add Task --------------------
+-
 @task_bp.route('/tasks/add', methods=['GET', 'POST'])
 @login_required
 def add_task():
@@ -242,7 +242,7 @@ def add_task():
     return render_template('project_task/add_task.html', projects=projects, employees=employees, user=user)
 
 
-# -------------------- Edit Task --------------------
+
 @task_bp.route('/tasks/edit/<int:task_id>', methods=['GET', 'POST'])
 @login_required
 def edit_task(task_id):
@@ -290,7 +290,6 @@ def edit_task(task_id):
     return render_template('project_task/edit_task.html', task=task, projects=projects, employees=employees, user=user)
 
 
-# -------------------- Delete Task --------------------
 @task_bp.route('/tasks/delete/<int:task_id>', methods=['POST'])
 @login_required
 def delete_task(task_id):
@@ -305,9 +304,9 @@ def delete_task(task_id):
         return redirect(url_for('task_bp.list_tasks'))
 
 
-# -------------------- Back to Dashboard --------------------
+
 @task_bp.route('/back-to-dashboard')
 @login_required
 def back_to_dashboard():
-    # Make sure this matches your actual endpoint name in manager_bp
+ 
     return redirect(url_for('manager_bp.it_manager_dashboard'))
