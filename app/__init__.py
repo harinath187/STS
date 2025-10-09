@@ -14,6 +14,7 @@ from app.routes.test import test_routes
 from app.routes.project_routes import project_bp
 from app.routes.emp_dashboard_routes import register_employee_routes
 from app.routes.hrroute import employeeslist,updateemplist,addemployee,add_employeelist #sai added
+from app.routes.Project_routes import register_project_routes
 from app.routes.supporthistoryroute import (
     supporthistory,
     suppassignlist,
@@ -34,11 +35,16 @@ def create_app():
     register_support_ticket_routes(app)
     register_task_comments_routes(app)
     register_support_comment_routes(app) 
+    register_project_routes(app)
     app.register_blueprint(test_routes)
     app.register_blueprint(project_bp)
     register_support_routes(app)
 
     # Support history routes
+
+    # Register IT manager/test/support routes
+
+    
     supporthistory(app)
     suppassignlist(app)
     notsuppassignlist(app)
@@ -47,13 +53,17 @@ def create_app():
     addemployee(app)
     add_employeelist(app)
 
+
+
     # Ticket detail/edit/delete routes
     ticket_detail_route(app)
     ticket_delete_route(app)
 
     # Employee dropdown routes
+    #  Register dynamic employee dropdown route
     employee_routes(app)
 
+    
     # Manager dashboard routes
     register_manager_routes(app)
     register_it_employee_routes(app)

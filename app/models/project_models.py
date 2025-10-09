@@ -1,5 +1,5 @@
 from app.models.db import get_db_connection
-
+from flask import session
 def fetch_all_projects():
     conn = get_db_connection()
     if not conn:
@@ -18,7 +18,11 @@ def fetch_all_projects():
         conn.close()
 
 def insert_project(data):
+    user = session.get("user")
+    project_manager = user["id"]
     conn = get_db_connection()
+    
+    # print(data.get('estimated_duration'))
     if not conn:
         return False
 
@@ -34,11 +38,12 @@ def insert_project(data):
         """
         values = (
             data['project_name'],
-            data['client_id'],
-            data.get('project_manager'),
-            data.get('estimated_duration_months'),
+            data['client_name'],
+            project_manager,
+            data.get('estimated_duration'),
+            
             data.get('tech_stack'),
-            data.get('actual_time_taken'),
+            data.get('time_taken'),
             data.get('cost_hours'),
             data.get('Attachment'),
             data.get('status_percentage')
@@ -76,3 +81,49 @@ ORDER BY e.firstname;
     cursor.execute(query, (manager_id,))
     return cursor.fetchall()
  
+
+
+def update_project_model(project_id):
+    conn = get_db_connection()
+    if not conn:
+        return []
+
+    try:
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("""
+            SELECT project_id, project_name, client_id, estimated_duration, 
+                tech_stack, time_taken, cost_hours, attachments, status_percentage
+            FROM projects WHERE project_id = %s
+            """, (project_id,))
+        project = cursor.fetchone()
+
+        
+        return project
+    except Exception as e:
+        print(" Error fetching projects:", e)
+        return []
+    finally:
+        cursor.close()
+        conn.close()
+
+def delete_project_by_id(project_id):
+    conn = get_db_connection()
+    print("project _ id ......",project_id)
+    if not conn:
+        return []
+
+    try:
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("  Delete FROM project WHERE id = %s  ", (project_id,))
+        print("cursor return.......",cursor)
+        # print("project deleted from  the database......",project)
+        conn.commit()
+        
+    except Exception as e:
+        print(" Error fetching projects:", e)
+        return []
+    finally:
+        cursor.close()
+        conn.close()        
+
+   

@@ -5,7 +5,6 @@ from app.models.hr import employeelist,departmentlist,roleslist
 from app.models.login import get_user_by_credentials  
 # from app.routes.emp_dashboard_routes import employee_dashboard_view
 
-print("ffffffff")
 
 
 
@@ -187,13 +186,5 @@ def register_routes(app):
     #     session.clear()
     #     return redirect("/login")
     
-    @app.route("/today_task")
-    def get_new():
-        today_task = get_today_task()
-        # print("task must show here.............",today_task)
-        return render_template("project_management/due_today.html",today_task = today_task)
-
-
-        return render_template("dashboard/employee.html", user=user)
-
     
+        
