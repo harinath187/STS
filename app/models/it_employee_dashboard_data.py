@@ -97,22 +97,6 @@ def get_recent_tickets_for_employee(emp_id, limit=5):
 
 
 
-# def get_tickets_by_employee(employee_id):
-#         conn=get_db_connection()
-#         cursor = conn.cursor(dictionary=True)
-#         query = """
-#             SELECT st.*, e1.firstname AS assigned_to_name, e2.firstname AS assigned_by_name, r.role_name
-#             FROM support_ticket st
-#             LEFT JOIN employee e1 ON st.assigned_to = e1.id
-#             LEFT JOIN employee e2 ON st.assigned_by = e2.id
-#             LEFT JOIN roles r ON st.role_id = r.id
-#             WHERE st.assigned_to = %s
-#             ORDER BY st.created_at DESC
-#         """
-#         print(1)
-#         print(cursor.execute(query, (employee_id,)))
-#         return cursor.fetchall()
-
 def get_employee_by_id(employee_id):
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)

@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for, flash
+from flask import render_template, request, redirect, url_for, flash,session
 from app.utils.auth import login_required
 from app.models.hr import employeelist,departmentlist,roleslist
 from app.models.db import get_db_connection 
@@ -12,7 +12,8 @@ def employeeslist(app):
         roles=roleslist()
         print(department)
         print(roles)
-        return render_template("hr/list_of_employees.html", employeelist=listitem,dept_list=department,role=roles)
+        user = session.get("user")
+        return render_template("hr/list_of_employees.html", employeelist=listitem,dept_list=department,role=roles, user=user)
 
 def addemployee(app):
     @app.route("/addemployee") 
@@ -20,7 +21,8 @@ def addemployee(app):
     def add_emplist():
         department=departmentlist()
         roles=roleslist()
-        return render_template("hr/Addemployee.html",dept_list=department,role=roles)
+        user = session.get("user")
+        return render_template("hr/Addemployee.html",dept_list=department,role=roles,user=user)
 
 def updateemplist(app):
     @app.route('/update_employee', methods=['POST'])
