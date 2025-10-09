@@ -45,7 +45,6 @@ def update_task_status(task_id, status):
     cur.execute(query, (status, task_id))
     conn.commit()
 
-    # Debug print - remove or comment out in production
     print(f"[DEBUG] Updated task_id={task_id} with status={status}")
 
     cur.close()
