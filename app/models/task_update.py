@@ -24,7 +24,7 @@ def get_employee_tasks(emp_id):
     cur.close()
     conn.close()
 
-    # Debug print - remove or comment out in production
+   
     print(f"[DEBUG] Tasks fetched for emp_id={emp_id}: {tasks}")
 
     return tasks
@@ -45,7 +45,7 @@ def update_task_status(task_id, status):
     cur.execute(query, (status, task_id))
     conn.commit()
 
-    # Debug print - remove or comment out in production
+
     print(f"[DEBUG] Updated task_id={task_id} with status={status}")
 
     cur.close()

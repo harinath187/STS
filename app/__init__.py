@@ -1,6 +1,6 @@
 import os
 from flask import Flask
-
+from app.routes.openticket_routes import register_open_ticket_routes
 from app.routes.login_routes import register_routes
 from app.routes.emp_dashboard_routes import register_employee_routes
 from app.routes.test import test_routes  # Blueprint
@@ -38,6 +38,8 @@ def create_app():
     register_support_ticket_routes(app)
     register_task_comments_routes(app)
     register_support_comment_routes(app)
+    # ✅ Register open ticket routes separately
+    register_open_ticket_routes(app)
     app.register_blueprint(test_routes)
     register_support_routes(app)
 
