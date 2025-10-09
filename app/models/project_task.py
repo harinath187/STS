@@ -1,4 +1,4 @@
-# app/models/project_task.py
+
 from app.models.db import get_db_connection
 
 class ProjectTask:
