@@ -6,7 +6,7 @@ def get_client_name():
     cursor.execute("""
     select * from Client_Details""")
     client = cursor.fetchall()
-    print("client db ..................",client)
+    
     cursor.close()
     conn.close()
     return client

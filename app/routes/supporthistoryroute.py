@@ -60,37 +60,44 @@ def ticket_detail_route(app):
             data = request.get_json()
             print("Received POST data:", data) 
 
-            required_fields = [
-                "assigned_to", "assigned_by", "dept_id", "duration",
-                "problem_description", "status"
-            ]
+            # Only validate fields that are truly required for assignment
+            required_fields = ["assigned_to", "assigned_by", "dept_id", "duration", "status"]
 
+            # Check for missing required fields
             missing_fields = []
             for field in required_fields:
                 if field not in data or data[field] in [None, ""]:
                     missing_fields.append(field)
             
-            if not (data.get('Priority') or data.get('priority')):
-                missing_fields.append('priority')
-            
             if missing_fields:
-                print(f"Missing fields: {missing_fields}")  
+                print(f"Missing fields: {missing_fields}")  # Debug log
                 return jsonify({
                     "error": "Missing required fields",
                     "fields": missing_fields
                 }), 400
 
-            if "comments" not in data or data["comments"] is None:
+            # Set default values for optional fields if not provided
+            if "comments" not in data or not data["comments"]:
                 data["comments"] = ""
+            
+            if "priority" not in data or not data["priority"]:
+                # If priority not provided, keep existing value (don't update it)
+                data["priority"] = None
+            
+            if "problem_description" not in data or not data["problem_description"]:
+                data["problem_description"] = None
             
             if "end_date" not in data:
                 data["end_date"] = None
+            
+            if "start_date" not in data:
+                data["start_date"] = None
 
             try:
                 update_ticket(ticket_id, data)
                 return jsonify({"message": "Ticket updated successfully"})
             except Exception as e:
-                print(f"Error in update_ticket: {str(e)}") 
+                print(f"Error in update_ticket: {str(e)}")  # Debug log
                 return jsonify({"error": str(e)}), 500
 
 
