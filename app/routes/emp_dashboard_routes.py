@@ -2,20 +2,13 @@ from flask import render_template, session, redirect
 from app.models import emp_dashboard
 import io, base64
 import matplotlib
-matplotlib.use("Agg") 
-
-import matplotlib.pyplot as plt
-import matplotlib
-matplotlib.use('Agg')  # Use the Agg backend for non-GUI rendering
+matplotlib.use("Agg")  # Use the Agg backend for non-GUI rendering
 import matplotlib.pyplot as plt
 
 
 def register_employee_routes(app):
-
     @app.route("/employee")
-    
     def employee_dashboard_view():
-        
         user = session.get("user")
         if not user:
             return redirect("/login")
@@ -32,19 +25,22 @@ def register_employee_routes(app):
 
         # --- Line chart ---
         months, completed_tasks = emp_dashboard.get_monthly_completed_tasks(emp_id)
-        fig1, ax1 = plt.subplots()
-        ax1.plot(months, completed_tasks, marker='o', color='blue')
-        ax1.set_title('Tasks Completed Per Month')
-        ax1.set_xlabel('Month')
-        ax1.set_ylabel('Completed Tasks')
-        ax1.grid(True)
-        plt.xticks(rotation=45)
-        img1 = io.BytesIO()
-        plt.tight_layout()
-        fig1.savefig(img1, format='png')
-        img1.seek(0)
-        line_chart = base64.b64encode(img1.getvalue()).decode()
-        plt.close(fig1)
+        line_chart = None  # Default to None in case no data
+
+        if months and completed_tasks:
+            fig1, ax1 = plt.subplots()
+            ax1.plot(months, completed_tasks, marker='o', color='blue', linewidth=2)
+            ax1.set_title('Tasks Completed Per Month')
+            ax1.set_xlabel('Month')
+            ax1.set_ylabel('Completed Tasks')
+            ax1.grid(True)
+            plt.xticks(rotation=45)
+            plt.tight_layout()
+            img1 = io.BytesIO()
+            fig1.savefig(img1, format='png')
+            img1.seek(0)
+            line_chart = base64.b64encode(img1.getvalue()).decode()
+            plt.close(fig1)
 
         # --- Pie chart ---
         pending = card_data["pending_tasks"]
@@ -68,7 +64,7 @@ def register_employee_routes(app):
             pie_chart = base64.b64encode(img2.getvalue()).decode()
             plt.close(fig2)
         else:
-            pie_chart = None  # No tasks yet
+            pie_chart = None  # No data to render pie chart
 
         # --- Recent tasks ---
         recent_tasks = emp_dashboard.get_recent_tasks(emp_id)

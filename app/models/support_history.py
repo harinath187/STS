@@ -5,24 +5,24 @@ def historylist():
     cursor = conn.cursor(dictionary=True)
     cursor.execute("""
         SELECT 
-    h.id,
-    CONCAT(e1.firstname, ' ', e1.lastname) AS assignto,
-    CONCAT(e2.firstname, ' ', e2.lastname) AS assignby,
-    d.dept_id,
-    d.dept_name,
-    h.duration,
-    h.comments,
-    h.problem_description,
-    h.priority,
-    h.start_date,
-    h.end_date,
-    h.status
-FROM support_ticket h
-INNER JOIN employee e1 ON h.assigned_to = e1.id
-INNER JOIN employee e2 ON h.assigned_by = e2.id
-LEFT JOIN department d ON h.dept_id = d.dept_id
-WHERE h.status IN ('RESOLVED', 'CLOSED')
-ORDER BY h.id;
+            h.id,
+            CONCAT(e1.firstname, ' ', e1.lastname) AS assignto,
+            CONCAT(e2.firstname, ' ', e2.lastname) AS assignby,
+            d.dept_id,
+            d.dept_name,
+            h.duration,
+            h.comments,
+            h.problem_description,
+            h.priority,
+            h.start_date,
+            h.end_date,
+            h.status
+        FROM support_ticket h
+        INNER JOIN employee e1 ON h.assigned_to = e1.id
+        INNER JOIN employee e2 ON h.assigned_by = e2.id
+        LEFT JOIN department d ON h.dept_id = d.dept_id
+        WHERE h.status IN ('RESOLVED', 'CLOSED')
+        ORDER BY h.id;
     """)
     results = cursor.fetchall()
     cursor.close()
@@ -97,7 +97,8 @@ def get_ticket_by_id(ticket_id):
             d.dept_id,
             d.dept_name,
             CONCAT(e2.firstname, ' ', e2.lastname) AS assignby_name,
-            h.assigned_to
+            h.assigned_to,
+            h.priority
         FROM support_ticket h
         LEFT JOIN department d ON h.dept_id = d.dept_id
         LEFT JOIN employee e2 ON h.assigned_by = e2.id
@@ -127,24 +128,20 @@ def update_ticket(ticket_id, data):
     """
     Update support_ticket including assigned_to.
     Only updates fields that are provided (not None).
-    Expects:
-        assigned_to, assigned_by, dept_id, duration,
-        comments (optional), problem_description (optional), 
-        priority (optional), start_date (optional), status
     """
     conn = get_db_connection()
     cursor = conn.cursor()
     
-    # Handle both Priority/priority and Start_Date/start_date cases
+    # Handle both Priority/priority cases
     priority = data.get('Priority') or data.get('priority')
     start_date = data.get('Start_Date') or data.get('start_date')
     problem_description = data.get('problem_description')
     
-    # Build dynamic UPDATE query to only update provided fields
+    # Build dynamic UPDATE query
     update_fields = []
     update_values = []
     
-    # Always update these core assignment fields
+    # Core assignment fields
     update_fields.append("assigned_to = %s")
     update_values.append(data.get('assigned_to'))
     
@@ -160,7 +157,7 @@ def update_ticket(ticket_id, data):
     update_fields.append("status = %s")
     update_values.append(data.get('status'))
     
-    # Only update optional fields if they are provided and not None
+    # Optional fields
     if data.get('comments') is not None:
         update_fields.append("comments = %s")
         update_values.append(data.get('comments', ''))
@@ -187,8 +184,8 @@ def update_ticket(ticket_id, data):
         WHERE id = %s
     """
     
-    print(f"Executing query: {query}")  # Debug log
-    print(f"With values: {update_values}")  # Debug log
+    print(f"Executing query: {query}")
+    print(f"With values: {update_values}")
     
     cursor.execute(query, tuple(update_values))
     conn.commit()
@@ -205,7 +202,7 @@ def delete_ticket(ticket_id):
     conn.close()
 
 
-def get_employees_by_department(dept_name):
+def get_employees_by_department_name(dept_name):
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
     cursor.execute("""
