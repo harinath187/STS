@@ -18,17 +18,18 @@
             <form method="POST" enctype="multipart/form-data">
                 
                 <div class="row">
-                    <!-- Project Selection -->
+                    <!-- Project Selection (Disabled) -->
                     <div class="col-md-6 mb-3">
                         <label for="project_id" class="form-label fw-bold">Project <span class="text-danger">*</span></label>
-                        <select id="project_id" name="project_id" class="form-select" required>
-                            <option value="">-- Select Project --</option>
+                        <select id="project_id" class="form-select" disabled>
                             {% for project in projects %}
                                 <option value="{{ project.id }}" {% if project.id == task.project_id %}selected{% endif %}>
                                     {{ project.project_name }}
                                 </option>
                             {% endfor %}
                         </select>
+                        <!-- Hidden input to submit project_id -->
+                        <input type="hidden" name="project_id" value="{{ task.project_id }}">
                     </div>
 
                     <!-- Task Name -->
@@ -78,17 +79,18 @@
                         </select>
                     </div>
 
-                    <!-- Assigned By (Manager) -->
+                    <!-- Assigned By (Manager, Disabled) -->
                     <div class="col-md-6 mb-3">
                         <label for="assigned_by" class="form-label fw-bold">Assigned By (Manager)</label>
-                        <select id="assigned_by" name="assigned_by" class="form-select">
-                            <option value="">-- Select Manager --</option>
+                        <select id="assigned_by" class="form-select" disabled>
                             {% for employee in employees %}
                                 <option value="{{ employee.id }}" {% if employee.id == task.assigned_by %}selected{% endif %}>
                                     {{ employee.employee_name }}
                                 </option>
                             {% endfor %}
                         </select>
+                        <!-- Hidden input to submit assigned_by -->
+                        <input type="hidden" name="assigned_by" value="{{ task.assigned_by }}">
                     </div>
                 </div>
 
@@ -126,8 +128,7 @@
                     <div class="col-md-6 mb-3">
                         <label for="attachment" class="form-label fw-bold">Attachment</label>
                         <input type="file" id="attachment" name="attachment" class="form-control" accept=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg,.gif">
-                      
-
+                    </div>
                 </div>
 
                 <!-- Action Buttons -->
@@ -145,24 +146,6 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<!-- <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const form = document.querySelector("form");
-    const startDateInput = document.getElementById("start_date");
-    const endDateInput = document.getElementById("end_date");
-
-    form.addEventListener("submit", function(e) {
-        const startDate = new Date(startDateInput.value);
-        const endDate = new Date(endDateInput.value);
-
-        if (endDateInput.value && endDate < startDate) {
-            e.preventDefault(); // Stop form submission
-            alert("End Date cannot be before Start Date!");
-            endDateInput.focus();
-        }
-    });
-});
-</script> -->
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     const form = document.querySelector("form");
