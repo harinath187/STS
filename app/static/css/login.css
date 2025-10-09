@@ -17,7 +17,7 @@ body {
       text-align: center;
       font-weight: 700;
       margin-bottom: 20px;
-      color: #2c3e50;
+      color: #ffffff;
       letter-spacing: 0.05em;
     }
     form {
@@ -43,8 +43,9 @@ body {
       display: block;
       margin-bottom: 6px;
       font-weight: 600;
-      color: #34495e;
+      color: #f0f3f5;
       margin-top: 15px;
+      font-size:24px;
       
     }
     input[type="text"], input[type="password"] {
