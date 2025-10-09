@@ -42,11 +42,12 @@
       <!-- Line Chart -->
       <div class="bg-white p-6 rounded-xl shadow">
         <h3 class="text-xl font-semibold mb-4">Tasks Completed Per Month</h3>
-        {% if line_chart %}
-          <img src="data:image/png;base64,{{ line_chart }}" alt="Tasks Completed Per Month" class="w-full h-auto">
-        {% else %}
-          <p class="text-gray-400 text-center">No data available for the line chart.</p>
-        {% endif %}
+       {% if line_chart %}
+  <img src="data:image/png;base64,{{ line_chart }}" alt="Line Chart">
+{% else %}
+  <p>No line chart data available.</p>
+{% endif %}
+
       </div>
 
       <!-- Pie Chart -->

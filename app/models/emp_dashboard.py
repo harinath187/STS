@@ -63,9 +63,9 @@ def get_monthly_completed_tasks(emp_id):
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("""
-        SELECT DATE_FORMAT(End_Date, '%%Y-%%m') AS month, COUNT(*) 
+        SELECT DATE_FORMAT(End_Date, '%Y-%m') AS month, COUNT(*) 
         FROM project_task 
-        WHERE assigned_to = %s AND status='COMPLETED'
+        WHERE assigned_to = %s AND status = 'COMPLETED'
         GROUP BY month
         ORDER BY month
     """, (emp_id,))
@@ -75,7 +75,9 @@ def get_monthly_completed_tasks(emp_id):
 
     months = [row[0] for row in rows]
     counts = [row[1] for row in rows]
+
     return months, counts
+
 def get_overdue_tasks(emp_id):
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
