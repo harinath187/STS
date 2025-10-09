@@ -139,7 +139,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script>
+<!-- <script>
 document.addEventListener("DOMContentLoaded", function() {
     const form = document.querySelector("form");
     const startDateInput = document.getElementById("start_date");
@@ -153,6 +153,54 @@ document.addEventListener("DOMContentLoaded", function() {
             e.preventDefault(); // Stop form submission
             alert("End Date cannot be before Start Date!");
             endDateInput.focus();
+        }
+    });
+});
+</script> -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const form = document.querySelector("form");
+    const startDateInput = document.getElementById("start_date");
+    const endDateInput = document.getElementById("end_date");
+    const estimatedHrsInput = document.getElementById("estimated_hrs");
+    const workedHrsInput = document.getElementById("worked_hrs");
+    const durationInput = document.getElementById("task_duration");
+
+    form.addEventListener("submit", function(e) {
+        // Date validation
+        const startDate = new Date(startDateInput.value);
+        const endDate = new Date(endDateInput.value);
+        if (endDateInput.value && endDate < startDate) {
+            e.preventDefault();
+            alert("End Date cannot be before Start Date!");
+            endDateInput.focus();
+            return;
+        }
+
+        // Estimated vs Worked Hours validation
+        const estimatedHrs = parseFloat(estimatedHrsInput.value) || 0;
+        const workedHrs = parseFloat(workedHrsInput.value) || 0;
+        if (estimatedHrs < workedHrs) {
+            e.preventDefault();
+            alert("Estimated Hours cannot be less than Worked Hours!");
+            estimatedHrsInput.focus();
+            return;
+        }
+
+        // Duration vs Hours validation
+        const durationDays = parseFloat(durationInput.value) || 0;
+        const maxPossibleHrs = durationDays * 24; // 24 hours per day
+        if (estimatedHrs > maxPossibleHrs) {
+            e.preventDefault();
+            alert(`Estimated Hours cannot exceed total hours in task duration (${maxPossibleHrs} hrs for ${durationDays} days)!`);
+            estimatedHrsInput.focus();
+            return;
+        }
+        if (workedHrs > maxPossibleHrs) {
+            e.preventDefault();
+            alert(`Worked Hours cannot exceed total hours in task duration (${maxPossibleHrs} hrs for ${durationDays} days)!`);
+            workedHrsInput.focus();
+            return;
         }
     });
 });
