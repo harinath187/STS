@@ -94,7 +94,7 @@ def register_project_routes(app):
                 flash("Project added successfully!", "success")
                 return redirect('/projects')
             else:
-                flash("Failed to add project.", "error")
+                flash("Failed to add project.","error")
 
         return render_template('mypro/add_project.html', client_name=clients, user=user)
 
