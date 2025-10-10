@@ -1,0 +1,130 @@
+<!-- Open_tickets-->
+{% extends "base.html" %}
+
+{% block title %}Open Support Tickets{% endblock %}
+
+{% block content %}
+<style>
+  /* Add margin below the DataTables search bar */
+  div.dataTables_filter {
+    margin-bottom: 1rem;
+  }
+</style>
+
+<div class="flex min-h-screen bg-gray-50">
+
+  <!-- Sidebar -->
+  <aside class="w-64 bg-white shadow-md flex flex-col fixed top-0 left-0 bottom-0">
+    {% include "common/employee_dashboard.html" %}
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 ml-64 pt-8 pr-8 pb-8 pl-4">
+    <h1 class="text-3xl font-semibold mb-6">Open Support Tickets</h1>
+
+    <div class="bg-white p-6 rounded-xl shadow">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold">My Support Tickets</h2>
+        <a href="{{ url_for('create_ticket') }}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+          Create Support Ticket
+        </a>
+      </div>
+
+      <div class="overflow-x-auto mt-4">
+        {% if tickets %}
+        <table id="ticketsTable" class="min-w-full border border-gray-200 text-sm">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="px-4 py-2 border">Ticket ID</th>
+              <th class="px-4 py-2 border">Department</th>
+              <th class="px-4 py-2 border">Duration</th>
+              <th class="px-4 py-2 border">Comments</th>
+              <th class="px-4 py-2 border">Problem Description</th>
+              <th class="px-4 py-2 border">Priority</th>
+              <th class="px-4 py-2 border">Attachment</th>
+              <th class="px-4 py-2 border">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for ticket in tickets %}
+            <tr class="hover:bg-gray-50">
+              <td class="px-4 py-2 border">{{ ticket.id }}</td>
+              <td class="px-4 py-2 border">{{ ticket.dept_id }}</td>
+              <td class="px-4 py-2 border">{{ ticket.duration or '-' }}</td>
+              <td class="px-4 py-2 border">{{ ticket.comments }}</td>
+              <td class="px-4 py-2 border">{{ ticket.problem_description }}</td>
+              <td class="px-4 py-2 border">
+                {% if ticket.Priority.lower() == 'low' %}
+                  <span class="text-green-700 bg-green-100 px-2 py-1 rounded font-semibold">Low</span>
+                {% elif ticket.Priority.lower() == 'high' %}
+                  <span class="text-red-700 bg-red-100 px-2 py-1 rounded font-semibold">High</span>
+                {% else %}
+                  {{ ticket.Priority }}
+                {% endif %}
+              </td>
+              <td class="px-4 py-2 border">
+                {% if ticket.Attachment %}
+                  {% set attachment_path = ticket.Attachment.replace('app/static/', '') %}
+                  <button 
+                   onclick="openModal('{{ url_for('static', filename=attachment_path) }}')"
+                   class="text-blue-600 underline hover:text-blue-800">
+                    View
+                  </button>
+                {% else %}
+                  <span class="text-gray-400">No file</span>
+                {% endif %}
+              </td>
+              <td class="px-4 py-2 border">{{ ticket.status }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <p class="text-gray-500">No open support tickets found.</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center z-50">
+      <div class="bg-white rounded-lg p-4 max-w-3xl w-full relative">
+        <button onclick="closeModal()" class="absolute top-2 right-2 text-gray-600 hover:text-black text-xl">&times;</button>
+        <img id="modalImage" src="" alt="Attachment" class="w-full h-auto rounded shadow">
+      </div>
+    </div>
+
+    <!-- jQuery + DataTables -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+    <script>
+      $(document).ready(function () {
+        $('#ticketsTable').DataTable({
+          paging: true,
+          pageLength: 10,
+          lengthMenu: [5, 10, 25, 50, 100],
+          ordering: true,
+          searching: true
+        });
+      });
+
+      function openModal(imageUrl) {
+        const modal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        modalImage.src = imageUrl;
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+
+      function closeModal() {
+        const modal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        modalImage.src = '';
+        modal.classList.remove('flex');
+        modal.classList.add('hidden');
+      }
+    </script>
+  </main>
+</div>
+{% endblock %}

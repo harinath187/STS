@@ -19,7 +19,7 @@ def register_support_comment_routes(app):
 
             filename = insert_support_comment(supt_id, message, file, upload_folder)
 
-            flash("✅ Support ticket comment created successfully!","success")
+            flash("Support ticket comment created successfully!","success")
             return redirect(url_for('create_support_comment'))  # redirect to the same page or a list page
 
         return render_template('employee/create_support_comment.html',user=user)
