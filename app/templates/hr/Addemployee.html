@@ -185,31 +185,31 @@
 
         <div class="form-row">
           <label for="firstname">First Name</label>
-          <input type="text" id="firstname" name="firstname" />
+          <input type="text" id="firstname1" name="firstname1" />
         </div>
         <p class="error" id="firstnameError"></p>
 
         <div class="form-row">
           <label for="lastname">Last Name</label>
-          <input type="text" id="lastname" name="lastname" />
+          <input type="text" id="lastname1" name="lastname1" />
         </div>
         <p class="error" id="lastnameError"></p>
 
         <div class="form-row">
           <label for="username">Username</label>
-          <input type="text" id="username" name="username" />
+          <input type="text" id="username1" name="username1" />
         </div>
         <p class="error" id="usernameError"></p>
 
         <div class="form-row">
           <label for="email">Email</label>
-          <input type="email" id="email" name="email" />
+          <input type="email" id="email1" name="email1" />
         </div>
         <p class="error" id="emailError"></p>
 
         <div class="form-row">
           <label for="password">Password</label>
-          <input type="password" id="password" name="password" />
+          <input type="password" id="password1" name="password1" />
         </div>
         
         <p class="error" id="passwordError"></p>
@@ -257,7 +257,7 @@
     });
 
     
-    const liveFields = ['firstname', 'lastname', 'username', 'email', 'password', 'dept', 'role'];
+    const liveFields = ['firstname1', 'lastname1', 'username1', 'email1', 'password1', 'dept', 'role'];
     liveFields.forEach(id => {
       const el = document.getElementById(id);
       if (!el) return;
@@ -305,27 +305,27 @@ document.getElementById('dept').addEventListener('change', function() {
   function validateForm() {
     let valid = true;
    
-    const firstname = document.getElementById('firstname').value.trim();
-    const lastname = document.getElementById('lastname').value.trim();
-    const username = document.getElementById('username').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value;
+    const firstname = document.getElementById('firstname1').value.trim();
+    const lastname = document.getElementById('lastname1').value.trim();
+    const username = document.getElementById('username1').value.trim();
+    const email = document.getElementById('email1').value.trim();
+    const password = document.getElementById('password1').value;
     const dept = document.getElementById('dept').value;
     const role = document.getElementById('role').value;
 
    
-    ['firstname', 'lastname', 'username', 'email', 'password', 'dept', 'role'].forEach(clearError);
+    ['firstname1', 'lastname1', 'username1', 'email1', 'password1', 'dept', 'role'].forEach(clearError);
 
  
-    if (!firstname) { setError('firstname', 'First name is required.'); valid = false; }
+    if (!firstname) { setError('firstname1', 'First name is required.'); valid = false; }
 
    
-    if (!username) { setError('username', 'Username is required.'); valid = false; }
+    if (!username) { setError('username1', 'Username is required.'); valid = false; }
     else if (username.length < 3) { setError('username', 'Username must be at least 3 characters.'); valid = false; }
 
     
     if (!email) {
-      setError('email', 'Email is required.'); valid = false;
+      setError('email1', 'Email is required.'); valid = false;
     } else {
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailPattern.test(email)) { setError('email', 'Enter a valid email address.'); valid = false; }
@@ -333,7 +333,7 @@ document.getElementById('dept').addEventListener('change', function() {
 
    
     if (password && password.length > 0 && password.length < 6) {
-      setError('password', 'Password must be at least 6 characters.');
+      setError('password1', 'Password must be at least 6 characters.');
       valid = false;
     }
 
