@@ -69,13 +69,12 @@ def get_monthly_completed_tasks(emp_id):
         GROUP BY month
         ORDER BY month
     """, (emp_id,))
-    rows = cursor.fetchall()
-    cursor.close()
+    rows = cursor.fetchall() # [('2025-09', 3), ('2025-10', 2)]
+    cursor.close() 
     conn.close()
 
-    months = [row[0] for row in rows]
-    counts = [row[1] for row in rows]
-
+    months = [row[0] for row in rows] # months = ['2025-09', '2025-10']
+    counts = [row[1] for row in rows] # counts = [3, 2]
     return months, counts
 
 def get_overdue_tasks(emp_id):

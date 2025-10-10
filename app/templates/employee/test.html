@@ -1,12 +1,15 @@
-
-
-
-
 {% extends "base.html" %}
  
 {% block title %}Employee Dashboard{% endblock %}
  
 {% block content %}
+<style>
+  /* Add margin below the DataTables search bar */
+  div.dataTables_filter {
+    margin-bottom: 1rem;
+  }
+</style>
+
 <div class="flex min-h-screen bg-gray-50">
  
   <!-- Sidebar -->
@@ -26,7 +29,7 @@
     </a>
   </div>
 
-  <div class="overflow-x-auto">
+  <div class="overflow-x-auto mt-4">
     {% if tasks %}
     <table id="tasksTable" class="min-w-full border border-gray-200 text-sm">
       <thead class="bg-gray-100">
@@ -56,7 +59,15 @@
           <td class="px-4 py-2 border">{{ task.End_Date }}</td>
           <td class="px-4 py-2 border">{{ task.estimated_hrs }}</td>
           <td class="px-4 py-2 border">{{ task.worked_hrs }}</td>
-          <td class="px-4 py-2 border">{{ task.status }}</td>
+          <td class="px-4 py-2 border">
+            {% if task.status.lower() == 'pending' %}
+              <span class="text-yellow-700 bg-yellow-100 px-2 py-1 rounded font-semibold">Pending</span>
+            {% elif task.status.lower() == 'completed' %}
+              <span class="text-green-700 bg-green-100 px-2 py-1 rounded font-semibold">Completed</span>
+            {% else %}
+              {{ task.status }}
+            {% endif %}
+          </td>
           <td class="px-4 py-2 border">{{ task.Comments }}</td>
         </tr>
         {% endfor %}
@@ -88,5 +99,3 @@
   </main>
 </div>
 {% endblock %}
- 
- 

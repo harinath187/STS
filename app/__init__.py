@@ -1,5 +1,6 @@
 import os
 from flask import Flask
+from app.routes.openticket_routes import register_open_ticket_routes
 
 # Existing route imports
 from app.routes.login_routes import register_routes
@@ -11,6 +12,7 @@ from app.routes.support_comment_routes import register_support_comment_routes
 from app.routes.it_manager_routes import register_support_routes
 from app.routes.register_it_employee_routes import register_it_employee_routes
 from app.routes.project_routes import project_bp
+from app.routes.task_update_routes import register_task_update_routes
 from app.routes.Project_routes import register_project_routes
 from app.routes.hrroute import (
     employeeslist,
@@ -28,7 +30,7 @@ from app.routes.supporthistoryroute import (
 )
 from app.routes.manager_routes import register_manager_routes
 
-# ✅ New import for Project Task blueprint
+# New import for Project Task blueprint
 from app.routes.project_task_routes import task_bp
 
 
@@ -42,15 +44,18 @@ def create_app():
     register_support_ticket_routes(app)
     register_task_comments_routes(app)
     register_support_comment_routes(app)
+    # Register open ticket routes separately
+    register_open_ticket_routes(app)
+    app.register_blueprint(test_routes)
     register_project_routes(app)
     register_support_routes(app)
     register_manager_routes(app)
     register_it_employee_routes(app)
 
     # Blueprints
-    app.register_blueprint(test_routes)
+
     app.register_blueprint(project_bp)
-    app.register_blueprint(task_bp)   # ✅ added for project task module
+    app.register_blueprint(task_bp)   # added for project task module
 
     # Support history & HR routes
     supporthistory(app)
@@ -63,6 +68,7 @@ def create_app():
 
     # Ticket detail/edit/delete routes
     ticket_detail_route(app)
+    register_task_update_routes(app)
     ticket_delete_route(app)
 
     # Employee dropdown routes

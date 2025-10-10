@@ -3,8 +3,8 @@
 {% block title %}Employee Dashboard{% endblock %}
 
 {% block content %}
-<div class="flex min-h-screen bg-gradient-to-br from-sky-100 via-white to-indigo-200">
 
+<div class="flex min-h-screen bg-gray-50">
   <!-- Sidebar -->
   <aside class="w-64 min-h-screen bg-white/90 shadow-xl flex flex-col fixed top-0 left-0 bottom-0 border-r border-indigo-100 z-20 backdrop-blur-xl">
     {% include "common/employee_dashboard.html" %}
@@ -61,7 +61,9 @@
 
     <!-- Recent Tasks -->
     <div class="mb-8">
-      <h3 class="text-2xl font-bold mb-5 text-indigo-700">Recent Tasks</h3>
+
+      <h3 class="text-xl font-semibold mb-4">Recent Tasks</h3>
+
       {% if recent_tasks %}
         <div class="overflow-x-auto rounded-2xl bg-white/90 border border-indigo-100 shadow-sm">
           <table class="min-w-full divide-y divide-indigo-50 text-sm">

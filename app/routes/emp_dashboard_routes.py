@@ -2,7 +2,7 @@ from flask import render_template, session, redirect
 from app.models import emp_dashboard
 import io, base64
 import matplotlib
-matplotlib.use("Agg")  # Use the Agg backend for non-GUI rendering
+matplotlib.use("Agg")  
 import matplotlib.pyplot as plt
 
 
@@ -15,7 +15,7 @@ def register_employee_routes(app):
 
         emp_id = user["id"]
 
-        # --- Top cards ---
+        
         card_data = {
             "total_tasks": emp_dashboard.get_total_tasks(emp_id),
             "pending_tasks": emp_dashboard.get_pending_tasks(emp_id),
@@ -23,9 +23,9 @@ def register_employee_routes(app):
             "support_tickets": emp_dashboard.get_support_tickets(emp_id)
         }
 
-        # --- Line chart ---
+      
         months, completed_tasks = emp_dashboard.get_monthly_completed_tasks(emp_id)
-        line_chart = None  # Default to None in case no data
+        line_chart = None 
 
         if months and completed_tasks:
             fig1, ax1 = plt.subplots()
@@ -42,7 +42,7 @@ def register_employee_routes(app):
             line_chart = base64.b64encode(img1.getvalue()).decode()
             plt.close(fig1)
 
-        # --- Pie chart ---
+      
         pending = card_data["pending_tasks"]
         completed = card_data["completed_tasks"]
         overdue_tasks_list = emp_dashboard.get_overdue_tasks(emp_id)
@@ -64,9 +64,9 @@ def register_employee_routes(app):
             pie_chart = base64.b64encode(img2.getvalue()).decode()
             plt.close(fig2)
         else:
-            pie_chart = None  # No data to render pie chart
+            pie_chart = None  
 
-        # --- Recent tasks ---
+     
         recent_tasks = emp_dashboard.get_recent_tasks(emp_id)
 
         return render_template(
