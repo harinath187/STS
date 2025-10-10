@@ -21,7 +21,7 @@ def create_support_ticket(dept_id, comments, problem_description, priority, atta
         priority,
         attachment_path,
         'OPEN',         # Default status on creation
-        created_by      # ✅ New field
+        created_by      #  New field
     ))
 
     connection.commit()

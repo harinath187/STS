@@ -1,6 +1,6 @@
 # File: app/models/opentickets.py
 
-from app.models.db import get_db_connection  # ✅ Import this
+from app.models.db import get_db_connection  # Import this
 
 def get_support_tickets_by_employee(emp_id):
     connection = get_db_connection()

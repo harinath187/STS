@@ -26,17 +26,17 @@ def register_support_ticket_routes(app: Flask):
                 attachment_path = os.path.join(UPLOAD_FOLDER, filename)
                 attachment_file.save(attachment_path)
 
-            # ✅ Pass created_by to support_ticket model function
+            # Pass created_by to support_ticket model function
             create_support_ticket(
                 dept_id,
                 comments,
                 problem_description,
                 priority,
                 attachment_path,
-                user["id"]  # ✅ created_by
+                user["id"]  # created_by
             )
 
-            flash("✅ Support ticket created successfully!", "success")
+            flash("Support ticket created successfully!", "success")
             return redirect(url_for('test_routes.test_tasks'))
 
         departments = get_all_departments()
