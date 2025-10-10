@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block title %}Client List{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.bootstrap5.min.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+<style>
+.dataTables_wrapper {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+table.dataTable {
+    width: 100% !important;
+    table-layout: fixed;
+}
+
+thead th {
+    background-color: #1f2937; 
+    color: white;
+}
+
+table.dataTable td {
+    white-space: normal !important;
+    word-wrap: break-word;
+    max-width: 200px;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    border: 1px solid black;  
+    border-radius: 4px;
+    padding: 4px 8px;
+    height: 32px;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    border: 0px;
+    padding: 4px 10px;
+    margin: 0 2px;
+    border-radius: 4px;
+    background: white;
+    color: #1f2937; 
+    cursor: pointer;
+    font-size: 0.875rem; 
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background: #e0f2fe; 
+    color: #1e3a8a;     
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
+}
+
+.dataTables_paginate {
+    float: right;
+}
+</style>
+
+<!-- Sidebar -->
+<aside class="w-64 bg-white shadow-md flex flex-col fixed top-0 left-0 bottom-0">
+    {% include "common/admin_dashboard.html" %}
+</aside>
+
+
+<!-- Main Content -->
+<div class="flex-1 ml-64 p-6">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+        <h2 class="text-2xl font-bold text-center md:text-left mb-4 md:mb-0">Client List</h2>
+        <a href="/save_client" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded hover:bg-blue-700">
+            <i class="fas fa-plus-circle mr-2"></i> Add New Client
+        </a>
+    </div>
+
+    {% if clients %}
+    <div class="table-responsive">
+        <table id="clientTable" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
+            <thead class="bg-gray-800 text-white">
+                <tr>
+                    <th class="px-4 py-2 text-left text-sm font-semibold">S.No</th>
+                    <th class="px-4 py-2 text-left text-sm font-semibold">POC</th>
+                    <th class="px-4 py-2 text-left text-sm font-semibold">Company Name</th>
+                    <th class="px-4 py-2 text-left text-sm font-semibold">Email</th>
+                    <th class="px-4 py-2 text-left text-sm font-semibold">Phone</th>
+                    <th class="px-4 py-2 text-left text-sm font-semibold">Country</th>
+                    <th class="px-4 py-2 text-left text-sm font-semibold">Created At</th>
+                    <th class="px-4 py-2 text-left text-sm font-semibold">Updated At</th>
+                    <th class="px-4 py-2 text-left text-sm font-semibold">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+                {% for client in clients %}
+                <tr class="hover:bg-gray-50">
+                    <td class="px-4 py-2 text-sm text-gray-700">{{ loop.index }}</td>
+                    <td class="px-4 py-2 text-sm text-gray-700">{{ client.POC }}</td>
+                    <td class="px-4 py-2 text-sm text-gray-700">{{ client.Company_Name }}</td>
+                    <td class="px-4 py-2 text-sm text-gray-700">{{ client.email }}</td>
+                    <td class="px-4 py-2 text-sm text-gray-700">{{ client.phone or '-' }}</td>
+                    <td class="px-4 py-2 text-sm text-gray-700">{{ client.country }}</td>
+                    <td class="px-4 py-2 text-sm text-gray-700">{{ client.created_date }}</td>
+                    <td class="px-4 py-2 text-sm text-gray-700">{{ client.updated_date }}</td>
+                    <td>
+                        <div class="d-flex justify-content-center gap-2 flex-wrap">
+                            <a href="/update_client/{{client.client_id}}" class="btn btn-sm btn-warning text-black d-flex align-items-center">
+                                <i class="bi bi-pencil-square me-1"></i>
+                            </a>
+                            <a href="/delete_client/{{client.client_id}}" class="btn btn-sm btn-danger d-flex align-items-center"
+                                onclick="return confirm('Are you sure you want to delete this client?');">
+                                <i class="bi bi-trash me-1"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <div class="text-center text-gray-600 mt-6">No clients found.</div>
+    {% endif %}
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#clientTable').DataTable({
+        responsive: true,
+        paging: true,
+        searching: true,
+        ordering: true,
+        info: true,
+        lengthChange: true,
+        pageLength: 10
+    });  
+});
+</script>
+{% endblock %}

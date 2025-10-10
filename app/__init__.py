@@ -18,8 +18,11 @@ from app.routes.hrroute import (
     employeeslist,
     updateemplist,
     addemployee,
-    add_employeelist
-)  # sai added
+    add_employeelist,
+    add_client_list,
+    add_client,
+    list_client,delete_client
+,update_get_client,update_post_client)  # sai added
 from app.routes.supporthistoryroute import (
     supporthistory,
     suppassignlist,
@@ -65,6 +68,12 @@ def create_app():
     updateemplist(app)
     addemployee(app)
     add_employeelist(app)
+    add_client_list(app)
+    list_client(app)
+    add_client(app)
+    delete_client(app)
+    update_get_client(app)
+    update_post_client(app)
 
     # Ticket detail/edit/delete routes
     ticket_detail_route(app)
