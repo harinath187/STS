@@ -6,7 +6,7 @@
     <span class="tracking-wide">Employee Dashboard</span>
   </div>
 
-  <!-- Navigation -->
+  <!-- Navigation Container -->
   <nav class="flex-1 px-5 py-6 mt-4 space-y-3 text-indigo-700 font-semibold">
 
     <!-- Home -->
@@ -41,16 +41,22 @@
         </a>
       </div>
     </div>
-      <a href="task_update" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-100 text-gray-700">
-      <i class="fa fa-ticket"></i><span>Task_Updation</span>
+
+    <!-- Task Updation -->
+    <a href="task_update" class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-indigo-100 transition duration-150 shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 group">
+      <i class="fa fa-ticket text-xl text-indigo-600 group-hover:text-indigo-800"></i>
+      <span>Task Updation</span>
     </a>
-        <a href="{{ url_for('open_tickets') }}" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-100 text-gray-700">
-      <i class="fa-solid fa-file-lines"></i><span>Open Tickets</span>
+
+    <!-- Open Tickets -->
+    <a href="{{ url_for('open_tickets') }}" class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-indigo-100 transition duration-150 shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 group">
+      <i class="fa fa-file-alt text-xl text-indigo-600 group-hover:text-indigo-800"></i>
+      <span>Open Tickets</span>
     </a>
 
   </nav>
 
-  <!-- Logout Button fixed at bottom -->
+  <!-- Logout Button (Outside Nav, Pinned to Bottom) -->
   <div class="px-5 pb-8">
     <a href="/logout" class="flex items-center gap-4 px-4 py-3 w-full rounded-xl font-bold text-red-700 bg-red-50 hover:bg-red-200 transition duration-150 shadow focus:outline-none focus:ring-2 focus:ring-red-300 group">
       <i class="fa fa-sign-out-alt text-xl group-hover:text-red-900"></i>
@@ -60,5 +66,5 @@
 
 </aside>
 
-<!-- Alpine.js for interactivity -->
+<!-- Alpine.js for dropdown functionality -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.12.0/cdn.min.js" defer></script>
