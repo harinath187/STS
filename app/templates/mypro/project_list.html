@@ -11,7 +11,22 @@
  
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
 <style>
+table.dataTable td {
+    white-space: normal !important;
+    word-wrap: break-word;
+    max-width: 200px;  
+}
 
+
+div.dataTables_wrapper {
+    overflow-x: auto;
+}
+
+
+table.dataTable {
+    table-layout: fixed;
+    width: 100% !important;
+}
 .dataTables_wrapper {
     background-color: white;
     padding: 2rem;
@@ -110,7 +125,7 @@ thead th {
             <th class="px-4 py-2 text-left text-sm font-semibold">Tech Stack</th>
             <th class="px-4 py-2 text-left text-sm font-semibold">Actual Time</th>
             <th class="px-4 py-2 text-left text-sm font-semibold">Cost</th>
-            <th class="px-4 py-2 text-left text-sm font-semibold">Attachment</th>
+            
             <th class="px-4 py-2 text-left text-sm font-semibold">Status</th>
             <th class="px-4 py-2 text-left text-sm font-semibold">Actions</th>
             <th class="px-4 py-2 text-left text-sm font-semibold">Created At</th>
@@ -128,13 +143,7 @@ thead th {
             <td class="px-4 py-2 text-sm text-gray-700">{{ project.tech_stack or '-' }}</td>
             <td class="px-4 py-2 text-sm text-gray-700">{{ project.actual_time_taken }}</td>
             <td class="px-4 py-2 text-sm text-gray-700">{{ project.cost_hours }}</td>
-            <td class="px-4 py-2 text-sm">
-              {% if project.Attachment %}
-                <a href="{{ url_for('static', filename=project.Attachment) }}" class="text-blue-600 hover:underline" target="_blank">View</a>
-              {% else %}
-                <span class="text-gray-400">No file</span>
-              {% endif %}
-            </td>
+            
             
             <td class="px-4 py-2 text-sm">
               <div class="w-full bg-gray-200 rounded-full h-4 relative">
