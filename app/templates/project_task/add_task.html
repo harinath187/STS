@@ -14,12 +14,7 @@
 </head>
 <body class="bg-light">
 
-<!-- <div class="container mt-5">
-    <div class="card shadow-lg">
-        <div class="card-header bg-success text-white">
-            <h3 class="mb-0"><i class="fas fa-plus-circle"></i> Create New Task</h3>
-        </div> -->
-        <div class="container mt-5">
+ <div class="container mt-5">
     <div class="card shadow-lg">
         <div class="card-header bg-primary text-white">
             <h3 class="mb-0"><i class="fas fa-plus-circle"></i> Create New Task</h3>
@@ -29,7 +24,7 @@
             <form method="POST" enctype="multipart/form-data">
 
                 <div class="row">
-                   
+                  
                     <div class="col-md-6 mb-3">
                         <label for="project_id" class="form-label fw-bold">Project <span class="text-danger">*</span></label>
                         <select id="project_id" name="project_id" class="form-select">
@@ -41,6 +36,7 @@
                         <span class="error-message" id="project_error"></span>
                     </div>
 
+                  
                     <div class="col-md-6 mb-3">
                         <label for="task_name" class="form-label fw-bold">Task Name <span class="text-danger">*</span></label>
                         <input type="text" id="task_name" name="task_name" class="form-control">
@@ -48,28 +44,27 @@
                     </div>
                 </div>
 
-                
                 <div class="mb-3">
                     <label for="task_description" class="form-label fw-bold">Task Description</label>
                     <textarea id="task_description" name="task_description" class="form-control" rows="3"></textarea>
                 </div>
 
                 <div class="row">
-                  
+                
                     <div class="col-md-4 mb-3">
                         <label for="task_duration" class="form-label fw-bold">Duration (days) <span class="text-danger">*</span></label>
                         <input type="number" id="task_duration" name="task_duration" class="form-control" min="0">
                         <span class="error-message" id="duration_error"></span>
                     </div>
 
-                    
+                 
                     <div class="col-md-4 mb-3">
                         <label for="estimated_hrs" class="form-label fw-bold">Estimated Hours <span class="text-danger">*</span></label>
                         <input type="number" id="estimated_hrs" name="estimated_hrs" class="form-control" min="0">
                         <span class="error-message" id="estimated_error"></span>
-                    </div>
+                    </div> -->
 
-                 
+                    <!-- Worked Hours -->
                     <div class="col-md-4 mb-3">
                         <label for="worked_hrs" class="form-label fw-bold">Worked Hours</label>
                         <input type="number" id="worked_hrs" name="worked_hrs" class="form-control" min="0" value="0">
@@ -78,7 +73,7 @@
                 </div>
 
                 <div class="row">
-                  
+                    
                     <div class="col-md-6 mb-3">
                         <label for="assigned_to" class="form-label fw-bold">Assign To (Employee) <span class="text-danger">*</span></label>
                         <select id="assigned_to" name="assigned_to" class="form-select">
@@ -104,14 +99,14 @@
                 </div>
 
                 <div class="row">
-                 
+                  
                     <div class="col-md-6 mb-3">
                         <label for="start_date" class="form-label fw-bold">Start Date <span class="text-danger">*</span></label>
                         <input type="date" id="start_date" name="start_date" class="form-control">
                         <span class="error-message" id="start_error"></span>
                     </div>
 
-                    <!-- End Date -->
+                  
                     <div class="col-md-6 mb-3">
                         <label for="end_date" class="form-label fw-bold">End Date <span class="text-danger">*</span></label>
                         <input type="date" id="end_date" name="end_date" class="form-control">
@@ -119,14 +114,14 @@
                     </div>
                 </div>
 
-                <!-- Comments -->
+              
                 <div class="mb-3">
                     <label for="comments" class="form-label fw-bold">Manager Comments</label>
                     <textarea id="comments" name="comments" class="form-control" rows="2"></textarea>
                 </div>
 
                 <div class="row">
-                   
+               
                     <div class="col-md-6 mb-3">
                         <label for="status" class="form-label fw-bold">Status <span class="text-danger">*</span></label>
                         <select id="status" name="status" class="form-select">
@@ -137,13 +132,14 @@
                         <span class="error-message" id="status_error"></span>
                     </div>
 
+                  
                     <div class="col-md-6 mb-3">
                         <label for="attachment" class="form-label fw-bold">Attachment</label>
                         <input type="file" id="attachment" name="attachment" class="form-control" accept=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg,.gif">
                     </div>
                 </div>
 
-              
+                
                 <div class="d-flex justify-content-between mt-4">
                     <a href="{{ url_for('task_bp.list_tasks') }}" class="btn btn-secondary">
                         <i class="fas fa-arrow-left"></i> Back to Task List
@@ -164,11 +160,10 @@ $(document).ready(function() {
     $("form").submit(function(e) {
         let isValid = true;
 
-        // Clear previous errors
         $(".error-message").text("");
         $("input, select, textarea").removeClass("error");
 
-        // Required fields validation
+      
         if ($("#project_id").val() === "") {
             $("#project_id").addClass("error");
             $("#project_error").text("Project is required.");
