@@ -1,35 +1,39 @@
 {% extends "base.html" %}
- 
+
 {% block title %}Employee Dashboard{% endblock %}
- 
+
 {% block content %}
 <div class="flex min-h-screen bg-gray-50">
- 
+
   <!-- Sidebar -->
   <aside class="w-64 bg-white shadow-md flex flex-col fixed top-0 left-0 bottom-0">
     {% include "common/employee_dashboard.html" %}
   </aside>
- 
+
   <!-- Main Content -->
   <main class="flex-1 ml-64 pt-8 pr-8 pb-8 pl-4">
-    <div class="max-w-2xl mx-auto bg-white p-6 rounded-xl shadow mt-8 relative">
-  
+    <div class="max-w-2xl mx-auto bg-white p-6 rounded-xl shadow mt-12 relative"> <!-- Added mt-12 for spacing -->
+
       <!-- Back to Tasks button -->
-      <div class="absolute top-0 right-0 mt-2 mr-2">
+      <div class="absolute top-0 right-0 mt-4 mr-4"> <!-- increased margin -->
         <a href="{{ url_for('test_routes.test_tasks') }}" 
-           class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-          Back to Tasks
+           class="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm">
+          <!-- Left arrow SVG icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
+          <span>Back to Tasks</span>
         </a>
       </div>
 
-      <h2 class="text-2xl font-bold mb-4">Create Support Ticket</h2>
+      <h2 class="text-2xl font-bold mb-4 text-gray-700">Create Support Ticket</h2>
 
-      <!-- Form with enctype for file upload -->
-      <form action="/create_support_ticket" method="POST" enctype="multipart/form-data" class="space-y-4">
+      <form action="/create_support_ticket" method="POST" enctype="multipart/form-data" class="space-y-5">
 
+        <!-- Department -->
         <div>
-          <label for="dept_id" class="block font-medium">Department:</label>
-          <select id="dept_id" name="dept_id" required class="w-full border rounded px-3 py-2">
+          <label for="dept_id" class="block text-sm font-medium text-gray-600">Department:</label>
+          <select id="dept_id" name="dept_id" required class="custom-select-input">
             <option value="" disabled selected>Select department</option>
             {% for dept in departments %}
               <option value="{{ dept.dept_id }}">{{ dept.dept_name }}</option>
@@ -37,36 +41,40 @@
           </select>
         </div>
 
+        <!-- Comments -->
         <div>
-          <label for="comments" class="block font-medium">Comments:</label>
-          <textarea id="comments" name="comments" class="w-full border rounded px-3 py-2"></textarea>
+          <label for="comments" class="block text-sm font-medium text-gray-600">Comments:</label>
+          <textarea id="comments" name="comments" class="custom-textarea"></textarea>
         </div>
 
+        <!-- Problem Description -->
         <div>
-          <label for="problem_description" class="block font-medium">Problem Description:</label>
-          <textarea id="problem_description" name="problem_description" required class="w-full border rounded px-3 py-2"></textarea>
+          <label for="problem_description" class="block text-sm font-medium text-gray-600">Problem Description:</label>
+          <textarea id="problem_description" name="problem_description" required class="custom-textarea"></textarea>
         </div>
 
+        <!-- Priority -->
         <div>
-          <label for="priority" class="block font-medium">Priority:</label>
-          <select id="priority" name="priority" class="w-full border rounded px-3 py-2">
+          <label for="priority" class="block text-sm font-medium text-gray-600">Priority:</label>
+          <select id="priority" name="priority" class="custom-select-input">
             <option value="LOW">Low</option>
             <option value="MEDIUM">Medium</option>
             <option value="HIGH">High</option>
           </select>
         </div>
 
-        <!-- Attachment field -->
+        <!-- Attachment -->
         <div>
-          <label for="attachment" class="block font-medium">Attachment:</label>
-          <input type="file" id="attachment" name="attachment" class="w-full border rounded px-3 py-2">
+          <label for="attachment" class="block text-sm font-medium text-gray-600">Attachment:</label>
+          <input type="file" id="attachment" name="attachment" class="custom-file-input">
         </div>
 
-        <div class="flex space-x-4">
-          <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+        <!-- Buttons -->
+        <div class="pt-4 flex justify-end space-x-4">
+          <button type="submit" class="bg-blue-600 text-white py-2 px-4 rounded-xl shadow hover:bg-blue-700 transition text-sm">
             Create Ticket
           </button>
-          <button type="reset" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">
+          <button type="reset" class="bg-black text-white py-2 px-4 rounded-xl shadow hover:bg-gray-900 transition text-sm">
             Clear
           </button>
         </div>
@@ -75,4 +83,72 @@
     </div>
   </main>
 </div>
+
+<!-- Styling -->
+<style>
+  .custom-select-input,
+  .custom-textarea {
+    width: 100%;
+    padding: 12px 20px;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #333;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+    transition: background 0.3s ease, border-color 0.3s ease;
+    font-size: 0.95rem;
+    appearance: none;
+    cursor: pointer;
+  }
+
+  .custom-select-input:focus,
+  .custom-select-input:hover,
+  .custom-textarea:focus,
+  .custom-textarea:hover {
+    outline: none;
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+
+  .custom-textarea {
+    border-radius: 20px;
+    resize: none;
+    height: 100px;
+  }
+
+  .custom-file-input {
+    position: relative;
+    width: 100%;
+    padding: 12px 20px;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #333;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+  }
+
+  .custom-file-input::file-selector-button {
+    background: rgba(255, 255, 255, 0.3);
+    border: none;
+    padding: 8px 16px;
+    margin-right: 10px;
+    border-radius: 50px;
+    color: #444;
+    font-weight: 500;
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.6), 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .custom-file-input::file-selector-button:hover {
+    background: rgba(59, 130, 246, 0.8); /* Tailwind blue-500 */
+    color: white;
+  }
+</style>
 {% endblock %}

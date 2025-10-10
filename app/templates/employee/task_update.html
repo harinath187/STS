@@ -7,46 +7,163 @@
   <aside class="w-64 bg-white shadow-md flex flex-col fixed top-0 left-0 bottom-0">
     {% include "common/employee_dashboard.html" %}
   </aside>
+
   <main class="flex-1 ml-64 pt-8 pr-8 pb-8 pl-4">
     <div class="max-w-2xl mx-auto bg-white p-6 sm:p-8 rounded-xl shadow mt-8">
 
-      <h2 class="text-2xl font-bold mb-4">Task Updation</h2>
+      <h2 class="text-2xl font-bold mb-4 text-gray-700">Task Updation</h2>
       <p class="text-gray-700 mb-6">
         Select your assigned task and update its current status.
       </p>
 
-      <form action="{{ url_for('task_update') }}" method="POST" class="space-y-4">
-        <div>
-          <label for="task_id" class="block font-medium">Task Name:</label>
-         <select name="task_id" required>
-  <option value="">Select Task</option>
-  {% for task in tasks %}
-    <option value="{{ task.task_id }}">{{ task.task_name }}</option>
-  {% endfor %}
-</select>
-        </div>
+      <!-- Flash messages
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %} -->
+          <!-- <div class="max-w-2xl mx-auto mb-4">
+            {% for category, message in messages %}
+              <div -->
+                <!-- class="p-4 rounded text-white 
+                  {% if category == 'success' %}bg-green-600
+                  {% elif category == 'warning' %}bg-yellow-500
+                  {% else %}bg-gray-600
+                  {% endif %}">
+                {{ message }}
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %} -->
+      {% endwith %}
 
+      <form action="{{ url_for('task_update') }}" method="POST" class="space-y-5" id="taskUpdateForm">
+
+        <!-- Task Name -->
         <div>
-          <label for="status" class="block font-medium">Status:</label>
-          <select id="status" name="status" required class="w-full border rounded px-3 py-2">
-            <option value="">Select Status</option>
-            <option value="Pending">Pending</option>
-            <option value="Completed">Completed</option>
+          <label for="task_id" class="block text-sm font-medium text-gray-600">Task Name:</label>
+          <select name="task_id" id="task_id" required class="custom-select-input">
+            <option value="">Select Task</option>
+            {% for task in tasks %}
+              <option value="{{ task.task_id }}">{{ task.task_name }}</option>
+            {% endfor %}
           </select>
         </div>
 
-        <div class="flex space-x-4">
-          <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+        <!-- Status Percentage Slider -->
+        <div>
+          <label for="statusRange" class="block text-sm font-medium text-gray-600">Status (%)</label>
+          <input id="statusRange" name="status_percentage" type="range" min="0" max="100" value="50" class="w-full">
+          <div class="text-right text-sm text-gray-500">
+            <span id="statusValue">50</span>%
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="pt-4 flex justify-end space-x-4">
+          <button type="submit"
+            class="bg-blue-600 text-white py-2 px-4 rounded-xl shadow hover:bg-blue-700 transition text-sm">
             Update Task
           </button>
-          <a href="{{ url_for('test_routes.test_tasks') }}" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">
+          <a href="{{ url_for('test_routes.test_tasks') }}"
+            class="bg-black text-white py-2 px-4 rounded-xl shadow hover:bg-gray-900 transition text-sm">
             Cancel
           </a>
         </div>
+
       </form>
 
     </div>
   </main>
 </div>
-{% endblock %}
 
+<!-- Custom Styling -->
+<style>
+  .custom-select-input {
+    width: 100%;
+    padding: 12px 20px;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #333;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+    transition: background 0.3s ease, border-color 0.3s ease;
+    font-size: 0.95rem;
+    appearance: none;
+    cursor: pointer;
+  }
+
+  /* Remove blue focus/hover styles */
+  .custom-select-input:focus,
+  .custom-select-input:hover {
+    outline: none;
+    background: rgba(255, 255, 255, 0.2); /* Keep consistent */
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+
+  .custom-select-input option {
+    color: #333;
+  }
+
+  .custom-select-input::-ms-expand {
+    display: none;
+  }
+
+  /* Validation error message style */
+  .text-red-500 {
+    color: #f56565 !important;
+  }
+
+  /* Red border on invalid inputs */
+  input.error, select.error, textarea.error {
+    border-color: #f56565 !important;
+  }
+
+  /* Green border on valid inputs */
+  input.valid, select.valid, textarea.valid {
+    border-color: #48bb78 !important; /* Tailwind green-400 */
+  }
+</style>
+
+<!-- jQuery & Validation -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+
+<script>
+  $(document).ready(function() {
+    // Live status update for range slider
+    $("#statusRange").on("input", function() {
+      $("#statusValue").text($(this).val());
+      $(this).valid(); // triggers validation live
+    });
+
+    $("#taskUpdateForm").validate({
+      rules: {
+        task_id: "required",
+        status_percentage: {
+          required: true,
+          range: [0, 100]
+        }
+      },
+      messages: {
+        task_id: "Please select a task",
+        status_percentage: "Status must be between 0 and 100"
+      },
+      errorElement: 'p',
+      errorClass: 'text-red-500 text-sm mt-1',
+      highlight: function(element) {
+        $(element).addClass('error').removeClass('valid');
+      },
+      unhighlight: function(element) {
+        $(element).removeClass('error').addClass('valid');
+      },
+      success: function(label) {
+        label.remove(); // remove the error label entirely
+      },
+      errorPlacement: function(error, element) {
+        error.insertAfter(element);
+      },
+    });
+  });
+</script>
+
+{% endblock %}
