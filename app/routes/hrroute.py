@@ -77,3 +77,45 @@ def add_employeelist(app):
         cursor.close()
         conn.close()
         return redirect(url_for('emplist'))
+    
+def add_client_list(app):    
+    @app.route('/add_client', methods=['POST'])
+    def add_client():
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        POC = request.form['POC']
+        Company_Name = request.form['Company_Name']
+        email = request.form['email']
+        phone = request.form.get('phone', None)
+        country = request.form.get('country', 'INDIA')
+
+        query = """
+            INSERT INTO Client_Details (POC, Company_Name, email, phone, country)
+            VALUES (%s, %s, %s, %s, %s)
+        """
+        cursor.execute(query, (POC, Company_Name, email, phone, country))
+        
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        return redirect(url_for('client_list'))
+def add_client(app):    
+    @app.route('/save_client', methods=['GET'])
+    def save_client():
+        return render_template('hr/add_client.html')
+    
+def list_client(app):    
+    @app.route('/client_list')
+    def client_list():
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM Client_Details ")
+        clients = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        return render_template('hr/client_list.html', clients=clients)
+
+    
+

@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% block title %}Add Client Details{% endblock %}
+
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+
+<style>
+    .error {
+        color: red;
+        font-size: 0.9rem;
+        margin-top: 4px;
+    }
+    .form-container {
+        background: #fff;
+        padding: 2rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    aside a {
+        text-decoration: none;
+        color: inherit; 
+    }
+
+   
+    aside a:hover {
+        text-decoration: none; 
+        color: #1f2937; 
+    }
+
+</style>
+
+<!-- Sidebar -->
+<aside class="w-64 bg-white shadow-md flex flex-col fixed top-0 left-0 bottom-0">
+    {% include "common/admin_dashboard.html" %}
+</aside>
+
+<!-- Main Content -->
+<div class="flex-1 ml-64 p-6">
+  <h2 class="text-2xl font-bold mb-4 text-center md:text-left">Add Client Details</h2>
+
+  <div class="form-container">
+   <form id="clientForm" method="POST" action="/add_client">
+
+      <div class="mb-3">
+        <label for="POC" class="form-label fw-semibold">POC <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="POC" name="POC" placeholder="Enter Point of Contact">
+      </div>
+
+      <div class="mb-3">
+        <label for="Company_Name" class="form-label fw-semibold">Company Name <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="Company_Name" name="Company_Name" placeholder="Enter Company Name">
+      </div>
+
+      <div class="mb-3">
+        <label for="email" class="form-label fw-semibold">Email <span class="text-danger">*</span></label>
+        <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email">
+      </div>
+
+      <div class="mb-3">
+        <label for="phone" class="form-label fw-semibold">Phone</label>
+        <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter Phone Number">
+      </div>
+
+      <div class="mb-3">
+        <label for="country" class="form-label fw-semibold">Country</label>
+        <input type="text" class="form-control" id="country" name="country" value="INDIA">
+      </div>
+
+      <div class="d-flex justify-content-between">
+        <a href="/client_list" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Back</a>
+        <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Save Client</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+$(document).ready(function() {
+  $("#clientForm").validate({
+    rules: {
+      POC: {
+        required: true,
+        minlength: 2
+      },
+      Company_Name: {
+        required: true
+      },
+      email: {
+        required: true,
+        email: true
+      },
+      phone: {
+        digits: true,
+        minlength: 5,
+        maxlength: 15
+      }
+    },
+    messages: {
+      POC: "Please enter the POC name",
+      Company_Name: "Please enter the company name",
+      email: {
+        required: "Please enter an email address",
+        email: "Please enter a valid email"
+      },
+      phone: {
+        digits: "Please enter only digits",
+        minlength: "Phone number must be at least 5 digits",
+        maxlength: "Phone number cannot exceed 15 digits"
+      }
+    },
+    errorElement: "div",
+    errorClass: "error",
+    submitHandler: function(form) {
+      form.submit();
+    }
+  });
+});
+</script>
+{% endblock %}

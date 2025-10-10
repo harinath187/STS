@@ -117,7 +117,7 @@ thead th {
       
         <thead class="bg-gray-800  text-white">
           <tr>
-            <th class="px-4 py-2 text-left text-sm font-semibold">ID</th>
+            <th class="px-4 py-2 text-left text-sm font-semibold">S.No</th>
             <th class="px-4 py-2 text-left text-sm font-semibold">Project Name</th>
             <th class="px-4 py-2 text-left text-sm font-semibold">Client </th>
             
@@ -135,7 +135,7 @@ thead th {
         <tbody class="divide-y divide-gray-200">
           {% for project in projects %}
           <tr class="hover:bg-gray-50">
-            <td class="px-4 py-2 text-sm text-gray-700">{{ project.id }}</td>
+            <td class="px-4 py-2 text-sm text-gray-700">{{ loop.index }}</td>
             <td class="px-4 py-2 text-sm text-gray-700">{{ project.project_name or '-' }}</td>
             <td class="px-4 py-2 text-sm text-gray-700">{{ project.Company_Name }}</td>
             
