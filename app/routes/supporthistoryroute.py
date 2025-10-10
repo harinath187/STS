@@ -49,7 +49,7 @@ def ticket_detail_route(app):
         if request.method == "GET":
             ticket = get_ticket_by_id(ticket_id)
             if ticket:
-                # Ensure priority is explicitly included in response
+                # Ensure priority and attachment are explicitly included in response
                 response_data = {
                     'id': ticket.get('id'),
                     'assigned_to': ticket.get('assigned_to'),
@@ -59,10 +59,11 @@ def ticket_detail_route(app):
                     'duration': ticket.get('duration'),
                     'comments': ticket.get('comments'),
                     'problem_description': ticket.get('problem_description'),
-                    'priority': ticket.get('priority'),  # Explicitly include priority
+                    'priority': ticket.get('priority'),
                     'start_date': ticket.get('start_date'),
                     'end_date': ticket.get('end_date'),
-                    'status': ticket.get('status')
+                    'status': ticket.get('status'),
+                    'Attachment': ticket.get('Attachment')  # Include attachment
                 }
                 print(f"Ticket data being sent: {response_data}")  # Debug log
                 return jsonify(response_data)

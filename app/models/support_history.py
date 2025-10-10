@@ -16,7 +16,8 @@ def historylist():
             h.priority,
             h.start_date,
             h.end_date,
-            h.status
+            h.status,
+            h.Attachment
         FROM support_ticket h
         INNER JOIN employee e1 ON h.assigned_to = e1.id
         INNER JOIN employee e2 ON h.assigned_by = e2.id
@@ -46,7 +47,8 @@ def assignlist():
             h.priority,
             h.start_date,
             h.end_date,
-            h.status
+            h.status,
+            h.Attachment
         FROM support_ticket h
         LEFT JOIN employee e1 ON h.assigned_to = e1.id
         LEFT JOIN employee e2 ON h.assigned_by = e2.id
@@ -75,7 +77,8 @@ def notassignlist():
             h.priority,
             h.start_date,
             h.end_date,
-            h.status
+            h.status,
+            h.Attachment
         FROM support_ticket h
         LEFT JOIN employee e1 ON h.assigned_to = e1.id
         LEFT JOIN employee e2 ON h.assigned_by = e2.id
@@ -98,7 +101,8 @@ def get_ticket_by_id(ticket_id):
             d.dept_name,
             CONCAT(e2.firstname, ' ', e2.lastname) AS assignby_name,
             h.assigned_to,
-            h.priority
+            h.priority,
+            h.Attachment
         FROM support_ticket h
         LEFT JOIN department d ON h.dept_id = d.dept_id
         LEFT JOIN employee e2 ON h.assigned_by = e2.id
