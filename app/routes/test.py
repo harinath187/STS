@@ -7,8 +7,8 @@ test_routes = Blueprint('test_routes', __name__)
 def test_tasks():
     user = session.get("user")
     if not user:
-        return redirect("/login")  # redirect if not logged in
+        return redirect("/login")
 
-    emp_id = user["id"]  # hardcoded from session
+    emp_id = user["id"] 
     tasks = get_tasks_by_employee(emp_id)
     return render_template("employee/test.html", user=user, tasks=tasks)
