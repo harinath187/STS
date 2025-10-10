@@ -4,11 +4,14 @@
  
 {% block content %}
 <div class="flex min-h-screen bg-gray-50">
+  <!-- Sidebar -->
+  <aside class="w-64 bg-white shadow-md flex flex-col fixed top-0 left-0 bottom-0">
     {% include "common/employee_dashboard.html" %}
   </aside>
  
   <!-- Main Content -->
   <main class="flex-1 ml-64 pt-8 pr-8 pb-8 pl-4">
+
 
     <!-- Welcome Message -->
     <h1 class="text-3xl font-semibold mb-6">Welcome, {{ user.firstname }}!</h1>
@@ -38,11 +41,12 @@
       <!-- Line Chart -->
       <div class="bg-white p-6 rounded-xl shadow">
         <h3 class="text-xl font-semibold mb-4">Tasks Completed Per Month</h3>
-        {% if line_chart %}
-          <img src="data:image/png;base64,{{ line_chart }}" alt="Tasks Completed Per Month" class="w-full h-auto">
-        {% else %}
-          <p class="text-gray-400 text-center">No data available for the line chart.</p>
-        {% endif %}
+       {% if line_chart %}
+  <img src="data:image/png;base64,{{ line_chart }}" alt="Line Chart">
+{% else %}
+  <p>No line chart data available.</p>
+{% endif %}
+
       </div>
 
       <!-- Pie Chart -->

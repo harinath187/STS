@@ -1,9 +1,9 @@
 
 import os
-from flask import Blueprint, render_template, request, redirect, flash, current_app
+from flask import Blueprint, render_template, request, redirect, flash, current_app,session,url_for
 from werkzeug.utils import secure_filename
-from app.models.project_models import fetch_all_projects, insert_project
-
+from app.models.project_models import fetch_all_projects, insert_project,get_employees_assigned_by
+from app.models.db import get_db_connection
 
 project_bp = Blueprint('project_bp', __name__)
 
@@ -40,3 +40,19 @@ UPLOAD_FOLDER = 'static/uploads'
 
 #     return render_template('mypro/add_project.html')
 
+
+
+@project_bp.route("/project_manager/team")
+def project_manager_team():
+    user = session.get("user")
+    if not user or user.get("dept_id") != 3:
+        return redirect(url_for("login"))
+ 
+    manager_id = user.get("id")
+    team_members = get_employees_assigned_by(manager_id)
+ 
+    return render_template(
+        "mypro/project_team.html",
+        user=user,
+        team_members=team_members
+    )

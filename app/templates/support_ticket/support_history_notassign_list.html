@@ -3,7 +3,6 @@
 {% block title %}Support History{% endblock %}
 
 {% block content %}
-
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css" />
 <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap4.min.css" />
@@ -12,6 +11,22 @@
   table#notAssignTable thead th {
     background-color: black !important;
     color: white !important;
+  }
+  
+  .error {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: block;
+  }
+  
+  .form-control.error {
+    border-color: #dc3545;
+  }
+  
+  .form-control.error:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
   }
 </style>
 
@@ -28,9 +43,9 @@
         <thead>
           <tr>
             <th>Assigned To</th>
-            <th>Assigned By</th>
+            <!-- <th>Assigned By</th> -->
             <th>Department Name</th>
-            <th>Duration</th>
+            <!-- <th>Duration</th> -->
             <th>Problem Description</th>
             <th>Priority</th>
             <th>Status</th>
@@ -41,11 +56,17 @@
           {% for notassign in notassignlist %}
           <tr data-ticket-id="{{ notassign.id }}">
             <td>{{ notassign.assignto }}</td>
-            <td>{{ notassign.assignby }}</td>
+            <!-- <td>{{ notassign.assignby }}</td> -->
             <td>{{ notassign.dept_name }}</td>
-            <td>{{ notassign.duration }}</td>
+            <!-- <td>{{ notassign.duration }}</td> -->
             <td>{{ notassign.problem_description }}</td>
-            <td>{{ notassign.priority }}</td>
+            <td>
+              {% if notassign.priority %}
+              <span class="badge-priority badge-{{ notassign.priority|lower }}">{{ notassign.priority }}</span>
+              {% else %}
+              <span class="badge-priority badge-medium">N/A</span>
+              {% endif %}
+            </td>
             <td>{{ notassign.status }}</td>
             <td>
               <button class="btn btn-sm btn-primary edit-btn">Assign</button>
@@ -59,74 +80,61 @@
   </main>
 </div>
 
-
+<!-- Modal -->
 <div class="modal fade" id="editTicketModal" tabindex="-1" aria-labelledby="editTicketModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <form id="editTicketForm">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Edit Support Ticket</h5>
+          <h5 class="modal-title">Assign Support Ticket</h5>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         <div class="modal-body">
-          
+
           <input type="hidden" id="ticketId">
 
+          <!-- Problem Description - READONLY -->
           <div class="form-group">
-            <label for="assignto">Assigned To</label>
+            <label for="problem_description">Problem Description</label>
+            <textarea class="form-control" id="problem_description" name="problem_description" rows="3" readonly style="background-color: #f8f9fa;"></textarea>
+          </div>
+
+          <!-- Comments - READONLY -->
+          <div class="form-group">
+            <label for="comments">Comments</label>
+            <textarea class="form-control" id="comments" name="comments" rows="2" readonly style="background-color: #f8f9fa;"></textarea>
+          </div>
+
+          <!-- Priority - READONLY (Badge Display) -->
+          <div class="form-group">
+            <label for="priority_display">Priority</label>
+            <div id="priority_display" style="padding: 10px; background-color: #f8f9fa; border: 1px solid #ced4da; border-radius: 4px; min-height: 38px;">
+              <span id="priority_badge"></span>
+            </div>
+            <input type="hidden" id="priority" name="priority">
+          </div>
+
+          <!-- Department - READONLY -->
+          <div class="form-group">
+            <label for="dept_name">Department</label>
+            <input type="text" class="form-control" id="dept_name" readonly style="background-color: #f8f9fa;">
+          </div>
+
+          <hr class="my-4">
+
+          <!-- Assigned To - EDITABLE DROPDOWN -->
+          <div class="form-group">
+            <label for="assignto">Assigned To <span class="text-danger">*</span></label>
             <select class="form-control" id="assignto" name="assignto" required>
               <option value="">Select Employee</option>
             </select>
           </div>
 
+          <!-- Duration - EDITABLE -->
           <div class="form-group">
-            <label for="assignby">Assigned By</label>
-            <input type="text" class="form-control" id="assignby" name="assignby" readonly>
-          </div>
-
-          <div class="form-group">
-            <label for="dept_name">Department</label>
-            <input type="text" class="form-control" id="dept_name" readonly>
-          </div>
-
-          <div class="form-group">
-            <label for="duration">Duration</label>
-            <input type="text" class="form-control" id="duration" name="duration" required>
-          </div>
-
-          <div class="form-group">
-            <label for="comments">Comments</label>
-            <textarea class="form-control" id="comments" name="comments" rows="2" readonly></textarea>
-          </div>
-
-          <div class="form-group">
-            <label for="problem_description">Problem Description</label>
-            <textarea class="form-control" id="problem_description" name="problem_description" rows="3" readonly></textarea>
-          </div>
-
-          <div class="form-group">
-            <label for="priority">Priority</label>
-            <select class="form-control" id="priority" name="priority" readonly>
-              <option value="">Select Priority</option>
-              <option value="Low">Low</option>
-              <option value="Medium">Medium</option>
-              <option value="High">High</option>
-              <option value="Critical">Critical</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="start_date">Start Date</label>
-            <input type="date" class="form-control" id="start_date" name="start_date" readonly>
-          </div>
-
-          <div class="form-group">
-            <label for="status">Status</label>
-            <select class="form-control" id="status" name="status" readonly>
-              <option value="OPEN">OPEN</option>
-              <option value="RESOLVED">RESOLVED</option>
-              <option value="CLOSED">CLOSED</option>
-            </select>
+            <label for="duration">Duration <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="duration" name="duration" placeholder="e.g. 3 hours, 45 minutes, 2 hours 30 minutes" required>
+            <small class="form-text text-muted">Format: "X hours", "X minutes", "X hrs Y mins" (Max: 24 hours)</small>
           </div>
 
         </div>
@@ -138,7 +146,6 @@
     </form>
   </div>
 </div>
-
 {% endblock %}
 
 {% block scripts %}
@@ -148,9 +155,10 @@
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
 
 <script>
-  var loggedInUserId = {{ user.id }};  // Ensure user.id is passed into template
+  var loggedInUserId = {{ user.id }};
 
   $(document).ready(function () {
     var table = $('#notAssignTable').DataTable({
@@ -163,7 +171,155 @@
       pageLength: 10
     });
 
-    
+    // Function to display priority badge
+    function displayPriority(priority) {
+      var badgeClass = 'badge-medium';
+      var displayText = priority || 'N/A';
+      
+      if (priority) {
+        var priorityLower = priority.toLowerCase();
+        if (priorityLower === 'high') {
+          badgeClass = 'badge-high';
+        } else if (priorityLower === 'medium') {
+          badgeClass = 'badge-medium';
+        } else if (priorityLower === 'low') {
+          badgeClass = 'badge-low';
+        }
+      }
+      
+      return '<span class="badge-priority ' + badgeClass + '">' + displayText + '</span>';
+    }
+
+    // Initialize jQuery Validation
+    var validator = $('#editTicketForm').validate({
+      rules: {
+        assignto: {
+          required: true
+        },
+        duration: {
+          required: true,
+          validateDuration: true
+        }
+      },
+      messages: {
+        assignto: {
+          required: "Please select an employee to assign the ticket"
+        },
+        duration: {
+          required: "Please enter the duration"
+        }
+      },
+      errorElement: 'span',
+      errorClass: 'error',
+      highlight: function(element) {
+        $(element).addClass('error');
+      },
+      unhighlight: function(element) {
+        $(element).removeClass('error');
+      },
+      errorPlacement: function(error, element) {
+        error.insertAfter(element);
+      }
+    });
+
+    // Custom validation method for duration
+    $.validator.addMethod("validateDuration", function(value, element) {
+      if (!value || !value.trim()) {
+        return false;
+      }
+      
+      var trimmedValue = value.trim();
+      
+      // Pattern for hours only: "5 hours", "3 hrs", "1 hour"
+      var hoursOnlyPattern = /^(\d{1,2})\s*(hours?|hrs?)$/i;
+      
+      // Pattern for minutes only: "30 minutes", "45 mins", "1 minute"
+      var minutesOnlyPattern = /^(\d{1,3})\s*(minutes?|mins?)$/i;
+      
+      // Pattern for hours and minutes: "2 hours 30 minutes", "1 hr 45 mins"
+      var combinedPattern = /^(\d{1,2})\s*(hours?|hrs?)\s+(\d{1,2})\s*(minutes?|mins?)$/i;
+      
+      var totalMinutes = 0;
+      
+      // Check combined pattern (hours and minutes)
+      var combinedMatch = trimmedValue.match(combinedPattern);
+      if (combinedMatch) {
+        var hours = parseInt(combinedMatch[1]);
+        var minutes = parseInt(combinedMatch[3]);
+        
+        if (minutes >= 60) {
+          return false;
+        }
+        
+        totalMinutes = (hours * 60) + minutes;
+      }
+      // Check hours only pattern
+      else {
+        var hoursMatch = trimmedValue.match(hoursOnlyPattern);
+        if (hoursMatch) {
+          var hours = parseInt(hoursMatch[1]);
+          totalMinutes = hours * 60;
+        }
+        // Check minutes only pattern
+        else {
+          var minutesMatch = trimmedValue.match(minutesOnlyPattern);
+          if (minutesMatch) {
+            totalMinutes = parseInt(minutesMatch[1]);
+          } else {
+            return false; // Invalid format
+          }
+        }
+      }
+      
+      // Check if total duration exceeds 24 hours (1440 minutes)
+      return totalMinutes > 0 && totalMinutes <= 1440;
+      
+    }, function(params, element) {
+      var value = $(element).val().trim();
+      
+      // Pattern matching
+      var hoursOnlyPattern = /^(\d{1,2})\s*(hours?|hrs?)$/i;
+      var minutesOnlyPattern = /^(\d{1,3})\s*(minutes?|mins?)$/i;
+      var combinedPattern = /^(\d{1,2})\s*(hours?|hrs?)\s+(\d{1,2})\s*(minutes?|mins?)$/i;
+      
+      var combinedMatch = value.match(combinedPattern);
+      var hoursMatch = value.match(hoursOnlyPattern);
+      var minutesMatch = value.match(minutesOnlyPattern);
+      
+      // Check if format is invalid
+      if (!combinedMatch && !hoursMatch && !minutesMatch) {
+        return 'Format: "3 hours", "45 minutes", or "2 hours 30 minutes"';
+      }
+      
+      var totalMinutes = 0;
+      
+      if (combinedMatch) {
+        var hours = parseInt(combinedMatch[1]);
+        var minutes = parseInt(combinedMatch[3]);
+        
+        if (minutes >= 60) {
+          return 'Minutes must be less than 60';
+        }
+        
+        totalMinutes = (hours * 60) + minutes;
+      } else if (hoursMatch) {
+        totalMinutes = parseInt(hoursMatch[1]) * 60;
+      } else if (minutesMatch) {
+        totalMinutes = parseInt(minutesMatch[1]);
+      }
+      
+      if (totalMinutes > 1440) {
+        return 'Duration cannot exceed 24 hours';
+      }
+      
+      if (totalMinutes === 0) {
+        return 'Duration must be greater than 0';
+      }
+      
+      return 'Please enter a valid duration';
+    });
+
+    // Edit button click
     $('#notAssignTable tbody').on('click', '.edit-btn', function () {
       var tr = $(this).closest('tr');
       var ticketId = tr.data('ticket-id');
@@ -172,45 +328,41 @@
         url: '/ticket/' + ticketId,
         method: 'GET',
         success: function (data) {
-          console.log("Fetched ticket data:", data);
-
+          // Reset form validation
+          validator.resetForm();
+          $('#editTicketForm').find('.error').removeClass('error');
+          
           $('#ticketId').val(ticketId);
-          $('#assignby').val(data.assignby_name || '');
+          $('#problem_description').val(data.problem_description || '');
+          $('#comments').val(data.comments || '');
+
+          var priorityValue = data.priority || '';
+          $('#priority').val(priorityValue);
+          $('#priority_badge').html(displayPriority(priorityValue));
 
           $('#dept_name').val(data.dept_name || '').data('dept-id', data.dept_id);
-
           $('#duration').val(data.duration || '');
-          $('#comments').val(data.comments || '');
-          $('#problem_description').val(data.problem_description || '');
 
-          $('#priority').val(data.Priority || '');
-
-          var formattedDate = '';
-          if (data.Start_Date) {
-            formattedDate = new Date(data.Start_Date).toISOString().split('T')[0];
+          if (data.dept_name) {
+            $.ajax({
+              url: '/employees/' + encodeURIComponent(data.dept_name),
+              method: 'GET',
+              success: function (employees) {
+                var $assignto = $('#assignto');
+                $assignto.empty();
+                $assignto.append('<option value="">Select Employee</option>');
+                employees.forEach(function (emp) {
+                  var fullName = emp.firstname + ' ' + emp.lastname;
+                  var selected = (emp.id === data.assigned_to) ? 'selected' : '';
+                  $assignto.append('<option value="' + emp.id + '" ' + selected + '>' + fullName + '</option>');
+                });
+              },
+              error: function (xhr) {
+                console.error('Error loading employees:', xhr);
+                alert('Failed to load employees for department.');
+              }
+            });
           }
-          $('#start_date').val(formattedDate);
-
-          $('#status').val(data.status || '');
-
-          
-          $.ajax({
-            url: '/employees/' + encodeURIComponent(data.dept_name),
-            method: 'GET',
-            success: function (employees) {
-              var $assignto = $('#assignto');
-              $assignto.empty();
-              $assignto.append('<option value="">Select Employee</option>');
-              employees.forEach(function (emp) {
-                var fullName = emp.firstname + ' ' + emp.lastname;
-                var selected = (emp.id === data.assigned_to) ? 'selected' : '';
-                $assignto.append('<option value="' + emp.id + '" ' + selected + '>' + fullName + '</option>');
-              });
-            },
-            error: function () {
-              alert('Failed to load employees for department.');
-            }
-          });
 
           $('#editTicketModal').modal('show');
         },
@@ -221,35 +373,48 @@
       });
     });
 
-    
+    // Limit allowed characters in duration input (numbers and letters)
+    $('#duration').on('input', function () {
+      this.value = this.value.replace(/[^0-9a-zA-Z\s]/g, '');
+    });
+
+    // Form submission
     $('#editTicketForm').on('submit', function (e) {
       e.preventDefault();
+      
+      // Validate form
+      if (!$(this).valid()) {
+        return false;
+      }
+      
       var ticketId = $('#ticketId').val();
       var dept_id = $('#dept_name').data('dept-id');
 
+      var assigned_to = parseInt($('#assignto').val());
+      var duration = $('#duration').val()?.trim();
+
+      // Prepare data
       var formData = {
-        assigned_to: parseInt($('#assignto').val()) || null,
+        assigned_to: assigned_to,
         assigned_by: loggedInUserId,
         dept_id: parseInt(dept_id),
-        duration: $('#duration').val().trim(),
-        comments: $('#comments').val().trim(),
-        problem_description: $('#problem_description').val().trim(),
-        priority: $('#priority').val().trim(),
-        start_date: $('#start_date').val(),
-        status: $('#status').val()
+        duration: duration,
+        status: 'OPEN'
       };
 
-      console.log("Submitting updated ticket data:", formData);
-
-      var missing = [];
-      for (var key in formData) {
-        if (formData[key] === null || formData[key] === '') {
-          missing.push(key);
-        }
+      var priorityVal = $('#priority').val()?.trim();
+      if (priorityVal) {
+        formData.priority = priorityVal;
       }
-      if (missing.length > 0) {
-        alert('Missing required: ' + missing.join(', '));
-        return;
+
+      var commentsVal = $('#comments').val()?.trim();
+      if (commentsVal) {
+        formData.comments = commentsVal;
+      }
+
+      var problemDescVal = $('#problem_description').val()?.trim();
+      if (problemDescVal) {
+        formData.problem_description = problemDescVal;
       }
 
       $.ajax({
@@ -258,21 +423,21 @@
         contentType: 'application/json',
         data: JSON.stringify(formData),
         success: function (response) {
-          alert(response.message || 'Ticket updated successfully!');
+          alert(response.message || 'Ticket assigned successfully!');
           $('#editTicketModal').modal('hide');
           location.reload();
         },
         error: function (xhr) {
-          console.error("Update error:", xhr.responseText);
           var err = xhr.responseJSON && xhr.responseJSON.error ? xhr.responseJSON.error : xhr.responseText;
+          console.error('Update error:', err);
           alert('Update failed: ' + err);
         }
       });
     });
 
-    // Delete route
+    // Delete Ticket
     $('#notAssignTable tbody').on('click', '.delete-btn', function () {
-      if (!confirm('Are you sure to delete this ticket?')) return;
+      if (!confirm('Are you sure you want to delete this ticket?')) return;
 
       var tr = $(this).closest('tr');
       var ticketId = tr.data('ticket-id');
@@ -281,7 +446,7 @@
         url: '/ticket/' + ticketId + '/delete',
         method: 'POST',
         success: function (response) {
-          alert(response.message);
+          alert(response.message || 'Ticket deleted successfully!');
           location.reload();
         },
         error: function (xhr) {
@@ -290,7 +455,6 @@
         }
       });
     });
-
   });
 </script>
 {% endblock %}

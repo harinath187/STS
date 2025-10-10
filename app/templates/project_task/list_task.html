@@ -3,26 +3,26 @@
 {% block title %}Project Tasks{% endblock %}
 
 {% block head %}
-<!-- Bootstrap CSS -->
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-<!-- DataTables CSS -->
+
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
 {% endblock %}
 
 {% block content %}
 <div class="flex min-h-screen bg-gray-50">
 
-  <!-- Sidebar (Tailwind sidebar kept as before) -->
+
   <aside class="w-64 bg-white shadow-md flex flex-col fixed top-0 left-0 bottom-0">
     {% include "common/project_manager.html" %}
   </aside>
 
-  <!-- Main Content -->
+
   <main class="flex-1 ml-64 pt-8 pr-8 pb-8 pl-4">
 
     <h1 class="text-3xl font-semibold mb-6">Project Tasks</h1>
 
-    <!-- Project Selection -->
+   
     <form method="get" action="{{ url_for('task_bp.list_tasks') }}" class="mb-3">
       <div class="row g-2 align-items-center">
         <div class="col-auto">
@@ -56,13 +56,13 @@
       </a>
     </div> -->
     <div class="mb-3 d-flex justify-content-end">
-  <a href="{{ url_for('task_bp.add_task') }}" class="btn btn-success">
+  <a href="{{ url_for('task_bp.add_task') }}" class="btn btn-primary">
     <i class="fas fa-plus"></i> Create New Task
   </a>
 </div>
 
 
-    <!-- Tasks Table -->
+    
     <div class="card shadow-sm p-3">
       <table id="tasksTable" class="table table-striped table-hover align-middle">
         <thead class="table-dark">
@@ -131,7 +131,6 @@
       </table>
     </div>
 
-    <!-- View Details Modal -->
     <div class="modal fade" id="taskDetailsModal" tabindex="-1">
       <div class="modal-dialog modal-lg">
         <div class="modal-content shadow-lg">
@@ -166,7 +165,7 @@
       </div>
     </div>
 
-    <!-- Delete Confirmation Modal -->
+   
     <div class="modal fade" id="deleteModal" tabindex="-1">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -193,7 +192,7 @@
 {% endblock %}
 
 {% block scripts %}
-<!-- jQuery, Bootstrap & DataTables -->
+
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
