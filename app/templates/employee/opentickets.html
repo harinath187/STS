@@ -63,8 +63,9 @@
               </td>
               <td class="px-4 py-2 border">
                 {% if ticket.Attachment %}
+                  {% set attachment_path = ticket.Attachment.replace('app/static/', '') %}
                   <button 
-                   onclick="openModal('{{ url_for('static', filename='uploads/support_attachment/' + ticket.Attachment) }}')"
+                   onclick="openModal('{{ url_for('static', filename=attachment_path) }}')"
                    class="text-blue-600 underline hover:text-blue-800">
                     View
                   </button>
