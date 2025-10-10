@@ -1,41 +1,109 @@
 {% extends "base.html" %}
 
-{% block title %}Admin Dashboard{% endblock %}
+{% block title %}Project Manager Dashboard{% endblock %}
 
 {% block content %}
-<div class="flex min-h-screen">
+<div class="flex min-h-screen bg-gradient-to-br from-sky-100 via-white to-indigo-200">
 
-  <aside class="w-64 bg-white shadow-md flex flex-col fixed top-0 left-0 bottom-0">
-  <div class="p-4 text-2xl font-bold text-blue-600">Dashboard</div>
-  <nav class="flex-1 px-4 mt-4 space-y-2">
-    <a href="/admin/home" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-100 text-gray-700">
-      <i class="fa fa-home"></i><span>Home</span>
-    </a>
-    <a href="/admin/tickets" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-100 text-gray-700">
-      <i class="fa fa-ticket"></i><span>Tickets</span>
-    </a>
-    <a href="/admin/analytics" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-100 text-gray-700">
-      <i class="fa fa-chart-line"></i><span>Analytics</span>
-    </a>
-    <a href="/admin/settings" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-100 text-gray-700">
-      <i class="fa fa-cog"></i><span>Settings</span>
-    </a>
-     <a href="/logout" class="flex items-center space-x-3 p-2 mt-auto mb-4 rounded-lg hover:bg-red-100 text-red-600">
-      <i class="fa fa-sign-out-alt"></i><span>Logout</span>
-    </a>
-  </nav>
-</aside>
+  <!-- Sidebar -->
+  <aside class="w-64 min-h-screen bg-white/90 shadow-2xl flex flex-col fixed top-0 left-0 bottom-0 border-r border-indigo-100 z-20 backdrop-blur-xl">
+    {% include "common/project_manager.html" %}
+  </aside>
 
+  <!-- Main Content -->
+  <main class="flex-1 ml-64 px-10 pt-10 pb-8 bg-transparent relative z-0">
 
-<main class="flex-1 ml-64 mt-0 p-6 bg-gray-50">
-  <h1 class="text-2xl font-semibold mb-6">Welcome Admin {{ user.name }}</h1>
-  <div class="grid grid-cols-3 gap-6">
-    <div class="bg-white p-4 rounded-xl shadow">Card 1</div>
-    <div class="bg-white p-4 rounded-xl shadow">Card 2</div>
-    <div class="bg-white p-4 rounded-xl shadow">Card 3</div>
-  </div>
-</main>
+    <!-- Welcome Message -->
+    <h1 class="text-4xl font-extrabold mb-10 text-indigo-800 tracking-wide drop-shadow-sm">
+      Welcome, {{ user.firstname }}!
+    </h1>
 
+    <!-- Top Cards -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-8 mb-10">
+      <div class="bg-white/90 p-7 rounded-2xl shadow-lg border-t-4 border-indigo-500 animate-fadeIn transition hover:scale-105 duration-200 text-center">
+        <h3 class="uppercase tracking-wider text-gray-500 font-semibold text-sm">Total Projects</h3>
+        <p class="text-4xl font-extrabold mt-2 text-indigo-800">{{ card_data.total_projects }}</p>
+      </div>
+      <div class="bg-white/90 p-7 rounded-2xl shadow-lg border-t-4 border-indigo-400 animate-fadeIn transition hover:scale-105 duration-200 text-center">
+        <h3 class="uppercase tracking-wider text-gray-500 font-semibold text-sm">Total Tasks</h3>
+        <p class="text-4xl font-extrabold mt-2 text-indigo-800">{{ card_data.total_tasks }}</p>
+      </div>
+      <div class="bg-white/90 p-7 rounded-2xl shadow-lg border-t-4 border-green-500 animate-fadeIn transition hover:scale-105 duration-200 text-center">
+        <h3 class="uppercase tracking-wider text-gray-500 font-semibold text-sm">Completed Tasks</h3>
+        <p class="text-4xl font-extrabold mt-2 text-green-700">{{ card_data.completed_tasks }}</p>
+      </div>
+      <div class="bg-white/90 p-7 rounded-2xl shadow-lg border-t-4 border-yellow-400 animate-fadeIn transition hover:scale-105 duration-200 text-center">
+        <h3 class="uppercase tracking-wider text-gray-500 font-semibold text-sm">In Progress</h3>
+        <p class="text-4xl font-extrabold mt-2 text-yellow-700">{{ card_data.in_progress_tasks }}</p>
+      </div>
+      <div class="bg-white/90 p-7 rounded-2xl shadow-lg border-t-4 border-gray-400 animate-fadeIn transition hover:scale-105 duration-200 text-center">
+        <h3 class="uppercase tracking-wider text-gray-500 font-semibold text-sm">Unassigned Tasks</h3>
+        <p class="text-4xl font-extrabold mt-2 text-gray-700">{{ card_data.unassigned_tasks }}</p>
+      </div>
+    </div>
 
+    <!-- Charts Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+      <div class="bg-white/90 p-8 rounded-2xl shadow-lg border border-indigo-100">
+        <h3 class="text-2xl font-bold mb-5 text-indigo-700">Tasks Created Per Month</h3>
+        {% if line_chart %}
+          <img src="data:image/png;base64,{{ line_chart }}" alt="Tasks Created Per Month" class="w-full rounded-lg border border-indigo-50 shadow transition hover:scale-105 duration-200" />
+        {% else %}
+          <p class="text-gray-400 text-center italic">No data available for the line chart.</p>
+        {% endif %}
+      </div>
+
+      <div class="bg-white/90 p-8 rounded-2xl shadow-lg border border-indigo-100">
+        <h3 class="text-2xl font-bold mb-5 text-indigo-700">Task Status</h3>
+        {% if pie_chart %}
+          <img src="data:image/png;base64,{{ pie_chart }}" alt="Task Status" class="w-full rounded-lg border border-indigo-50 shadow transition hover:scale-105 duration-200" />
+        {% else %}
+          <p class="text-gray-400 text-center italic">No tasks yet to display.</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Recent Tasks Table -->
+    <div class="mb-8">
+      <h3 class="text-2xl font-bold mb-5 text-indigo-700">Recent Tasks</h3>
+
+      {% if recent_tasks %}
+        <div class="overflow-x-auto rounded-2xl bg-white/90 border border-indigo-100 shadow-sm">
+          <table class="min-w-full divide-y divide-indigo-50 text-sm">
+            <thead class="bg-indigo-50 text-indigo-700 font-bold uppercase">
+              <tr>
+                <th class="py-3 px-4 text-left">Task Name</th>
+                <th class="py-3 px-4 text-left">Project</th>
+                <th class="py-3 px-4 text-left">Start Date</th>
+                <th class="py-3 px-4 text-left">End Date</th>
+                <th class="py-3 px-4 text-left">Status</th>
+              </tr>
+            </thead>
+            <tbody class="text-indigo-900">
+              {% for task in recent_tasks %}
+              <tr class="hover:bg-indigo-50 transition">
+                <td class="py-3 px-4 font-semibold">{{ task.task_name }}</td>
+                <td class="py-3 px-4">{{ task.project_name or '-' }}</td>
+                <td class="py-3 px-4">{{ task.Start_Date }}</td>
+                <td class="py-3 px-4">{{ task.End_Date }}</td>
+                <td class="py-3 px-4">
+                  <span class="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase
+                    {% if task.status == 'COMPLETED' %}bg-green-100 text-green-800
+                    {% elif task.status == 'PENDING' or task.status == 'IN PROGRESS' %}bg-yellow-100 text-yellow-800
+                    {% else %}bg-red-100 text-red-800{% endif %}">
+                    {{ task.status }}
+                  </span>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <p class="text-gray-400 text-center italic">No recent tasks available.</p>
+      {% endif %}
+    </div>
+
+  </main>
 </div>
 {% endblock %}
