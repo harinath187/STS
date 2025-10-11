@@ -34,7 +34,7 @@
         <label class="block text-sm font-medium text-gray-600">Task Name <span class="text-red-500">*</span></label>
         <input id="task_name" name="task_name" type="text" value="{{ task.task_name }}"
           class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
-        <p class="text-red-500 text-sm mt-1" id="name_error"></p>
+        <p class="text-red-500 text-sm mt-1" id="task_name_error"></p>
       </div>
 
       <!-- Task Description -->
@@ -50,21 +50,21 @@
           <label class="block text-sm font-medium text-gray-600">Duration (days) <span class="text-red-500">*</span></label>
           <input id="task_duration" name="task_duration" type="number" min="0" value="{{ task.task_Duration or '' }}"
             class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
-          <p class="text-red-500 text-sm mt-1" id="duration_error"></p>
+          <p class="text-red-500 text-sm mt-1" id="task_duration_error"></p>
         </div>
 
         <div>
           <label class="block text-sm font-medium text-gray-600">Estimated Hours <span class="text-red-500">*</span></label>
           <input id="estimated_hrs" name="estimated_hrs" type="number" min="0" value="{{ task.estimated_hrs or '' }}"
             class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
-          <p class="text-red-500 text-sm mt-1" id="estimated_error"></p>
+          <p class="text-red-500 text-sm mt-1" id="estimated_hrs_error"></p>
         </div>
 
         <div>
           <label class="block text-sm font-medium text-gray-600">Worked Hours</label>
           <input id="worked_hrs" name="worked_hrs" type="number" min="0" value="{{ task.worked_hrs or 0 }}"
             class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
-          <p class="text-red-500 text-sm mt-1" id="worked_error"></p>
+          <p class="text-red-500 text-sm mt-1" id="worked_hrs_error"></p>
         </div>
       </div>
 
@@ -81,7 +81,7 @@
               </option>
             {% endfor %}
           </select>
-          <p class="text-red-500 text-sm mt-1" id="assigned_error"></p>
+          <p class="text-red-500 text-sm mt-1" id="assigned_to_error"></p>
         </div>
 
         <div>
@@ -103,14 +103,14 @@
           <label class="block text-sm font-medium text-gray-600">Start Date <span class="text-red-500">*</span></label>
           <input id="start_date" name="start_date" type="date" value="{{ task.Start_Date or '' }}"
             class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
-          <p class="text-red-500 text-sm mt-1" id="start_error"></p>
+          <p class="text-red-500 text-sm mt-1" id="start_date_error"></p>
         </div>
 
         <div>
           <label class="block text-sm font-medium text-gray-600">End Date <span class="text-red-500">*</span></label>
           <input id="end_date" name="end_date" type="date" value="{{ task.End_Date or '' }}"
             class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
-          <p class="text-red-500 text-sm mt-1" id="end_error"></p>
+          <p class="text-red-500 text-sm mt-1" id="end_date_error"></p>
         </div>
       </div>
 
@@ -159,21 +159,23 @@
   </div>
 </main>
 
-<!-- JS Validation (same logic, modernized) -->
+<!-- JS Validation -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function() {
   $("#editTaskForm").submit(function(e) {
     let valid = true;
     $("p.text-red-500").text("");
+    $("input, select").removeClass("border-red-500");
 
-    function err(id, msg) {
+    function showError(id, msg) {
       $("#" + id).addClass("border-red-500");
       $("#" + id + "_error").text(msg);
       valid = false;
     }
 
-    const fields = [
+    // Required fields validation
+    const requiredFields = [
       ["task_name", "Task Name is required."],
       ["task_duration", "Duration is required."],
       ["estimated_hrs", "Estimated Hours is required."],
@@ -183,26 +185,27 @@ $(document).ready(function() {
       ["status", "Status is required."]
     ];
 
-    fields.forEach(([id, msg]) => {
-      if (!$("#" + id).val()) err(id, msg);
+    requiredFields.forEach(([id, msg]) => {
+      if (!$("#" + id).val()) showError(id, msg);
     });
 
+    // Date validation
     const start = new Date($("#start_date").val());
     const end = new Date($("#end_date").val());
-    if ($("#end_date").val() && end < start)
-      err("end_date", "End Date cannot be before Start Date.");
+    if ($("#end_date").val() && end < start) showError("end_date", "End Date cannot be before Start Date.");
 
+    // Hours validation
+    const dur = parseFloat($("#task_duration").val()) || 0;
     const est = parseFloat($("#estimated_hrs").val()) || 0;
     const worked = parseFloat($("#worked_hrs").val()) || 0;
-    const dur = parseFloat($("#task_duration").val()) || 0;
     const max = dur * 24;
 
     if (est < worked) {
-      err("estimated_hrs", "Estimated Hours cannot be less than Worked Hours.");
-      err("worked_hrs", "Worked Hours cannot exceed Estimated Hours.");
+      showError("estimated_hrs", "Estimated Hours cannot be less than Worked Hours.");
+      showError("worked_hrs", "Worked Hours cannot exceed Estimated Hours.");
     }
-    if (est > max) err("estimated_hrs", `Estimated Hours cannot exceed total (${max}).`);
-    if (worked > max) err("worked_hrs", `Worked Hours cannot exceed total (${max}).`);
+    if (est > max) showError("estimated_hrs", `Estimated Hours cannot exceed total (${max}).`);
+    if (worked > max) showError("worked_hrs", `Worked Hours cannot exceed total (${max}).`);
 
     if (!valid) e.preventDefault();
   });
