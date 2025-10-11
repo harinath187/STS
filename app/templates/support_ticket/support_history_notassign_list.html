@@ -30,7 +30,7 @@
     box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
   }
 
-  .badge-priority {
+  /* .badge-priority {
     padding: 5px 12px;
     border-radius: 12px;
     font-size: 0.875rem;
@@ -38,7 +38,7 @@
     display: inline-block;
   }
 
-  /* .badge-high {
+  .badge-high {
     background-color: #dc3545;
     color: white;
   }
@@ -365,9 +365,25 @@
     // Function to display attachment
     function displayAttachment(attachment) {
       if (attachment) {
-        return '<a href="' + attachment + '" target="_blank" class="attachment-link"><i class="fas fa-paperclip"></i> View File</a>';
+        var attachmentUrl = getAttachmentUrl(attachment);
+        return '<a href="' + attachmentUrl + '" target="_blank" class="attachment-link"><i class="fas fa-paperclip"></i> View File</a>';
       } else {
         return '<span class="no-attachment">No attachment</span>';
+      }
+    }
+
+    // Function to convert file path to URL
+    function getAttachmentUrl(filePath) {
+      // Remove /app/static/ prefix if exists and prepend with /static/
+      if (filePath.startsWith('/app/static/')) {
+        return filePath.replace('/app/static/', '/static/');
+      } else if (filePath.startsWith('static/')) {
+        return '/' + filePath;
+      } else if (filePath.startsWith('/static/')) {
+        return filePath;
+      } else {
+        // If it's just the filename or relative path
+        return '/static/uploads/support_attachment/' + filePath.split('/').pop();
       }
     }
 
@@ -517,12 +533,33 @@
       return 'Please enter a valid duration';
     });
 
+    // Function to convert file path to URL
+    function getAttachmentUrl(filePath) {
+      // Remove /app/static/ prefix if exists and prepend with /static/
+      if (filePath.startsWith('/app/static/')) {
+        return filePath.replace('/app/static/', '/static/');
+      } else if (filePath.startsWith('static/')) {
+        return '/' + filePath;
+      } else if (filePath.startsWith('/static/')) {
+        return filePath;
+      } else {
+        // If it's just the filename or relative path
+        return '/static/uploads/support_attachment/' + filePath.split('/').pop();
+      }
+    }
+
     // View button click - Open attachment in modal
     $('#notAssignTable tbody').on('click', '.view-btn:not(:disabled)', function () {
       var tr = $(this).closest('tr');
       var attachment = tr.data('attachment');
 
       if (attachment) {
+        // Convert file path to proper URL
+        var attachmentUrl = getAttachmentUrl(attachment);
+        
+        console.log('Original path:', attachment);
+        console.log('Converted URL:', attachmentUrl);
+
         // Reset modal content
         $('#attachmentLoading').show();
         $('#attachmentViewer').hide();
@@ -530,7 +567,7 @@
         $('#attachmentError').hide();
 
         // Get file extension
-        var fileExtension = getFileExtension(attachment);
+        var fileExtension = getFileExtension(attachmentUrl);
 
         // Show modal
         $('#attachmentModal').modal('show');
@@ -538,19 +575,20 @@
         // Load attachment based on file type
         if (isImageFile(fileExtension)) {
           // Display image
-          $('#attachmentImage').attr('src', attachment);
+          $('#attachmentImage').attr('src', attachmentUrl);
           $('#attachmentImage').on('load', function() {
             $('#attachmentLoading').hide();
             $('#attachmentImage').show();
           });
           $('#attachmentImage').on('error', function() {
+            console.error('Failed to load image:', attachmentUrl);
             $('#attachmentLoading').hide();
             $('#attachmentError').show();
-            $('#downloadLink').attr('href', attachment);
+            $('#downloadLink').attr('href', attachmentUrl);
           });
         } else if (isPreviewableFile(fileExtension)) {
           // Display in iframe (PDF, TXT, HTML)
-          $('#attachmentViewer').attr('src', attachment);
+          $('#attachmentViewer').attr('src', attachmentUrl);
           $('#attachmentViewer').on('load', function() {
             $('#attachmentLoading').hide();
             $('#attachmentViewer').show();
@@ -566,7 +604,7 @@
           // Show download option for other file types
           $('#attachmentLoading').hide();
           $('#attachmentError').show();
-          $('#downloadLink').attr('href', attachment);
+          $('#downloadLink').attr('href', attachmentUrl);
         }
       } else {
         alert('No attachment available for this ticket.');
