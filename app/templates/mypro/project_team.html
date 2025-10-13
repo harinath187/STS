@@ -64,21 +64,14 @@
 
   $(document).ready(function () {
     $('#teamTable').DataTable({
-      responsive: true,
-      paging: true,
-      pageLength: 10,
-      lengthMenu: [5, 10, 25, 50, 100],
-      searching: true,
-      ordering: true,
-      info: true,
-      language: {
-        paginate: {
-          previous: "Previous",
-          next: "Next"
-        },
-        lengthMenu: "Show _MENU_ entries",
-        search: "Search:"
-      }
+     stripeClasses: [], // disables row striping
+  responsive: true,
+  paging: true,
+  searching: true,
+  ordering: true,
+  info: true,
+  lengthChange: true,
+  pageLength: 10
     });
   });
 </script>

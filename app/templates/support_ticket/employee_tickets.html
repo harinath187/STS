@@ -70,13 +70,14 @@
 <script>
   $(document).ready(function () {
     $('#ticketsTable').DataTable({
-      responsive: true,
-      paging: true,
-      searching: true,
-      ordering: true,
-      info: true,
-      lengthChange: true,
-      pageLength: 10
+      stripeClasses: [], // disables row striping
+  responsive: true,
+  paging: true,
+  searching: true,
+  ordering: true,
+  info: true,
+  lengthChange: true,
+  pageLength: 10
     });
   });
 </script>
