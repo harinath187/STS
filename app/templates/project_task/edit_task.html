@@ -1,240 +1,214 @@
+{% extends "base.html" %}
+{% block title %}Edit Task{% endblock %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Edit Task</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    <style>
-        .error { border: 2px solid red !important; }
-        .error-message { color: red; font-size: 0.875em; min-height: 1.2em; display: block; }
-    </style>
-</head>
-<body class="bg-light">
+{% block content %}
+<script src="https://cdn.tailwindcss.com"></script>
 
-<div class="container mt-5">
-    <div class="card shadow-lg">
-        <!-- <div class="card-header bg-warning text-dark"> -->
-            <div class="card-header bg-primary text-white">
-            <h3 class="mb-0"><i class="fas fa-edit"></i> Edit Task</h3>
+<!-- Sidebar -->
+<aside class="w-64 bg-white shadow-md flex flex-col fixed top-0 left-0 bottom-0">
+  {% include "common/project_manager.html" %}
+</aside>
+
+<!-- Main Content -->
+<main class="flex-1 ml-64 p-10 bg-gray-50 min-h-screen">
+  <div class="bg-white shadow-lg rounded-2xl w-full max-w-4xl p-8 mx-auto">
+    <h2 class="text-2xl font-bold mb-6 text-gray-700">Edit Task</h2>
+
+    <form method="POST" enctype="multipart/form-data" id="editTaskForm" class="space-y-5">
+      
+      <!-- Project Name -->
+      <div>
+        <label class="block text-sm font-medium text-gray-600">Project</label>
+        <select disabled class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500 bg-gray-100">
+          {% for project in projects %}
+            <option value="{{ project.id }}" {% if project.id == task.project_id %}selected{% endif %}>
+              {{ project.project_name }}
+            </option>
+          {% endfor %}
+        </select>
+        <input type="hidden" name="project_id" value="{{ task.project_id }}">
+      </div>
+
+      <!-- Task Name -->
+      <div>
+        <label class="block text-sm font-medium text-gray-600">Task Name <span class="text-red-500">*</span></label>
+        <input id="task_name" name="task_name" type="text" value="{{ task.task_name }}"
+          class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
+        <p class="text-red-500 text-sm mt-1" id="task_name_error"></p>
+      </div>
+
+      <!-- Task Description -->
+      <div>
+        <label class="block text-sm font-medium text-gray-600">Task Description</label>
+        <textarea id="task_description" name="task_description" rows="3"
+          class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">{{ task.task_description or '' }}</textarea>
+      </div>
+
+      <!-- Duration / Estimated / Worked Hours -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div>
+          <label class="block text-sm font-medium text-gray-600">Duration (days) <span class="text-red-500">*</span></label>
+          <input id="task_duration" name="task_duration" type="number" min="0" value="{{ task.task_Duration or '' }}"
+            class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
+          <p class="text-red-500 text-sm mt-1" id="task_duration_error"></p>
         </div>
-        <div class="card-body">
-            <form method="POST" enctype="multipart/form-data">
-                
-                <div class="row">
-                   
-                    <div class="col-md-6 mb-3">
-                        <label for="project_id" class="form-label fw-bold">Project <span class="text-danger">*</span></label>
-                        <select id="project_id" class="form-select" disabled>
-                            {% for project in projects %}
-                                <option value="{{ project.id }}" {% if project.id == task.project_id %}selected{% endif %}>
-                                    {{ project.project_name }}
-                                </option>
-                            {% endfor %}
-                        </select>
-                        <input type="hidden" name="project_id" value="{{ task.project_id }}">
-                        <span class="error-message" id="project_error"></span>
-                    </div>
 
-                    
-                    <div class="col-md-6 mb-3">
-                        <label for="task_name" class="form-label fw-bold">Task Name <span class="text-danger">*</span></label>
-                        <input type="text" id="task_name" name="task_name" class="form-control" value="{{ task.task_name }}">
-                        <span class="error-message" id="name_error"></span>
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <label for="task_description" class="form-label fw-bold">Task Description</label>
-                    <textarea id="task_description" name="task_description" class="form-control" rows="3">{{ task.task_description or '' }}</textarea>
-                </div>
-
-                <div class="row">
-                  
-                    <div class="col-md-4 mb-3">
-                        <label for="task_duration" class="form-label fw-bold">Duration (days) <span class="text-danger">*</span></label>
-                        <input type="number" id="task_duration" name="task_duration" class="form-control" min="0" value="{{ task.task_Duration or '' }}">
-                        <span class="error-message" id="duration_error"></span>
-                    </div>
-
-                    <div class="col-md-4 mb-3">
-                        <label for="estimated_hrs" class="form-label fw-bold">Estimated Hours <span class="text-danger">*</span></label>
-                        <input type="number" id="estimated_hrs" name="estimated_hrs" class="form-control" min="0" value="{{ task.estimated_hrs or '' }}">
-                        <span class="error-message" id="estimated_error"></span>
-                    </div>
-
-              
-                    <div class="col-md-4 mb-3">
-                        <label for="worked_hrs" class="form-label fw-bold">Worked Hours</label>
-                        <input type="number" id="worked_hrs" name="worked_hrs" class="form-control" min="0" value="{{ task.worked_hrs or 0 }}">
-                        <span class="error-message" id="worked_error"></span>
-                    </div>
-                </div>
-
-                <div class="row">
-                    
-                    <div class="col-md-6 mb-3">
-                        <label for="assigned_to" class="form-label fw-bold">Assign To (Employee) <span class="text-danger">*</span></label>
-                        <select id="assigned_to" name="assigned_to" class="form-select">
-                            <option value="">-- Select Employee --</option>
-                            {% for employee in employees %}
-                                <option value="{{ employee.id }}" {% if employee.id == task.assigned_to %}selected{% endif %}>
-                                    {{ employee.employee_name }}
-                                </option>
-                            {% endfor %}
-                        </select>
-                        <span class="error-message" id="assigned_error"></span>
-                    </div>
-
-                    
-                    <div class="col-md-6 mb-3">
-                        <label for="assigned_by" class="form-label fw-bold">Assigned By (Manager)</label>
-                        <select id="assigned_by" class="form-select" disabled>
-                            {% for employee in employees %}
-                                <option value="{{ employee.id }}" {% if employee.id == task.assigned_by %}selected{% endif %}>
-                                    {{ employee.employee_name }}
-                                </option>
-                            {% endfor %}
-                        </select>
-                        <input type="hidden" name="assigned_by" value="{{ task.assigned_by }}">
-                    </div>
-                </div>
-
-                <div class="row">
-                   
-                    <div class="col-md-6 mb-3">
-                        <label for="start_date" class="form-label fw-bold">Start Date <span class="text-danger">*</span></label>
-                        <input type="date" id="start_date" name="start_date" class="form-control" value="{{ task.Start_Date or '' }}">
-                        <span class="error-message" id="start_error"></span>
-                    </div>
-
-                  
-                    <div class="col-md-6 mb-3">
-                        <label for="end_date" class="form-label fw-bold">End Date <span class="text-danger">*</span></label>
-                        <input type="date" id="end_date" name="end_date" class="form-control" value="{{ task.End_Date or '' }}">
-                        <span class="error-message" id="end_error"></span>
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <label for="comments" class="form-label fw-bold">Manager Comments</label>
-                    <textarea id="comments" name="comments" class="form-control" rows="2">{{ task.Comments or '' }}</textarea>
-                </div>
-
-                <div class="row">
-                   
-                    <div class="col-md-6 mb-3">
-                        <label for="status" class="form-label fw-bold">Status <span class="text-danger">*</span></label>
-                        <select id="status" name="status" class="form-select">
-                            <option value="">-- Select Status --</option>
-                            <option value="PENDING" {% if task.status == 'PENDING' %}selected{% endif %}>Pending</option>
-                            <option value="COMPLETED" {% if task.status == 'COMPLETED' %}selected{% endif %}>Completed</option>
-                        </select>
-                        <span class="error-message" id="status_error"></span>
-                    </div>
-
-                 
-                    <div class="col-md-6 mb-3">
-                        <label for="attachment" class="form-label fw-bold">Attachment</label>
-                        <input type="file" id="attachment" name="attachment" class="form-control" accept=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg,.gif">
-                    </div>
-                </div>
-
-               
-                <div class="d-flex justify-content-between mt-4">
-                    <a href="{{ url_for('task_bp.list_tasks', project_id=task.project_id) }}" class="btn btn-secondary">
-                        <i class="fas fa-arrow-left"></i> Back to Task List
-                    </a>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save"></i> Update Task
-                    </button>
-                </div>
-            </form>
+        <div>
+          <label class="block text-sm font-medium text-gray-600">Estimated Hours <span class="text-red-500">*</span></label>
+          <input id="estimated_hrs" name="estimated_hrs" type="number" min="0" value="{{ task.estimated_hrs or '' }}"
+            class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
+          <p class="text-red-500 text-sm mt-1" id="estimated_hrs_error"></p>
         </div>
-    </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        <div>
+          <label class="block text-sm font-medium text-gray-600">Worked Hours</label>
+          <input id="worked_hrs" name="worked_hrs" type="number" min="0" value="{{ task.worked_hrs or 0 }}"
+            class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
+          <p class="text-red-500 text-sm mt-1" id="worked_hrs_error"></p>
+        </div>
+      </div>
+
+      <!-- Assigned To / By -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div>
+          <label class="block text-sm font-medium text-gray-600">Assign To (Employee) <span class="text-red-500">*</span></label>
+          <select id="assigned_to" name="assigned_to"
+            class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
+            <option value="">-- Select Employee --</option>
+            {% for employee in employees %}
+              <option value="{{ employee.id }}" {% if employee.id == task.assigned_to %}selected{% endif %}>
+                {{ employee.employee_name }}
+              </option>
+            {% endfor %}
+          </select>
+          <p class="text-red-500 text-sm mt-1" id="assigned_to_error"></p>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-600">Assigned By (Manager)</label>
+          <select disabled class="mt-1 w-full border rounded-lg p-2 bg-gray-100">
+            {% for employee in employees %}
+              <option value="{{ employee.id }}" {% if employee.id == task.assigned_by %}selected{% endif %}>
+                {{ employee.employee_name }}
+              </option>
+            {% endfor %}
+          </select>
+          <input type="hidden" name="assigned_by" value="{{ task.assigned_by }}">
+        </div>
+      </div>
+
+      <!-- Dates -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div>
+          <label class="block text-sm font-medium text-gray-600">Start Date <span class="text-red-500">*</span></label>
+          <input id="start_date" name="start_date" type="date" value="{{ task.Start_Date or '' }}"
+            class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
+          <p class="text-red-500 text-sm mt-1" id="start_date_error"></p>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-600">End Date <span class="text-red-500">*</span></label>
+          <input id="end_date" name="end_date" type="date" value="{{ task.End_Date or '' }}"
+            class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
+          <p class="text-red-500 text-sm mt-1" id="end_date_error"></p>
+        </div>
+      </div>
+
+      <!-- Comments -->
+      <div>
+        <label class="block text-sm font-medium text-gray-600">Manager Comments</label>
+        <textarea id="comments" name="comments" rows="2"
+          class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">{{ task.Comments or '' }}</textarea>
+      </div>
+
+      <!-- Status and Attachment -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div>
+          <label class="block text-sm font-medium text-gray-600">Status <span class="text-red-500">*</span></label>
+          <select id="status" name="status"
+            class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
+            <option value="">-- Select Status --</option>
+            <option value="PENDING" {% if task.status == 'PENDING' %}selected{% endif %}>Pending</option>
+            <option value="COMPLETED" {% if task.status == 'COMPLETED' %}selected{% endif %}>Completed</option>
+          </select>
+          <p class="text-red-500 text-sm mt-1" id="status_error"></p>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-600">Attachment</label>
+          <input id="attachment" name="attachment" type="file"
+            class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500"
+            accept=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg,.gif">
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="flex justify-between items-center pt-6">
+        <a href="{{ url_for('task_bp.list_tasks', project_id=task.project_id) }}"
+          class="bg-blue-600 text-white py-2 px-4 rounded-lg shadow hover:bg-blue-700 transition">
+          <i class="fas fa-arrow-left"></i> Back to Task List
+        </a>
+
+        <button type="submit"
+          class="bg-blue-600 text-white py-2 px-4 rounded-lg shadow hover:bg-blue-700 transition">
+          <i class="fas fa-save"></i> Update Task
+        </button>
+      </div>
+
+    </form>
+  </div>
+</main>
+
+<!-- JS Validation -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function() {
-    $("form").submit(function(e) {
-        let isValid = true;
+  $("#editTaskForm").submit(function(e) {
+    let valid = true;
+    $("p.text-red-500").text("");
+    $("input, select").removeClass("border-red-500");
 
-        $(".error-message").text("");
-        $("input, select, textarea").removeClass("error");
+    function showError(id, msg) {
+      $("#" + id).addClass("border-red-500");
+      $("#" + id + "_error").text(msg);
+      valid = false;
+    }
 
-        if ($("#task_name").val().trim() === "") {
-            $("#task_name").addClass("error");
-            $("#name_error").text("Task Name is required.");
-            isValid = false;
-        }
-        if ($("#task_duration").val() === "") {
-            $("#task_duration").addClass("error");
-            $("#duration_error").text("Duration is required.");
-            isValid = false;
-        }
-        if ($("#estimated_hrs").val() === "") {
-            $("#estimated_hrs").addClass("error");
-            $("#estimated_error").text("Estimated Hours is required.");
-            isValid = false;
-        }
-        if ($("#assigned_to").val() === "") {
-            $("#assigned_to").addClass("error");
-            $("#assigned_error").text("Assign To is required.");
-            isValid = false;
-        }
-        if ($("#start_date").val() === "") {
-            $("#start_date").addClass("error");
-            $("#start_error").text("Start Date is required.");
-            isValid = false;
-        }
-        if ($("#end_date").val() === "") {
-            $("#end_date").addClass("error");
-            $("#end_error").text("End Date is required.");
-            isValid = false;
-        }
-        if ($("#status").val() === "") {
-            $("#status").addClass("error");
-            $("#status_error").text("Status is required.");
-            isValid = false;
-        }
+    // Required fields validation
+    const requiredFields = [
+      ["task_name", "Task Name is required."],
+      ["task_duration", "Duration is required."],
+      ["estimated_hrs", "Estimated Hours is required."],
+      ["assigned_to", "Assign To is required."],
+      ["start_date", "Start Date is required."],
+      ["end_date", "End Date is required."],
+      ["status", "Status is required."]
+    ];
 
-        const startDate = new Date($("#start_date").val());
-        const endDate = new Date($("#end_date").val());
-        if ($("#end_date").val() && endDate < startDate) {
-            $("#end_date").addClass("error");
-            $("#end_error").text("End Date cannot be before Start Date.");
-            isValid = false;
-        }
-
-        const estimatedHrs = parseFloat($("#estimated_hrs").val()) || 0;
-        const workedHrs = parseFloat($("#worked_hrs").val()) || 0;
-        const durationDays = parseFloat($("#task_duration").val()) || 0;
-        const maxPossibleHrs = durationDays * 24;
-
-        if (estimatedHrs < workedHrs) {
-            $("#estimated_hrs, #worked_hrs").addClass("error");
-            $("#estimated_error").text("Estimated Hours cannot be less than Worked Hours.");
-            $("#worked_error").text("Worked Hours cannot exceed Estimated Hours.");
-            isValid = false;
-        }
-
-        if (estimatedHrs > maxPossibleHrs) {
-            $("#estimated_hrs").addClass("error");
-            $("#estimated_error").text(`Estimated Hours cannot exceed total hours (${maxPossibleHrs}).`);
-            isValid = false;
-        }
-        if (workedHrs > maxPossibleHrs) {
-            $("#worked_hrs").addClass("error");
-            $("#worked_error").text(`Worked Hours cannot exceed total hours (${maxPossibleHrs}).`);
-            isValid = false;
-        }
-
-        if (!isValid) e.preventDefault();
+    requiredFields.forEach(([id, msg]) => {
+      if (!$("#" + id).val()) showError(id, msg);
     });
+
+    // Date validation
+    const start = new Date($("#start_date").val());
+    const end = new Date($("#end_date").val());
+    if ($("#end_date").val() && end < start) showError("end_date", "End Date cannot be before Start Date.");
+
+    // Hours validation
+    const dur = parseFloat($("#task_duration").val()) || 0;
+    const est = parseFloat($("#estimated_hrs").val()) || 0;
+    const worked = parseFloat($("#worked_hrs").val()) || 0;
+    const max = dur * 24;
+
+    if (est < worked) {
+      showError("estimated_hrs", "Estimated Hours cannot be less than Worked Hours.");
+      showError("worked_hrs", "Worked Hours cannot exceed Estimated Hours.");
+    }
+    if (est > max) showError("estimated_hrs", `Estimated Hours cannot exceed total (${max}).`);
+    if (worked > max) showError("worked_hrs", `Worked Hours cannot exceed total (${max}).`);
+
+    if (!valid) e.preventDefault();
+  });
 });
 </script>
-</body>
-</html>
+{% endblock %}
