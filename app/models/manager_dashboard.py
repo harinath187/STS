@@ -67,7 +67,7 @@ def get_monthly_task_counts(manager_id):
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("""
-        SELECT DATE_FORMAT(created_at, '%%Y-%%m') AS month, COUNT(*) 
+        SELECT DATE_FORMAT(created_at, '%Y-%m') AS month, COUNT(*) 
         FROM project_task
         WHERE project_id IN (
             SELECT id FROM project WHERE project_manager = %s
