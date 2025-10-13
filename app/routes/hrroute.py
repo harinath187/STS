@@ -59,11 +59,11 @@ def add_employeelist(app):
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        firstname = request.form['firstname']
-        lastname = request.form['lastname']
-        username = request.form['username']
-        email = request.form['email']
-        password = request.form['password']
+        firstname = request.form['firstname1']
+        lastname = request.form['lastname1']
+        username = request.form['username1']
+        email = request.form['email1']
+        password = request.form['password1']
         dept_id = request.form['dept_id']
         role_id = request.form['role_id']
 
