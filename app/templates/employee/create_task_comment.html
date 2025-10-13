@@ -1,71 +1,106 @@
-
-
-
-
-
-
 {% extends "base.html" %}
- 
+
 {% block title %}Employee Dashboard{% endblock %}
- 
+
 {% block content %}
-<div class="flex min-h-screen bg-gray-50">
- 
+<div class="flex min-h-screen bg-gray-100">
+
   <!-- Sidebar -->
   <aside class="w-64 bg-white shadow-md flex flex-col fixed top-0 left-0 bottom-0">
     {% include "common/employee_dashboard.html" %}
   </aside>
- 
+
   <!-- Main Content -->
-  <main class="flex-1 ml-64 pt-8 pr-8 pb-8 pl-4">
-  <div class="max-w-2xl mx-auto bg-white p-6 rounded-xl shadow mt-8">
+  <main class="flex-1 ml-64 p-10">
+    <div class="bg-white shadow-lg rounded-2xl w-full max-w-2xl p-8 mx-auto">
+      <h2 class="text-2xl font-bold mb-6 text-gray-700">Create Task Comment</h2>
 
-  <h2 class="text-2xl font-bold mb-4">Create Task Comment</h2>
+      <!-- Flash Messages -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="mb-4 p-3 rounded-lg {{ 'bg-green-100 text-green-800' if category=='success' else 'bg-red-100 text-red-800' }}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
 
-  <!-- Flash Messages -->
-  {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-      {% for category, message in messages %}
-        <div class="mb-4 p-3 rounded {{ 'bg-green-100 text-green-800' if category=='success' else 'bg-red-100 text-red-800' }}">
-          {{ message }}
+      <form action="{{ url_for('create_task_comment') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
+
+        <!-- Task ID -->
+        <div>
+          <label class="block text-sm font-medium text-gray-600" for="task_id">Task ID</label>
+          <input type="number" id="task_id" name="task_id" required placeholder="Enter Task ID"
+            class="mt-1 w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
         </div>
-      {% endfor %}
-    {% endif %}
-  {% endwith %}
 
-  <form action="{{ url_for('create_task_comment') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
-    
-    <div>
-      <label for="task_id" class="block font-medium">Task ID:</label>
-      <input type="number" id="task_id" name="task_id" required class="w-full border rounded px-3 py-2">
-    </div>
+        <!-- Message -->
+        <div>
+          <label class="block text-sm font-medium text-gray-600" for="message">Message</label>
+          <textarea id="message" name="message" required placeholder="Enter your comment"
+            class="mt-1 w-full border rounded-lg p-2 h-32 resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+        </div>
 
-    <div>
-      <label for="message" class="block font-medium">Message:</label>
-      <textarea id="message" name="message" required class="w-full border rounded px-3 py-2"></textarea>
-    </div>
+        <!-- Attachment -->
+        <div>
+          <label class="block text-sm font-medium text-gray-600" for="attachment">Attachment</label>
+          <input type="file" id="attachment" name="attachment" class="custom-file-input">
+        </div>
 
-    <div>
-      <label for="attachment" class="block font-medium">Attachment:</label>
-      <input type="file" id="attachment" name="attachment" class="w-full border rounded px-3 py-2">
-    </div>
-
-    <div class="flex space-x-4">
-      <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-        Create Comment
-      </button>
-      <a href="{{ url_for('test_routes.test_tasks') }}" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">
-        Cancel
-      </a>
-    </div>
-
-  </form>
+     <!-- Buttons -->
+<div class="pt-4 flex justify-end space-x-4">
+  <button type="submit"
+    class="bg-blue-600 text-white py-2 px-4 rounded-xl shadow hover:bg-blue-700 transition text-sm">
+    Create Comment
+  </button>
+  <a href="{{ url_for('test_routes.test_tasks') }}"
+    class="bg-black text-white py-2 px-4 rounded-xl shadow hover:bg-gray-900 transition text-sm">
+    Cancel
+  </a>
 </div>
+
+
+      </form>
+    </div>
   </main>
 </div>
+
+<!-- Custom Styling -->
+<style>
+  .custom-file-input {
+    position: relative;
+    width: 100%;
+    padding: 12px 20px;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #333;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+  }
+
+  .custom-file-input::file-selector-button {
+    background: transparent;
+    border: none;
+    padding: 8px 16px;
+    margin-right: 10px;
+    border-radius: 50px;
+    cursor: pointer;
+    color: #444;
+    font-weight: 500;
+    background: rgba(255, 255, 255, 0.3);
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.6), 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .custom-file-input::file-selector-button:hover {
+    background: rgba(59, 130, 246, 0.8); /* Tailwind blue-500 */
+    color: white;
+  }
+</style>
 {% endblock %}
- 
- 
-
-
-
