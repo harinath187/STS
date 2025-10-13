@@ -11,76 +11,186 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" />
 <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css" />
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
-/* Table Cell Styling */
+/* DataTable Styling */
 table.dataTable td {
-    white-space: normal !important;
-    word-wrap: break-word;
-    max-width: 200px;
+  white-space: normal !important;
+  word-wrap: break-word;
+  max-width: 200px;
 }
 
 /* DataTable Wrapper Styling */
 div.dataTables_wrapper {
-    overflow-x: auto;
-    background-color: white;
-    padding: 2rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  overflow-x: auto;
+  background-color: white;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 /* Table Layout and Background */
 table.dataTable {
-    table-layout: fixed;
-    width: 100% !important;
-    background-color: white;
+  width: 100% !important;
+  background-color: white;
 }
 
 /* Header Styling: Black Background */
-thead th {
-    background-color: #000000 !important;
-    color: white !important;
+table#supportTable thead th {
+  background-color: #000000 !important;
+  color: white !important;
+  font-weight: 600;
+  padding: 12px 8px;
 }
 
-/* Search Input */
+/* Search Input Styling */
 .dataTables_wrapper .dataTables_filter input {
-    border: 1px solid black;
-    border-radius: 4px;
-    padding: 4px 8px;
-    height: 32px;
+  border: 1px solid #000000;
+  border-radius: 4px;
+  padding: 6px 12px;
+  height: 38px;
+  margin-left: 8px;
 }
+
 .dataTables_wrapper .dataTables_filter input:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+  border-color: #000000;
 }
 
 /* Pagination Buttons */
 .dataTables_wrapper .dataTables_paginate .paginate_button {
-    border: 0px solid #d1d5db;
-    padding: 4px 10px;
-    margin: 0 2px;
-    border-radius: 4px;
-    background: white;
-    color: #1f2937;
-    cursor: pointer;
-    font-size: 0.875rem;
+  border: 1px solid #d1d5db;
+  padding: 6px 12px;
+  margin: 0 2px;
+  border-radius: 4px;
+  background: white;
+  color: #1f2937;
+  cursor: pointer;
+  font-size: 0.875rem;
 }
+
 .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-    background: #e0f2fe;
-    color: #1e3a8a;
+  background: #e0f2fe;
+  color: #1e3a8a;
+  border-color: #3b82f6;
 }
+
 .dataTables_wrapper .dataTables_paginate .paginate_button.current {
-    background: #3b82f6;
-    color: white;
-    border-color: #3b82f6;
+  background: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
 }
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
 .dataTables_wrapper .dataTables_paginate .paginate_button:focus {
-    outline: none;
+  outline: none;
 }
 
 .dataTables_paginate {
-    float: right;
+  float: right;
+  margin-top: 1rem;
+}
+
+/* Length Select Styling */
+.dataTables_wrapper .dataTables_length select {
+  border: 1px solid #000000;
+  border-radius: 4px;
+  padding: 4px 8px;
+  margin: 0 8px;
+}
+
+/* Info Text Styling */
+.dataTables_wrapper .dataTables_info {
+  padding-top: 1rem;
+  font-size: 0.875rem;
+  color: #6c757d;
+}
+
+/* Priority Badges */
+.badge-priority {
+  padding: 5px 12px;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.badge-high {
+  background-color: #dc3545;
+  color: white;
+}
+
+.badge-medium {
+  background-color: #ffc107;
+  color: #000;
+}
+
+.badge-low {
+  background-color: #28a745;
+  color: white;
+}
+
+/* Status Badges */
+.badge-status {
+  padding: 5px 12px;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  display: inline-block;
+  text-transform: uppercase;
+}
+
+.badge-open {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.badge-closed {
+  background-color: #6c757d;
+  color: white;
+}
+
+.badge-in-progress {
+  background-color: #fd7e14;
+  color: white;
+}
+
+.badge-resolved {
+  background-color: #28a745;
+  color: white;
+}
+
+/* Table Row Hover Effect */
+table.dataTable tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+/* Responsive Table Improvements */
+@media screen and (max-width: 768px) {
+  div.dataTables_wrapper {
+    padding: 1rem;
+  }
+}
+
+/* Empty State Styling */
+.no-data-message {
+  text-align: center;
+  padding: 3rem 1rem;
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.no-data-message i {
+  font-size: 3rem;
+  color: #6c757d;
+  margin-bottom: 1rem;
 }
 </style>
 
@@ -116,15 +226,51 @@ thead th {
             <td>{{ assign.dept_name }}</td>
             <td>{{ assign.duration }}</td>
             <td>{{ assign.problem_description }}</td>
-            <td>{{ assign.priority }}</td>
-            <td>{{ assign.status }}</td>
+            <td>
+              {% if assign.priority %}
+                {% set priority_lower = assign.priority|lower %}
+                {% if priority_lower == 'high' %}
+                  <span class="badge-priority badge-high">{{ assign.priority }}</span>
+                {% elif priority_lower == 'medium' %}
+                  <span class="badge-priority badge-medium">{{ assign.priority }}</span>
+                {% elif priority_lower == 'low' %}
+                  <span class="badge-priority badge-low">{{ assign.priority }}</span>
+                {% else %}
+                  <span class="badge-priority badge-medium">{{ assign.priority }}</span>
+                {% endif %}
+              {% else %}
+                <span class="badge-priority badge-medium">N/A</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if assign.status %}
+                {% set status_lower = assign.status|lower %}
+                {% if status_lower == 'open' %}
+                  <span class="badge-status badge-open">{{ assign.status }}</span>
+                {% elif status_lower == 'closed' %}
+                  <span class="badge-status badge-closed">{{ assign.status }}</span>
+                {% elif status_lower == 'in progress' or status_lower == 'in-progress' %}
+                  <span class="badge-status badge-in-progress">{{ assign.status }}</span>
+                {% elif status_lower == 'resolved' %}
+                  <span class="badge-status badge-resolved">{{ assign.status }}</span>
+                {% else %}
+                  <span class="badge-status badge-open">{{ assign.status }}</span>
+                {% endif %}
+              {% else %}
+                <span class="badge-status badge-open">N/A</span>
+              {% endif %}
+            </td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
     </div>
     {% else %}
-      <div class="text-center text-gray-600 mt-6">No support records found.</div>
+      <div class="no-data-message">
+        <i class="fas fa-inbox"></i>
+        <h4>No Support Records Found</h4>
+        <p class="text-muted">There are currently no support tickets assigned to display.</p>
+      </div>
     {% endif %}
   </main>
 </div>
@@ -150,7 +296,26 @@ thead th {
       ordering: true,
       info: true,
       lengthChange: true,
-      pageLength: 5
+      pageLength: 10,
+      language: {
+        search: "Search:",
+        lengthMenu: "Show _MENU_ entries",
+        info: "Showing _START_ to _END_ of _TOTAL_ entries",
+        infoEmpty: "Showing 0 to 0 of 0 entries",
+        infoFiltered: "(filtered from _MAX_ total entries)",
+        paginate: {
+          first: "First",
+          last: "Last",
+          next: "Next",
+          previous: "Previous"
+        },
+        emptyTable: "No support records available",
+        zeroRecords: "No matching records found"
+      },
+      order: [[0, 'asc']], // Default sort by first column (Assigned To)
+      columnDefs: [
+        { orderable: true, targets: '_all' }
+      ]
     });
   });
 </script>
