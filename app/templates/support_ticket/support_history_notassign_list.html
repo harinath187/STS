@@ -9,11 +9,103 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
 <style>
-  table#notAssignTable thead th {
-    background-color: black !important;
-    color: white !important;
+  /* DataTable Styling */
+  table.dataTable td {
+    white-space: normal !important;
+    word-wrap: break-word;
+    max-width: 200px;
   }
-  
+
+  div.dataTables_wrapper {
+    overflow-x: auto;
+    background-color: white;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  table.dataTable {
+    width: 100% !important;
+    background-color: white;
+  }
+
+  /* Black Header Background */
+  table#notAssignTable thead th {
+    background-color: #000000 !important;
+    color: white !important;
+    font-weight: 600;
+    padding: 12px 8px;
+  }
+
+  /* Search Input Styling */
+  .dataTables_wrapper .dataTables_filter input {
+    border: 1px solid #000000;
+    border-radius: 4px;
+    padding: 6px 12px;
+    height: 38px;
+    margin-left: 8px;
+  }
+
+  .dataTables_wrapper .dataTables_filter input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+    border-color: #000000;
+  }
+
+  /* Pagination Buttons */
+  .dataTables_wrapper .dataTables_paginate .paginate_button {
+    border: 1px solid #d1d5db;
+    padding: 6px 12px;
+    margin: 0 2px;
+    border-radius: 4px;
+    background: white;
+    color: #1f2937;
+    cursor: pointer;
+    font-size: 0.875rem;
+  }
+
+  .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background: #e0f2fe;
+    color: #1e3a8a;
+    border-color: #3b82f6;
+  }
+
+  .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
+  }
+
+  .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .dataTables_wrapper .dataTables_paginate .paginate_button:focus {
+    outline: none;
+  }
+
+  .dataTables_paginate {
+    float: right;
+    margin-top: 1rem;
+  }
+
+  /* Length Select Styling */
+  .dataTables_wrapper .dataTables_length select {
+    border: 1px solid #000000;
+    border-radius: 4px;
+    padding: 4px 8px;
+    margin: 0 8px;
+  }
+
+  /* Info Text Styling */
+  .dataTables_wrapper .dataTables_info {
+    padding-top: 1rem;
+    font-size: 0.875rem;
+    color: #6c757d;
+  }
+
+  /* Form Validation Styling */
   .error {
     color: #dc3545;
     font-size: 0.875rem;
@@ -30,7 +122,8 @@
     box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
   }
 
-  /* .badge-priority {
+  /* Priority Badges */
+  .badge-priority {
     padding: 5px 12px;
     border-radius: 12px;
     font-size: 0.875rem;
@@ -51,8 +144,9 @@
   .badge-low {
     background-color: #28a745;
     color: white;
-  } */
+  }
 
+  /* Action Buttons */
   .action-buttons {
     display: flex;
     gap: 5px;
@@ -64,6 +158,7 @@
     font-size: 0.875rem;
   }
 
+  /* Attachment Styling */
   .attachment-link {
     color: #007bff;
     text-decoration: none;
@@ -144,6 +239,21 @@
   .spinner-border {
     width: 3rem;
     height: 3rem;
+  }
+
+  /* Responsive Table Improvements */
+  @media screen and (max-width: 768px) {
+    div.dataTables_wrapper {
+      padding: 1rem;
+    }
+
+    .action-buttons {
+      flex-direction: column;
+    }
+
+    .action-buttons .btn {
+      width: 100%;
+    }
   }
 </style>
 
@@ -340,7 +450,20 @@
       ordering: true,
       info: true,
       lengthChange: true,
-      pageLength: 10
+      pageLength: 10,
+      language: {
+        search: "Search:",
+        lengthMenu: "Show _MENU_ entries",
+        info: "Showing _START_ to _END_ of _TOTAL_ entries",
+        infoEmpty: "Showing 0 to 0 of 0 entries",
+        infoFiltered: "(filtered from _MAX_ total entries)",
+        paginate: {
+          first: "First",
+          last: "Last",
+          next: "Next",
+          previous: "Previous"
+        }
+      }
     });
 
     // Function to display priority badge
@@ -374,7 +497,6 @@
 
     // Function to convert file path to URL
     function getAttachmentUrl(filePath) {
-      // Remove /app/static/ prefix if exists and prepend with /static/
       if (filePath.startsWith('/app/static/')) {
         return filePath.replace('/app/static/', '/static/');
       } else if (filePath.startsWith('static/')) {
@@ -382,7 +504,6 @@
       } else if (filePath.startsWith('/static/')) {
         return filePath;
       } else {
-        // If it's just the filename or relative path
         return '/static/uploads/support_attachment/' + filePath.split('/').pop();
       }
     }
@@ -443,20 +564,13 @@
       }
       
       var trimmedValue = value.trim();
-      
-      // Pattern for hours only: "5 hours", "3 hrs", "1 hour"
       var hoursOnlyPattern = /^(\d{1,2})\s*(hours?|hrs?)$/i;
-      
-      // Pattern for minutes only: "30 minutes", "45 mins", "1 minute"
       var minutesOnlyPattern = /^(\d{1,3})\s*(minutes?|mins?)$/i;
-      
-      // Pattern for hours and minutes: "2 hours 30 minutes", "1 hr 45 mins"
       var combinedPattern = /^(\d{1,2})\s*(hours?|hrs?)\s+(\d{1,2})\s*(minutes?|mins?)$/i;
       
       var totalMinutes = 0;
-      
-      // Check combined pattern (hours and minutes)
       var combinedMatch = trimmedValue.match(combinedPattern);
+      
       if (combinedMatch) {
         var hours = parseInt(combinedMatch[1]);
         var minutes = parseInt(combinedMatch[3]);
@@ -466,32 +580,25 @@
         }
         
         totalMinutes = (hours * 60) + minutes;
-      }
-      // Check hours only pattern
-      else {
+      } else {
         var hoursMatch = trimmedValue.match(hoursOnlyPattern);
         if (hoursMatch) {
           var hours = parseInt(hoursMatch[1]);
           totalMinutes = hours * 60;
-        }
-        // Check minutes only pattern
-        else {
+        } else {
           var minutesMatch = trimmedValue.match(minutesOnlyPattern);
           if (minutesMatch) {
             totalMinutes = parseInt(minutesMatch[1]);
           } else {
-            return false; // Invalid format
+            return false;
           }
         }
       }
       
-      // Check if total duration exceeds 24 hours (1440 minutes)
       return totalMinutes > 0 && totalMinutes <= 1440;
       
     }, function(params, element) {
       var value = $(element).val().trim();
-      
-      // Pattern matching
       var hoursOnlyPattern = /^(\d{1,2})\s*(hours?|hrs?)$/i;
       var minutesOnlyPattern = /^(\d{1,3})\s*(minutes?|mins?)$/i;
       var combinedPattern = /^(\d{1,2})\s*(hours?|hrs?)\s+(\d{1,2})\s*(minutes?|mins?)$/i;
@@ -500,7 +607,6 @@
       var hoursMatch = value.match(hoursOnlyPattern);
       var minutesMatch = value.match(minutesOnlyPattern);
       
-      // Check if format is invalid
       if (!combinedMatch && !hoursMatch && !minutesMatch) {
         return 'Format: "3 hours", "45 minutes", or "2 hours 30 minutes"';
       }
@@ -533,48 +639,26 @@
       return 'Please enter a valid duration';
     });
 
-    // Function to convert file path to URL
-    function getAttachmentUrl(filePath) {
-      // Remove /app/static/ prefix if exists and prepend with /static/
-      if (filePath.startsWith('/app/static/')) {
-        return filePath.replace('/app/static/', '/static/');
-      } else if (filePath.startsWith('static/')) {
-        return '/' + filePath;
-      } else if (filePath.startsWith('/static/')) {
-        return filePath;
-      } else {
-        // If it's just the filename or relative path
-        return '/static/uploads/support_attachment/' + filePath.split('/').pop();
-      }
-    }
-
     // View button click - Open attachment in modal
     $('#notAssignTable tbody').on('click', '.view-btn:not(:disabled)', function () {
       var tr = $(this).closest('tr');
       var attachment = tr.data('attachment');
 
       if (attachment) {
-        // Convert file path to proper URL
         var attachmentUrl = getAttachmentUrl(attachment);
         
         console.log('Original path:', attachment);
         console.log('Converted URL:', attachmentUrl);
 
-        // Reset modal content
         $('#attachmentLoading').show();
         $('#attachmentViewer').hide();
         $('#attachmentImage').hide();
         $('#attachmentError').hide();
 
-        // Get file extension
         var fileExtension = getFileExtension(attachmentUrl);
-
-        // Show modal
         $('#attachmentModal').modal('show');
 
-        // Load attachment based on file type
         if (isImageFile(fileExtension)) {
-          // Display image
           $('#attachmentImage').attr('src', attachmentUrl);
           $('#attachmentImage').on('load', function() {
             $('#attachmentLoading').hide();
@@ -587,13 +671,11 @@
             $('#downloadLink').attr('href', attachmentUrl);
           });
         } else if (isPreviewableFile(fileExtension)) {
-          // Display in iframe (PDF, TXT, HTML)
           $('#attachmentViewer').attr('src', attachmentUrl);
           $('#attachmentViewer').on('load', function() {
             $('#attachmentLoading').hide();
             $('#attachmentViewer').show();
           });
-          // Fallback after timeout
           setTimeout(function() {
             if ($('#attachmentLoading').is(':visible')) {
               $('#attachmentLoading').hide();
@@ -601,7 +683,6 @@
             }
           }, 2000);
         } else {
-          // Show download option for other file types
           $('#attachmentLoading').hide();
           $('#attachmentError').show();
           $('#downloadLink').attr('href', attachmentUrl);
@@ -630,7 +711,6 @@
         url: '/ticket/' + ticketId,
         method: 'GET',
         success: function (data) {
-          // Reset form validation
           validator.resetForm();
           $('#editTicketForm').find('.error').removeClass('error');
           
@@ -644,8 +724,6 @@
 
           $('#dept_name').val(data.dept_name || '').data('dept-id', data.dept_id);
           $('#duration').val(data.duration || '');
-
-          // Display attachment
           $('#attachment_content').html(displayAttachment(data.Attachment));
 
           if (data.dept_name) {
@@ -678,7 +756,7 @@
       });
     });
 
-    // Limit allowed characters in duration input (numbers and letters)
+    // Limit allowed characters in duration input
     $('#duration').on('input', function () {
       this.value = this.value.replace(/[^0-9a-zA-Z\s]/g, '');
     });
@@ -687,18 +765,15 @@
     $('#editTicketForm').on('submit', function (e) {
       e.preventDefault();
       
-      // Validate form
       if (!$(this).valid()) {
         return false;
       }
       
       var ticketId = $('#ticketId').val();
       var dept_id = $('#dept_name').data('dept-id');
-
       var assigned_to = parseInt($('#assignto').val());
       var duration = $('#duration').val()?.trim();
 
-      // Prepare data
       var formData = {
         assigned_to: assigned_to,
         assigned_by: loggedInUserId,
