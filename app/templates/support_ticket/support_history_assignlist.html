@@ -35,13 +35,17 @@
   color: #6c757d;
   margin-bottom: 1rem;
 }
+
+/* Fix sidebar links - prevent Bootstrap override */
+aside nav a,
+aside div a {
+  text-decoration: none !important;
+}
 </style>
 
 <div class="flex min-h-screen bg-gray-50">
   <!-- Sidebar -->
-  <aside class="w-64 bg-white shadow-md flex flex-col fixed top-0 left-0 bottom-0">
-    {% include "common/it_manager.html" %}
-  </aside>
+  {% include "common/it_manager.html" %}
 
   <!-- Main Content -->
   <main class="flex-1 ml-64 mt-0 p-6 bg-gray-50">
@@ -155,7 +159,7 @@
         emptyTable: "No support records available",
         zeroRecords: "No matching records found"
       },
-      order: [[0, 'asc']], // Default sort by first column (Assigned To)
+      order: [[0, 'asc']],
       columnDefs: [
         { orderable: true, targets: '_all' }
       ]
