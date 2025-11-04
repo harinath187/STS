@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, session
 from app.routes.openticket_routes import register_open_ticket_routes
 
 # Existing route imports
@@ -21,46 +21,51 @@ from app.routes.hrroute import (
     add_employeelist,
     add_client_list,
     add_client,
-    list_client,delete_client
-,update_get_client,update_post_client)  # sai added
+    list_client,
+    delete_client,
+    update_get_client,
+    update_post_client,
+)
 from app.routes.supporthistoryroute import (
     supporthistory,
     suppassignlist,
     notsuppassignlist,
     ticket_detail_route,
     ticket_delete_route,
-    employee_routes  
+    employee_routes
 )
 from app.routes.manager_routes import register_manager_routes
-
-# New import for Project Task blueprint
-from app.routes.project_task_routes import task_bp
-
+from app.routes.project_task_routes import task_bp  # For Project Task blueprint
 
 def create_app():
     app = Flask(__name__)
-    app.secret_key = "sts"
+    app.secret_key = "sts"  # Use a secure key in production
 
-    # Register all major routes
+    #Context processor to inject default user
+    @app.context_processor
+    def inject_user():
+        user = session.get("user")
+        if not user:
+            user = {"firstname": "", "lastname": ""}
+        return dict(user=user)
+
+    
     register_routes(app)
     register_employee_routes(app)
     register_support_ticket_routes(app)
     register_task_comments_routes(app)
     register_support_comment_routes(app)
-    # Register open ticket routes separately
     register_open_ticket_routes(app)
-    app.register_blueprint(test_routes)
     register_project_routes(app)
     register_support_routes(app)
     register_manager_routes(app)
     register_it_employee_routes(app)
 
-    # Blueprints
-
+    app.register_blueprint(test_routes)
     app.register_blueprint(project_bp)
-    app.register_blueprint(task_bp)   # added for project task module
+    app.register_blueprint(task_bp)
 
-    # Support history & HR routes
+    
     supporthistory(app)
     suppassignlist(app)
     notsuppassignlist(app)
@@ -75,12 +80,9 @@ def create_app():
     update_get_client(app)
     update_post_client(app)
 
-    # Ticket detail/edit/delete routes
     ticket_detail_route(app)
     register_task_update_routes(app)
     ticket_delete_route(app)
-
-    # Employee dropdown routes
     employee_routes(app)
 
     return app
