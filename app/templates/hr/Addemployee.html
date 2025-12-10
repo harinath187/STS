@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% from "common/sidebar_macro.html" import render_sidebar %}
 {% block title %}Add Employee{% endblock %}
 
 {% block content %}
@@ -170,7 +169,9 @@
 </style>
 
 <div class="flex min-h-screen">
-  {{ render_sidebar(sidebar_configs.admin, current_path=request.path, current_endpoint=request.endpoint) }}
+  <aside class="w-64 bg-white shadow-md flex flex-col fixed top-0 left-0 bottom-0">
+    {% include "common/admin_dashboard.html" %}
+  </aside>
 
   <main class="flex-1 ml-64 p-6 bg-gray-50">
      <h1 class="text-2xl font-semibold mb-6">Welcome HR {{ user.firstname }}</h1>

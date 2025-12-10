@@ -1,0 +1,51 @@
+<aside class="w-64 min-h-screen bg-white/90 shadow-2xl flex flex-col fixed top-0 left-0 bottom-0 border-r border-indigo-100 z-20 backdrop-blur-xl">
+
+  <!-- Sidebar Header -->
+  <div class="p-6 flex items-center gap-3 text-2xl font-extrabold text-indigo-700 bg-gradient-to-r from-indigo-50 via-white to-blue-50 rounded-t-2xl shadow-sm select-none">
+    <i class="fa fa-user-circle text-indigo-400"></i>
+    <span class="tracking-wide">Dashboard</span>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="flex-1 px-5 py-6 mt-4 space-y-3 text-indigo-700 font-semibold">
+
+    <!-- Home -->
+    <a href="/manager" 
+       class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-indigo-100 transition duration-150 shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 group">
+      <i class="fa fa-home text-xl text-indigo-600 group-hover:text-indigo-800"></i>
+      <span>Home</span>
+    </a>
+
+    <!-- Assigned Team -->
+    <a href="/project_manager/team" 
+       class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-indigo-100 transition duration-150 shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 group">
+      <i class="fa fa-ticket text-xl text-indigo-600 group-hover:text-indigo-800"></i>
+      <span>Assigned Team</span>
+    </a>
+
+    <!-- Analytics -->
+    <a href="/projects" 
+       class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-indigo-100 transition duration-150 shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 group">
+      <i class="fa fa-chart-line text-xl text-indigo-600 group-hover:text-indigo-800"></i>
+      <span>Analytics</span>
+    </a>
+
+    <!-- Tickets -->
+    <a href="/task" 
+       class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-indigo-100 transition duration-150 shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 group">
+      <i class="fa fa-cog text-xl text-indigo-600 group-hover:text-indigo-800"></i>
+      <span>Tickets</span>
+    </a>
+
+  </nav>
+
+  <!-- Logout Button fixed at bottom -->
+  <div class="px-5 pb-8">
+    <a href="/logout" 
+       class="flex items-center gap-4 px-4 py-3 w-full rounded-xl font-bold text-red-700 bg-red-50 hover:bg-red-200 transition duration-150 shadow focus:outline-none focus:ring-2 focus:ring-red-300 group">
+      <i class="fa fa-sign-out-alt text-xl group-hover:text-red-900"></i>
+      <span>Logout</span>
+    </a>
+  </div>
+
+</aside>

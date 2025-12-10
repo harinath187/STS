@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% from "common/sidebar_macro.html" import render_sidebar %}
 
 {% block title %}Project Tasks{% endblock %}
 
@@ -12,7 +11,11 @@
 
 {% block content %}
 <div class="flex min-h-screen bg-gray-50">
-  {{ render_sidebar(sidebar_configs.project_manager, current_path=request.path, current_endpoint=request.endpoint) }}
+
+
+  <aside class="w-64 bg-white shadow-md flex flex-col fixed top-0 left-0 bottom-0">
+    {% include "common/project_manager.html" %}
+  </aside>
 
 
   <main class="flex-1 ml-64 pt-8 pr-8 pb-8 pl-4">
