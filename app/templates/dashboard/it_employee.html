@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from "common/sidebar_macro.html" import render_sidebar %}
  
 {% block title %}IT Employee Dashboard{% endblock %}
  
@@ -6,9 +7,7 @@
 <div class="flex min-h-screen bg-gradient-to-br from-sky-100 via-white to-indigo-200">
 
   <!-- Sidebar -->
-  <aside class="w-64 min-h-screen bg-white/90 shadow-2xl flex flex-col fixed top-0 left-0 bottom-0 border-r border-indigo-100 z-20 backdrop-blur-xl">
-    {% include "common/it_employee.html" %}
-  </aside>
+  {{ render_sidebar(sidebar_configs.it_employee, current_path=request.path, current_endpoint=request.endpoint) }}
  
   <!-- Main Content -->
   <main class="flex-1 ml-64 px-10 pt-10 pb-8 bg-transparent relative z-0">

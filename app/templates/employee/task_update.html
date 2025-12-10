@@ -1,12 +1,11 @@
 {% extends "base.html" %}
+{% from "common/sidebar_macro.html" import render_sidebar %}
 
 {% block title %}Task Updation{% endblock %}
 
 {% block content %}
 <div class="flex min-h-screen bg-gray-50">
-  <aside class="w-64 bg-white shadow-md flex flex-col fixed top-0 left-0 bottom-0">
-    {% include "common/employee_dashboard.html" %}
-  </aside>
+  {{ render_sidebar(sidebar_configs.employee, current_path=request.path, current_endpoint=request.endpoint) }}
   <main class="flex-1 ml-64 pt-8 pr-8 pb-8 pl-4">
     <div class="max-w-2xl mx-auto bg-white p-6 sm:p-8 rounded-xl shadow mt-8">
 
@@ -49,4 +48,3 @@
   </main>
 </div>
 {% endblock %}
-

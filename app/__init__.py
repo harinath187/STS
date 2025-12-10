@@ -35,6 +35,7 @@ from app.routes.manager_routes import register_manager_routes
 
 # New import for Project Task blueprint
 from app.routes.project_task_routes import task_bp
+from app.utils.sidebar_config import SIDEBAR_CONFIGS
 
 
 def create_app():
@@ -82,5 +83,9 @@ def create_app():
 
     # Employee dropdown routes
     employee_routes(app)
+
+    @app.context_processor
+    def inject_sidebar_configs():
+        return {"sidebar_configs": SIDEBAR_CONFIGS}
 
     return app

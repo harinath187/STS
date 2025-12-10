@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from "common/sidebar_macro.html" import render_sidebar %}
 {% block title %}Update Client{% endblock %}
 
 {% block content %}
@@ -53,12 +54,10 @@
     }
 </style>
 
-<aside class="w-64 bg-white shadow-md flex flex-col fixed top-0 left-0 bottom-0">
-    {% include "common/admin_dashboard.html" %}
-</aside>
+<div class="flex min-h-screen bg-gray-50">
+  {{ render_sidebar(sidebar_configs.admin, current_path=request.path, current_endpoint=request.endpoint) }}
 
-
-<div class="flex-1 ml-64 p-6">
+  <div class="flex-1 ml-64 p-6">
     <h2 class="text-2xl font-bold mb-4">Update Client Details</h2>
     <div class="form-container">
         <form id="clientForm" method="POST" action="/update_client/{{ client.client_id }}">
@@ -88,5 +87,6 @@
             </div>
         </form>
     </div>
+  </div>
 </div>
 {% endblock %}
