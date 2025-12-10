@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from "common/sidebar_macro.html" import render_sidebar %}
 
 {% block title %}Support History{% endblock %}
 
@@ -19,9 +20,7 @@
 </style>
 
 <div class="flex min-h-screen">
-  <aside class="w-64 bg-white shadow-md flex flex-col fixed top-0 left-0 bottom-0">
-    {% include "common/it_manager.html" %}
-  </aside>
+  {{ render_sidebar(sidebar_configs.it_manager, current_path=request.path, current_endpoint=request.endpoint) }}
 
 
   <main class="flex-1 ml-64 mt-0 p-6 bg-gray-50">

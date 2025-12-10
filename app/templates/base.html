@@ -11,6 +11,42 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.12.0/cdn.min.js" defer></script>
+  <style>
+    html {
+      overflow-y: scroll;
+    }
+    .sts-sidebar {
+      text-decoration: none;
+    }
+    .sts-sidebar a {
+      text-decoration: none !important;
+    }
+    .sts-sidebar__link,
+    .sts-sidebar__sublink {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      width: 100%;
+      cursor: pointer;
+    }
+    .sts-sidebar__link i,
+    .sts-sidebar__sublink i {
+      width: 1.5rem;
+      text-align: center;
+    }
+    .sts-sidebar__link:focus,
+    .sts-sidebar__sublink:focus,
+    .sts-sidebar__link:active,
+    .sts-sidebar__sublink:active {
+      outline: none;
+      box-shadow: none;
+    }
+    .sts-sidebar__link:visited,
+    .sts-sidebar__sublink:visited {
+      color: inherit;
+    }
+  </style>
   
  
   <!-- Custom page-specific CSS -->
@@ -52,9 +88,11 @@
     <div class="flex flex-1 overflow-hidden">
      
       <main class="flex-1 p-6 overflow-y-auto">
+        {% if user %}
         <div class="w-full flex justify-end mb-6">
           {% include "common/navbar.html" %}
         </div>
+        {% endif %}
         {% block content %}
         {% endblock %}
  
